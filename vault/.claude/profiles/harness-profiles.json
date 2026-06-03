@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "active": "vault",
+  "profiles": {
+    "vault": {
+      "description": "Full Windows vault cockpit: dashboard plus /operate, package organs, daily ledgers, hooks, and gated daily-driver skills.",
+      "enabled_hooks": ["post-tool-middleware", "stop-check", "cn-zero-english-guard"],
+      "enabled_skills": ["operate", "day-ops", "capture-routing", "forwardable-quality", "machine-health", "daily-note", "capture-process", "task-capture", "source-ingest", "meeting-note", "best-of-n", "status", "harness-health", "skill-eval", "sanity"],
+      "excluded_tools": [],
+      "live_surfaces": ["Harness Dashboard", "/operate", "daily note ledger", "middleware-events.jsonl", "usage.jsonl"]
+    },
+    "dashboard": {
+      "description": "Human cockpit view: dashboard writes intent/capture requests and reads machine state without classifying business content.",
+      "enabled_hooks": ["post-tool-middleware"],
+      "enabled_skills": ["operate", "day-ops", "capture-routing", "machine-health", "harness-health", "status"],
+      "excluded_tools": ["direct business classification in plugin"],
+      "live_surfaces": ["Harness Dashboard", "operate-request.jsonl", "capture-inbox.jsonl", "middleware-events.jsonl"]
+    },
+    "fs": {
+      "description": "Filesystem-oriented maintenance profile for vault mechanics and harness control-plane edits.",
+      "enabled_hooks": ["post-tool-middleware", "stop-check"],
+      "enabled_skills": ["machine-health", "skill-eval", "harness-health", "sanity", "status"],
+      "excluded_tools": ["business artifact finalization"],
+      "live_surfaces": [".claude/skills", "09 Rules", ".claude/_eval-fixtures", ".claude/_state/harness-manifest.json"]
+    },
+    "afk": {
+      "description": "Remote/bridge profile: status, capture, and delivery checks through Feishu/Discord paths.",
+      "enabled_hooks": ["post-tool-middleware"],
+      "enabled_skills": ["status", "operate", "capture-routing", "machine-health", "harness-health"],
+      "excluded_tools": ["large local UI operations"],
+      "live_surfaces": ["harness-pulse.json", "autonomous-log.jsonl", "Feishu bridge", "Discord bridge"]
+    }
+  }
+}

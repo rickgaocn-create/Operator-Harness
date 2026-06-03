@@ -1,0 +1,27 @@
+tier: packaged
+entrypoint: SKILL.md
+role: daily-operations-organ
+state_reads:
+  - 04 Notes/daily notes/{today}.md
+  - 04 Notes/weekly/{iso_week}.md
+  - 06 Tasks/Today.md
+  - 06 Tasks/Inbox.md
+  - .claude/_state/dashboard/capture-inbox.jsonl
+state_writes:
+  - delegated: daily-note
+  - delegated: sync-day
+  - delegated: replan
+  - delegated: inbox-process
+  - delegated: day-digest
+required_evals:
+  - runner.py day-ops
+  - runner.py daily-note
+  - runner.py sync-day
+  - runner.py replan
+  - runner.py inbox-process
+dashboard_outputs:
+  - Top 3 Priorities
+  - Day Planner
+  - Needs Attention
+  - EOD status
+notes: "Coordinator package for daily operation. Thin skills remain owners of concrete writes."

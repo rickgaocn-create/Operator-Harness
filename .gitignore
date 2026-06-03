@@ -1,0 +1,37 @@
+# --- secrets / machine-local (never commit) ---
+*.env
+*.env.*
+.env
+.credentials.json
+access.json
+access.json.*
+feishu-access.json
+*.pid
+*.lastuuid
+*.stamp
+settings.local.json
+runtime.local.json
+config.json
+configs/rg-*.toml
+auth-qr.png
+auth.json
+
+# --- runtime state / logs ---
+*.log
+_state/
+.daily-ingest-queue/
+queue/
+sessions/
+.tmp/
+*.sqlite
+
+# --- build / deps ---
+node_modules/
+dist/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.smart-env/
+.obsidian/workspace*.json
+.obsidian/cache

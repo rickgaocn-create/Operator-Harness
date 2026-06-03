@@ -1,0 +1,222 @@
+---
+category: meta
+name: compress
+description: Save a session log before context decays, optionally with a cross-tool resume block so a fresh Claude/Codex session can pick the work up. Use /compress when wrapping up, switching tasks, nearing context pressure, preparing to compact, or handing work to another tool.
+model: claude-sonnet-4-6
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+last-major-rewrite: 2026-05-29
+---
+# Skill: Compress Session
+
+Save a structured, searchable log of the current session before closing. Captures decisions, learnings, and pending tasks so nothing's lost between sessions. Sessions decay fast in memory; the log is the bridge.
+
+Two operations live in this skill, in order:
+1. **Compress to disk** (Phases 1–4) — write the session log into the vault. This is the durable record.
+2. **Compact context** (Phase 5, optional) — once the log is on disk, you can safely free Claude's context window via `/compact` at logical boundaries rather than letting auto-compaction fire mid-task.
+
+Optionally, when you pass a next-focus (`/compress <what the next session will do>`) or are handing work to another tool, the log also gets a tool-agnostic **Resume (cross-tool)** block so a fresh Claude *or* Codex session can pick the work up — no separate handoff artifact needed (see § Cross-tool resume block, below Phase 2).
+
+The disk save always runs first because compaction destroys multi-step conversation context — but never the files you've already written.
+
+## When to Use
+
+- Ending a focused work session
+- Before closing Claude / context window
+- After any session where decisions were made, problems solved, or context shifted
+
+## How It Works
+
+1. Scan the conversation for what's worth preserving
+2. Confirm draft with user
+3. Format as structured log
+4. Save to **`04 Notes/Session Logs/`**
+5. Surface any new RG-owned tasks to **`06 Tasks/Inbox.md`**
+
+---
+
+## Phase 1: Draft What to Preserve · 6-Bucket Retro (MECE)
+
+Scan the conversation and pull, into **exactly** these 6 buckets. Each bucket is mutually exclusive; if an item could fit two, prefer the higher one in the list. **Empty buckets are valid** — write `(none this session)`. Don't fabricate to fill.
+
+1. **🐛 Bugs discovered** — things that broke or surfaced during the session (tool errors, broken wikilinks, dead automations, schema mismatches, stale references, harness misfires). Surfaced, not necessarily fixed.
+2. **❌ Failed assumptions** — beliefs the session proved wrong. State the prior belief, the contradicting evidence, and the corrected understanding. (e.g., "Assumed M.11 compression would fix /biz chain. Refuted by 5/21 W21 biweekly miss at compressed baseline.")
+3. **🏛️ Architecture decisions** — durable structural choices made this session. State the decision + the rationale + what was rejected. These promote to `02 Cards/meta/` with `adr: true` for the ADR layer.
+4. **🚫 Rejected approaches** — paths considered and not taken (and why). Critical to preserve — keeps future sessions from re-litigating dead-ends. Less load-bearing than ADRs (didn't happen), but worth knowing.
+5. **🔧 Workflow improvements** — friction we'd remove next time. Tools, prompts, sequences, defaults that would have been better. Promote durable ones to 09 Rules or skill patches; ephemeral ones stay in the log.
+6. **❓ Unresolved questions** — things still open. Decisions deferred, debugging not finished, external dependencies, "need to ask X." Each should have a path to closure (next session topic / task / who-decides).
+
+**Plus metadata** (not a retro bucket — searchability trace):
+- **Files modified** — vault files created or edited
+- **Pending tasks** — surfaced commitments to route per Phase 3 (Inbox / project Kanban)
+
+Present to user:
+
+> "Here's the 6-bucket retro for this session — confirm or edit before I write:"
+> [draft, one heading per bucket, empty buckets noted]
+
+---
+
+## Phase 2: Format Session Log
+
+**Path:** **`04 Notes/Session Logs/YYYY-MM-DD-[slug].md`**
+
+Slug = 2–3 word descriptor in kebab-case. Examples: `2026-04-20-xiaopeng-bd`, `2026-04-21-ma-target-screen`, `2026-04-22-aix-vendor-eval`.
+
+Create **`04 Notes/Session Logs/`** if missing.
+
+```markdown
+---
+type: session
+date: YYYY-MM-DD
+projects: [{{PROJECT_A}}, {{ORG_B}}]
+topics: [topic1, topic2]
+outcome: one-line summary of what this session accomplished
+retro-buckets:
+  bugs: N
+  failed-assumptions: N
+  adrs: N
+  rejected-approaches: N
+  workflow-improvements: N
+  unresolved-questions: N
+adr-candidates: []   # wikilinks to Cards promoted to 02 Cards/meta/ with adr: true
+next-focus: null     # OPTIONAL — one-line "what the next session should do" (set when handing off)
+suggested-skills: [] # OPTIONAL — entry-point skills for the next agent
+target-tool: any     # OPTIONAL — any | claude | codex (who the resume block targets)
+---
+
+# Session: YYYY-MM-DD — [slug]
+
+## Quick Reference
+**Topics:** topic1, topic2
+**Projects:** {{PROJECT_A}} / {{ORG_B}}
+**Outcome:** [one sentence]
+
+## 🐛 Bugs discovered
+- [bug surfaced — file/skill/symptom — fixed Y/N]
+
+## ❌ Failed assumptions
+- **Prior belief:** [what we thought]
+  **Refuted by:** [evidence]
+  **Corrected understanding:** [new model]
+
+## 🏛️ Architecture decisions
+- **Decision:** [what was chosen]
+  **Rationale:** [why]
+  **Rejected:** [what was considered and not taken]
+  **Promoted to:** [[02 Cards/meta/C{date}-{slug}]] with `adr: true` (if durable)
+
+## 🚫 Rejected approaches
+- **Considered:** [path]
+  **Why not:** [trade-off / cost / failure mode]
+
+## 🔧 Workflow improvements
+- [friction observed → proposed fix → promote path (09 Rule patch / skill edit / Card / log-only)]
+
+## ❓ Unresolved questions
+- [open question — path to closure: next session / task ID / who-decides]
+
+## ⏭️ Resume (cross-tool) — *optional; include only when handing off or a next-focus was given*
+> Tool-agnostic pickup for a fresh Claude **or** Codex session. References are vault-relative paths/URLs a Codex session can open directly.
+- **Next focus:** [one line — what the next session should accomplish]
+- **First steps (ordered):** 1) [unambiguous first action]  2) …
+- **Suggested skills:** `/resume` (cold-load vault state), [others] — *Codex: no slash skills; follow First steps inline.*
+- **Referenced artifacts:** [[paths]] / URLs / `git:<hash>` — reference, don't re-paste.
+
+---
+
+## Files Touched (metadata)
+- [[path/to/file.md]] — [what changed]
+
+## Pending Tasks (routed)
+- [ ] [task title] #context-tag 🔼 📅 YYYY-MM-DD → [routed to: Inbox / project Kanban / Personal]
+
+---
+
+## Raw Session Log
+[Full conversation summary archived below for searchability]
+```
+
+### Cross-tool resume block (optional)
+
+Include the **`## ⏭️ Resume (cross-tool)`** section + the `next-focus` / `suggested-skills` / `target-tool` frontmatter **only** when the user passed a next-focus (`/compress <focus>`) or is handing the work to another tool. Otherwise omit them — a plain retro doesn't need a pickup block.
+
+When you do include it:
+- **Tool-agnostic.** Markdown + vault-relative paths/URLs only; no Claude-only mechanics in load-bearing steps — a Codex session must be able to open every reference. Name suggested skills, but always pair them with an inline-steps fallback.
+- **Reference, don't duplicate.** Point at artifacts (this log's own buckets, project plans, commits by hash); don't re-paste them into the resume block.
+- **Redact.** Strip secrets / PII / sensitive counterparty specifics first (`09 Rules/sensitivity-guard.md`); gate on the forwardable-quality guard once it lands. The vault is git/Obsidian-synced — a leak here is durable.
+
+---
+
+## Phase 3: Surface New Tasks
+
+For any **Pending Tasks** from Phase 1 not already in **`06 Tasks/Inbox.md`**, append per `/task-capture` rules — same line format, context tag, priority, due date. Show what will be appended; confirm before writing.
+
+Counterparty-owned items that surfaced (e.g. "vendor will send pricing by Friday") stay in the session log only — those aren't ours to track.
+
+---
+
+## Phase 4: Confirm and Save
+
+Write after confirmation. Close with:
+
+> "Saved: [[04 Notes/Session Logs/YYYY-MM-DD-slug.md]] — [n] decisions, [n] learnings, [n] tasks queued to Inbox."
+
+---
+
+## Phase 5: Strategic Context Compaction (optional)
+
+Once the session log is on disk, Claude's in-memory context becomes safe to free via `/compact`. This is the right moment to suggest it — but only at logical boundaries, not arbitrarily.
+
+### When to suggest `/compact` after the save
+
+| Phase Transition | Compact? | Why |
+|---|---|---|
+| Research → Planning | Yes | Research context is bulky; the plan is the distilled output |
+| Planning → Execution | Yes | The plan is now in TodoWrite or a vault file; free context for the work |
+| Mid-task (mid-meeting-note, mid-card-write, mid-deck) | **No** | Losing file paths and partial state is costly — finish first |
+| After a failed approach | Yes | Clear the dead-end reasoning before trying a new angle |
+| Debugging / troubleshooting → next topic | Yes | Debug traces pollute context for unrelated work |
+| Switching projects (e.g., {{PROJECT_A}} → {{ORG_B}}) | Yes | Hard context shift; better to start fresh |
+| Long session approaching context limits (~200K tokens) | Yes | Compact before auto-compaction fires at an arbitrary point |
+| Just finished a focused session, ending Claude soon | **No need** | The save already preserves what matters; let it end naturally |
+
+### What survives `/compact` (your safety net)
+
+| Persists | Lost in compaction |
+|---|---|
+| CLAUDE.md instructions | Intermediate reasoning and analysis |
+| TodoWrite / TaskCreate list | File contents previously read (must re-read) |
+| Auto-memory files (`~/.claude/projects/.../memory/`) | Multi-step conversation context |
+| Files on disk — **including the session log you just wrote in Phase 2** | Nuanced verbal preferences stated mid-session |
+| Git state | Tool-call history and counters |
+
+Because Phase 2 already wrote the session log to disk, the post-compact Claude can re-read it via `[[04 Notes/Session Logs/...]]` if the next task needs that context.
+
+### How to suggest
+
+After confirming the save in Phase 4, append a one-line recommendation only when the decision guide says "Yes". Example:
+
+> "Saved: [[04 Notes/Session Logs/2026-05-12-aix-vendor-eval.md]] — 3 decisions, 5 learnings, 2 tasks queued.
+> Suggest running `/compact Focus on next: {{ORG_B}} weekly update` now — this was a research-heavy phase and the next task is unrelated."
+
+If the decision guide says "No" or "No need", say nothing. Don't suggest compacting just to suggest it.
+
+### `/compact` with a focus directive
+
+Always pair `/compact` with what comes next when possible:
+
+```
+/compact Focus on drafting the biweekly report — only the OKR-relevant context matters now
+```
+
+This gives Claude a North Star for what to retain during the compaction summary it generates.
+
+### What this skill does NOT do
+
+- Does not invoke `/compact` for the user — that's a slash command they run themselves.
+- Does not install any compaction hooks. ECC's `strategic-compact` ships a `suggest-compact.js` PreToolUse hook; this vault deliberately doesn't take it (hooks fight your SessionStart pipeline).
+- Does not compact mid-conversation without warning. Always saves first.
+
+---
+
+*Phase 5 derived from ECC's `strategic-compact` skill (MIT, affaan-m/everything-claude-code), adapted for the vault's compress-first-then-compact pairing.*

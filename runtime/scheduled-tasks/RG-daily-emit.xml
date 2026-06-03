@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Description>Daily 08:00 鈥?run /daily-emit skill in autonomous mode (read tomorrow-seed, write today daily note)</Description>
+
+    <URI>\RG-daily-emit</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+
+    <ExecutionTimeLimit>PT20M</ExecutionTimeLimit>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <RestartOnFailure>
+
+      <Count>1</Count>
+
+      <Interval>PT15M</Interval>
+
+    </RestartOnFailure>
+
+    <StartWhenAvailable>true</StartWhenAvailable>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+
+  </Settings>
+
+  <Triggers>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-23T08:00:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>{{USER_HOME}}\.claude\skills\daily-emit\run_wrapper.cmd</Command>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

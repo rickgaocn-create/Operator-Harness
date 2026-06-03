@@ -1,0 +1,54 @@
+{
+  "name": "afk-code",
+  "version": "0.3.1",
+  "description": "Monitor and interact with Claude Code sessions from Slack/Discord/Telegram",
+  "author": "Colin Harman",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/clharman/afk-code.git"
+  },
+  "type": "module",
+  "bin": {
+    "afk-code": "./dist/cli/index.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx src/cli/index.ts",
+    "qa:feishu": "tsx scripts/qa-feishu-bridge.ts",
+    "qa:codex-runner": "tsx scripts/qa-codex-runner-input.ts",
+    "prepublishOnly": "npm run build",
+    "postinstall": "node -e \"const fs = require('fs'); const path = require('path'); const dir = path.dirname(path.dirname(require.resolve('node-pty'))); const prebuilds = path.join(dir, 'prebuilds'); if (fs.existsSync(prebuilds)) { fs.readdirSync(prebuilds).forEach(p => { const helper = path.join(prebuilds, p, 'spawn-helper'); if (fs.existsSync(helper)) fs.chmodSync(helper, 0o755); }); }\""
+  },
+  "files": [
+    "dist",
+    "slack-manifest.json",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "slack",
+    "discord",
+    "telegram",
+    "bot",
+    "ai",
+    "cli"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@slack/bolt": "^4.6.0",
+    "cross-spawn": "^7.0.6",
+    "discord.js": "^14.25.1",
+    "grammy": "^1.35.0",
+    "node-pty": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  }
+}

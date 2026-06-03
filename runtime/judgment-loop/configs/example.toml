@@ -1,0 +1,86 @@
+# judgment-loop instance config (template). Copy this and point it at your content.
+# One config = one judgment graph + the corpus it's mined from.
+
+[paths]
+# Root that the relative dirs/globs below resolve against.
+#   "."          -> the directory this config file lives in
+#   "/abs/path"  -> an absolute path to your notes vault / repo
+root = "."
+
+[graph]
+# Directory holding your typed judgment nodes (one .md per value / framework).
+dir = "graph/_judgment"
+
+# Frontmatter keys the engine reads. Defaults shown — override only if your notes differ.
+[graph.frontmatter]
+id = "id"
+name = "name"
+type = "type"               # "value" or "framework"
+applies_to = "applies-to"   # tags an output context is matched against (the lens)
+embodies = "embodies"       # (frameworks) the value-ids this framework serves
+
+# Bold-label fields lifted from each node body, as written in the .md (e.g. `**Statement:** …`).
+[graph.body]
+statement = "Statement"
+procedure = "Procedure"
+rules = "Rules that serve it"
+operationalized = "Operationalized by"
+
+[graph.tags]
+baseline = "baseline"   # applies-to tag = always-on lens (the floor; never diverged)
+
+[lens]
+cap = 4   # max context-specific lenses returned (lead + supports)
+
+[distill]
+corrections = "state/corrections.jsonl"        # your append-only capture log
+proposals = "state/distill-proposals.jsonl"    # where the model writes proposals
+threshold = 5                                  # distill is "due" at this many new events
+new_status = "new"
+placeholder_marker = 'J\d\w*'   # your convention for marking an unfilled edge in a node
+
+[harvest]
+cap = 40
+
+# keyword -> node-id hints (name YOUR nodes; the model finalizes the real `touches`).
+[[harvest.touch_hints]]
+pattern = 'truth|honest|verif|disconfirm'
+nodes = ["v-truth-over-comfort"]
+[[harvest.touch_hints]]
+pattern = 'leverage|compound|reusab|portab'
+nodes = ["v-compounding-growth"]
+
+# --- corpus sources: point these at YOUR notes ---
+
+# A markdown source: glob your notes, lift a lead blockquote + named `## sections`.
+[[harvest.sources]]
+kind = "markdown"
+label = "card"
+glob = "cards/**/*.md"
+include_lead_blockquote = true
+sections = ["Mechanism", "Application"]
+skip_status = ["archived"]
+tier = "prior"
+base_score = 2
+score_bonus_status = { live = 1 }
+
+# A daily/work-log source (domain tier): mine the judgment-bearing sections only.
+[[harvest.sources]]
+kind = "markdown"
+label = "daily-note"
+glob = "daily/*.md"
+sections = ["End of Day Review", "Quick Capture"]
+meaningful_gate = true          # skip near-empty days
+tier = "domain"
+base_score = 2
+
+# A JSONL source: your corrections log, filtered to already-graduated events.
+[[harvest.sources]]
+kind = "jsonl"
+label = "promoted-correction"
+path = "state/corrections.jsonl"
+filter = { status = "promoted" }
+passage_fields = { rule = "candidate_rule", why = "why" }
+touches_field = "touches"
+tier = "logic"
+base_score = 2

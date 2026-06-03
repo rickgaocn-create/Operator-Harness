@@ -1,0 +1,15 @@
+tier: packaged
+entrypoint: SKILL.md
+role: structural-eval-gate
+state_reads:
+  - .claude/_eval-fixtures/eval-config/*.yaml
+  - .claude/skills/*/skill-package.yaml
+state_writes:
+  - .claude/_eval-fixtures/eval-runs/run-*.json
+required_evals:
+  - runner.py skill-eval
+  - skill_surface_lint.py
+dashboard_outputs:
+  - eval run records
+  - package manifest count
+notes: "Packaged-skill discovery starts here; thin skills stay SKILL.md-centric."

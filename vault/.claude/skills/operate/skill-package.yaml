@@ -1,0 +1,16 @@
+tier: packaged
+entrypoint: SKILL.md
+role: conversational-cockpit
+state_reads:
+  - 09 Rules/operator-intents.md
+  - 09 Rules/underlays.md
+  - .claude/_state/underlays/source-graph.json
+  - .claude/_state/underlays/taste-engine.json
+  - .claude/_state/middleware-events.jsonl
+state_writes:
+  - none
+required_evals:
+  - runner.py operate
+dashboard_outputs:
+  - operate-request.jsonl consumer contract
+notes: "/operate is the default human conversational interface; direct skills remain implementation details."

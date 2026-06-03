@@ -1,0 +1,506 @@
+---
+category: work
+name: daily-note
+description: Create or open today's Time-pillar daily note with frontmatter, weekly link, Top 3, Day Planner, and EOD review. Trigger on /daily-note, daily note, open today, start-of-day orientation, or when another skill logs to today's ledger.
+model: claude-opus-4-7
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+---
+# Skill: Daily Note
+
+Daily note is now the machine ledger/backing store for Harness Dashboard and `/operate`. Keep parser-stable sections; do not optimize it as the primary human operating surface.
+
+Create or open today's daily note in **`04 Notes/daily notes/{YYYY-MM-DD}.md`**, following the Time pillar cascade contract from [[09 Rules/time.md]]. The file is the day's ledger — start-of-day orientation, mid-day capture, end-of-day rollup.
+
+## When to Use
+
+- Start-of-day orientation
+- User says "daily note", "today's note", "open today", "what's today look like"
+- Any other skill needs to log to today's ledger (e.g. `/source-ingest` Phase 6, `/card-lint` Phase 7)
+- **Close mode** — user says "close out today", "EOD review", "wrap up the day", or invokes `/daily-note --close`. Runs Phase 7 reconciliation instead of the open/create flow.
+
+## How It Works
+
+**Open / create flow (default):**
+1. Compute today's date + ISO week
+2. If today's note exists → summarize it; otherwise create from template
+3. Verify parent weekly file exists; offer to create it first if missing (cascade integrity matters more than speed)
+4. Write daily with frontmatter that satisfies the Time pillar contract
+
+**Close flow (`--close`):**
+- Skip Phases 3–6. Jump directly to Phase 7 (EOD reconciliation) — parses today's `## Day Planner`, walks each item with the user, propagates results to project Kanbans, syncs frontmatter arrays, sets `status: closed`.
+
+---
+
+## Phase 1: Compute Date Anchors
+
+| Anchor | Value | Source |
+|---|---|---|
+| Today | `YYYY-MM-DD` (ISO) | `date +%Y-%m-%d` |
+| Weekday | full name | `date +%A` |
+| ISO week | `YYYY-Www` | `date +%Y-W%V` (Monday-start) |
+| Parent file | **`04 Notes/weekly/{YYYY-Www}.md`** | rule canonical |
+
+---
+
+## Phase 2: Check for Existing Note
+
+```bash
+ls "04 Notes/daily notes/$(date +%Y-%m-%d).md" 2>/dev/null
+```
+
+**If it exists:** Read it and summarize — what priorities were set, what's checked off, what's still open. Ask if anything needs updating. Stop here unless the user wants more.
+
+**If not:** Continue to Phase 3.
+
+---
+
+## Phase 3: Verify Parent Weekly File
+
+Time pillar requires every daily to link upward — without a parent weekly, you can't reverse-navigate from daily → week → quarter, and the cascade integrity check breaks.
+
+```bash
+ls "04 Notes/weekly/$(date +%Y-W%V).md" 2>/dev/null
+```
+
+**Missing → auto-create (adopt decision 2026-05-27 · no longer just "offer"):** scaffold `04 Notes/weekly/{YYYY-Www}.md` per `time.md` weekly anatomy **before** writing the daily. Pull Big Rocks from `2026-Q2.md` (12-Week) + the previous 双周报 `§ 下双周聚焦`; seed the `§ OKR Progress Check` from the `Q2 OKR Tracker` O/KR spine; set the biweekly-linkage frontmatter (`biweekly-period` / `biweekly-role` / `biweekly-report` / `biweekly-prev` / `okr-tracker`). This runs in autonomous `/daily-emit` too — the first daily of a new ISO week guarantees the parent weekly exists, no prompt needed. Cascade integrity matters more than speed.
+
+When the week's Big Rocks are genuinely unknown, scaffold the structure with rows marked "confirm/refine at Friday review" rather than block or fabricate. Never leave the daily parent-less — a daily without a weekly is invisible to the Time pillar and re-breaks the daily-note eval.
+
+---
+
+## Phase 3.5: State-aware Bootstrap (2026-05-14 加入)
+
+> **Why this phase exists**: 2026-05-14 incident — Claude created daily note 时不知道用户在 SH 出差，假设广州 base routine。`trip-date:` frontmatter signal 一行 grep 就能命中但没读 → daily note 失效。Genesis: [[I260514-grep-trip-date-before-daily-note-top3]]。
+>
+> **Rule**: 任何 daily-note 创建 BEFORE Phase 4 must scan 6 vault surfaces to ground today's state in continuity. Cite vault sources。
+
+### Step 1 — Trip / OOO Context Check（最高优先级）
+
+```bash
+today=$(date +%Y-%m-%d)
+# Grep all trip bundles for trip-date including today
+grep -l "trip-date.*${today}" "03 Projects/**/03 行程计划/(C) 差旅*.md" 2>/dev/null
+grep -l "trip-date.*${today}" "03 Projects/**/差旅*.md" 2>/dev/null
+```
+
+如有命中 → 读 trip bundle § 1 行程概览 + § 2 议程 + § 0 (申请表 if 已订)。
+
+**Effect**：
+- Top 3 candidates 围绕 trip 主线议程（不是 generic routine）
+- Day Planner 反映实际行程时段（航班 / 会议 / 自由时段 / 退房 / 返程）· v3 hybrid format since 2026-05-21: 每行 `- [ ] HH:mm task {{datetimeStart:: YYYY-MM-DDTHH:mm:00}}` (BREAK / END 行不加 datetimeStart)
+- frontmatter 加 `trip-context: "[[(C) 差旅...]]"` field
+- tags 加 `沪差0XYZ` / `厦差0XYZ` chain-anchor
+
+### Step 2 — Yesterday's Carry Forward
+
+Read **`04 Notes/daily notes/{yesterday}.md`** § End of Day Review § Carry forward to tomorrow.
+
+如有未完成 carry-forward items → 作 Top 3 候选 surface 给用户。
+
+### Step 3 — This Week's Big Rocks
+
+Read parent weekly file (**`04 Notes/weekly/{YYYY-Www}.md`**) § This Week's Big Rocks。
+
+任何 Big Rock 没在过去 N 天 daily 体现过 → 强候选。
+
+### Step 4 — Recent 7-Day Unfinished Day Planner
+
+```bash
+# Glob last 7 daily notes
+for d in 7 6 5 4 3 2 1; do
+  past_date=$(date -d "$d days ago" +%Y-%m-%d 2>/dev/null || date -v-${d}d +%Y-%m-%d)
+  ls "04 Notes/daily notes/${past_date}.md" 2>/dev/null
+done | xargs grep -A1 "^- \[ \] " | grep "HH:mm" | head -10
+```
+
+任何 7 天内出现 ≥3 次的 unfinished Day Planner item → 长期 slipped，propose 升 Top 3 OR 转 Kanban Backlog（陈年 dead task 不应继续在 Day Planner）。
+
+### Step 5 — Surface tasks `{{dateDue:: today}}` + `{{priority:: 0|1|2}}`
+
+```bash
+# Operon syntax — post 2026-05-21 migration (priorities 0/1/2/3/4/5/`/` per .operon/priorities.json)
+grep -lE "\{\{dateDue:: ${today}\}\}" "03 Projects/{{PROJECT_A}}/Tasks.md" "03 Projects/{{ORG_B}}/Tasks.md"
+grep -lE "\{\{priority:: [012]\}\}" "03 Projects/{{PROJECT_A}}/Tasks.md" "03 Projects/{{ORG_B}}/Tasks.md"
+```
+
+Also `{{status:: Project.(Overdue|ThisWeek)}}` carries lane signal. 读这些 task lines → propose 加入 Day Planner 时间块。
+
+### Step 6 — Recent Instincts Touched
+
+```bash
+# 7 天内创建或更新的 instincts
+find "02 Cards/instincts/" -name "I*.md" -newermt "$(date -d '7 days ago')" 2>/dev/null
+```
+
+任何 instinct 在 7 天内被 touched → 列给用户作 context（"这周你 capture 的微模式："），让 daily 工作能 reference。
+
+### Step 7 — Synthesize Top 3 candidates
+
+把 Step 1-6 collected 信号合成给 Phase 4 用：
+
+```
+今天 State-aware candidates:
+
+🎯 Trip / OOO context:
+- {如 trip 命中：trip name + day N/M + 关键议程}
+- {如无：no trip today}
+
+📦 Carry forward from yesterday:
+- {如有：列 max 3}
+
+🪨 This week's Big Rocks not yet touched:
+- {如有：列 max 2}
+
+🔁 Long-slipped items (7+ days):
+- {如有：列 max 2，propose 转 Backlog}
+
+📅 Due today (Kanban):
+- {如有：列}
+
+🧠 Recent instincts (context):
+- {如有：列 1-2 行}
+```
+
+→ 进 Phase 4 用作 Top 3 推荐 baseline。
+
+---
+
+## Phase 4: Ask for Top 3 Priorities (bound to surface tasks when possible · 2026-05-21 PM)
+
+> "What are your top 3 priorities for today?"
+>
+> **基于 Phase 3.5 已 surface 的 candidates**，主动给推荐 Top 3 + 让用户 swap / accept。不再让用户从零想。
+
+Sample prompt (after Phase 3.5):
+
+```
+Phase 3.5 已扫描 vault — 推荐 Top 3:
+
+1. {从 Trip 主线 / Carry forward / Big Rocks 综合的最强候选} ← bound to 03 Projects/{{PROJECT_A}}/Tasks.md {{operonId:: abc1234}}
+2. {次强候选} ← bound to 06 Tasks/Inbox.md {{operonId:: def5678}}
+3. {第三候选} ← no surface binding (new commitment — will write Inbox raw item after pick)
+
+候选池见 § State-aware candidates。要接受 / 替换哪几条？
+```
+
+Keep the prompt short — the user picks; Claude doesn't lecture.
+
+### Top 3 ↔ surface task binding (v3 Phase 4 of 2026-05-21 daily-note overhaul)
+
+When a Top 3 candidate comes from Phase 3.5 Step 5 ("surface tasks `{{dateDue:: today}}` + `{{priority:: 0|1|2}}`") or Step 2 ("yesterday's carry-forward"), the candidate's source surface task has a known `{{operonId}}`. Emit the Top 3 line with a binding HTML comment so `/sync-day` Phase 5b can propagate `[x]` toggles back to the surface:
+
+```markdown
+- [ ] 🔴 **AM ≤11:00 飞前 critical-path verify-then-补** — narrative reasoning + emoji + scope <!-- bound: {{operonId:: abc1234}} surface=03 Projects/{{PROJECT_A}}/Tasks.md -->
+```
+
+The HTML comment is **Operon-invisible** (not parsed as a field — preserves Top 3 as pure morning planning, not a duplicate indexed task). Comment grammar:
+
+```
+<!-- bound: {{operonId:: <7char>}} surface=<path-from-vault-root> -->
+```
+
+When user later marks `[x]` on a bound Top 3 line, `/sync-day` Phase 5b:
+1. Greps daily note for `<!-- bound: -->` comments next to `[x]` lines that weren't `[x]` at last sync
+2. Looks up the surface task by operonId
+3. Proposes `[ ] → [x]` + `{{status:: Project.Done}}` + `{{dateCompleted:: {today}}}` write on the surface line
+4. User confirms per the standard `(a/b/c)` picker
+
+For Top 3 items WITHOUT a Phase 3.5 surface match (= net-new commitment user types in directly): emit the Top 3 line WITHOUT the `<!-- bound: -->` comment AND propose a one-shot `/task-capture` into **`06 Tasks/Inbox.md`** so a surface task exists by EOD. If user declines, the Top 3 line stays purely narrative (no sync to operon — user owns the reconciliation manually).
+
+**Why HTML comments (not `{{operonId}}` field on the Top 3 line)**: a `{{operonId}}` field on the Top 3 line would make Operon's indexer see TWO tasks with the same id (surface + Top 3) — triggering `duplicateConflicts` modal. Operon handles this via `expectedDuplicateTransitionInstances` for legitimate cases (e.g. recurring), but Top 3 isn't one of those. Comment binding avoids the duplicate-conflict surface entirely.
+
+---
+
+## Phase 5: Create the Note
+
+**Path:** **`04 Notes/daily notes/{YYYY-MM-DD}.md`**
+
+**Canonical contract:** [[09 Rules/time.md#Daily]] — frontmatter spec + field semantics live there. This skill instantiates it.
+
+```markdown
+---
+type: daily
+date: YYYY-MM-DD
+weekday: {Monday|Tuesday|...|Sunday}
+iso-week: W{nn}
+quarter: YYYY-Q{n}
+parent: "[[YYYY-Www]]"
+status: active
+day-mode:
+tags:
+  - daily-note
+  - YYYY/Q{n}/W{nn}
+projects-touched: []
+people-touched: []
+cards-spawned: []
+actions-touched: []
+# daily-rating (filled at /daily-note --close · feeds /vault-evolve Phase 5.c metrics)
+# Schema: { morning-bootstrap: 1-5, chew-actionability: 1-5, draft-acceptance: Y|N }
+---
+
+> **Cascade:** [[GOALS.md]] → [[YYYY-Q{n}]] → [[YYYY-Www]] → **YYYY-MM-DD {Weekday} · Day {N}/7**
+
+# YYYY-MM-DD · {Weekday}
+
+## Top 3 Priorities
+<!-- Each line MAY carry a binding comment if the priority maps to a surface-tracked Operon task. Format: `- [ ] <narrative> <!-- bound: {{operonId:: <7char>}} surface=<path> -->`. /sync-day Phase 5b uses the binding to propagate [x] back to the surface task on close. Top 3 lines without a binding are pure narrative (no Operon sync). -->
+
+- [ ] {priority 1} <!-- bound: {{operonId:: <id>}} surface=<path> -->
+- [ ] {priority 2}
+- [ ] {priority 3}
+
+### 🥁 Daily Drum (live · Operon)
+<!-- Live view of today + overdue open tasks across all surfaces. If a 🔺/⏫ task here is NOT reflected in Top 3 above, reconcile before EOD. -->
+
+```operon
+filter: "Daily Drum (today + overdue · open)"
+```
+
+---
+
+## Day Planner
+<!-- Day Planner (OG) + Operon Calendar Time Grid 双读 · v3 hybrid syntax: `- [ ] HH:mm task {{operonId:: <7char>}} {{datetimeStart:: YYYY-MM-DDTHH:mm:00}}` · BREAK/END lines stay plain (no Operon block) -->
+
+{Pre-populated by /daily-emit OR hand-filled. Each task line carries operonId + datetimeStart so both plugins render. BREAK / END lines stay plain.}
+
+---
+
+## Meetings & Conversations Today
+<!-- 按时间倒序，每条：HH:MM · 渠道 · 对方（[[wiki]]）· outcome -->
+
+---
+
+## Active Tracks
+
+### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+- **Today:**
+
+### {{ORG_B}} — `03 Projects/{{ORG_B}}/`
+- **Today:**
+
+### AIX — Track 3 ({{ORG_B}} parallel)
+- **Today:**
+
+> 本周 ⏫ 自动从 [[YYYY-Www]] § Big Rocks 投影 — daily 不复述
+
+---
+
+## Quick Capture
+<!-- 散记，由 /inbox-process 或 /source-ingest 在日终处理 -->
+
+---
+
+## Ingests
+<!-- 由 /source-ingest 自动追加 — [HH:MM] source → cards -->
+
+## Lint
+<!-- 由 /card-lint 自动追加 — [HH:MM] N scanned, R/Y/G findings -->
+
+---
+
+## End of Day Review
+
+### 📦 Shipped today (live · Operon)
+<!-- Auto-computed from {{dateCompleted:: today}}. Add prose annotations in **Shipped:** below — narrative WHY, not inventory WHAT. -->
+
+```operon
+filter: "Shipped Today"
+```
+
+**Shipped (annotations):**
+-
+
+### ⏰ Slipped (live · Operon)
+<!-- Auto-computed: open tasks with {{dateDue:: < today}}. Annotate below — why slipped, what to do. -->
+
+```operon
+filter: "Slipped (overdue · open)"
+```
+
+**Slipped (annotations):**
+-
+
+### ➡️ Carry forward — tomorrow (live · Operon)
+<!-- Auto-computed: open tasks with {{dateDue:: tomorrow}}. Append manual carry-overs below if reschedules needed. -->
+
+```operon
+filter: "Carry Forward (tomorrow)"
+```
+
+**Carry forward (annotations / reschedules):**
+-
+
+### Cross-references (filled at close)
+
+**Cards spawned:** _填后同步至 frontmatter `cards-spawned`_
+-
+
+**Actions touched:** _填后同步至 frontmatter `actions-touched`_
+-
+
+**People touched:** _填后同步至 frontmatter `people-touched`_
+-
+
+**Day-mode (set at close):** `exec | learning | hybrid | rest` → 改 frontmatter
+
+### Snapshot at close (frozen audit trail)
+<!-- /daily-note --close freezes the Shipped/Slipped/Carry-forward embed results into HTML comments here so historical dailies stay point-in-time accurate even though the embeds are live. -->
+
+<!-- snapshot-shipped: (filled by /daily-note --close) -->
+<!-- snapshot-slipped: (filled by /daily-note --close) -->
+<!-- snapshot-carry: (filled by /daily-note --close) -->
+```
+
+**Notes:**
+- `## Ingests` / `## Lint` 预留为子章节 — `/source-ingest` 和 `/card-lint` 直接 append，不创建章节
+- `## End of Day Review` 的 4 个 link sections（Cards / Actions / People + carry forward）填完后 → frontmatter 同步 → `status: closed`
+- `day-mode` 决定 EOD 完整度：`exec` 期望全填；`learning` / `rest` 允许只填 Quick Capture + EOD 简版
+
+**Day-of-week math (Day N/7):** Monday=1, Tuesday=2, ..., Sunday=7. `date +%u` gives ISO weekday number directly.
+
+---
+
+## Phase 6: Confirm
+
+> "Daily ready: [[04 Notes/daily notes/YYYY-MM-DD.md]] · parent: [[YYYY-Www]]. What are we starting with?"
+
+---
+
+## Phase 7: Close Mode — EOD Reconciliation
+
+**Invocation:** `/daily-note --close`, "close out today", "EOD review", "wrap up the day". Default target is today's note; `--date YYYY-MM-DD` allows back-fill closure of a past day.
+
+**Why this exists:** Day Planner OG's `completePastItems` is set to `false` (see **`09 Rules/tasks.md`** § Day Planner contract) — the plugin no longer auto-toggles items by clock time. Day Planner checkbox state is now user-authored truth, but Kanban status doesn't hear about it unless we walk the items. This phase is the back-sync.
+
+### Step 1 — Parse the Day Planner block
+
+Read target daily note. Locate `## Day Planner` section. Collect every line matching `^- \[(.)\] (\d{2}:\d{2}) (.+?)(?:\s*\{\{datetimeStart::.*\}\})?$`. Skip lines where the task body is `BREAK` or `END`.
+
+For each item, record: checkbox state, time, task text (with trailing `{{datetimeStart:: ...}}` stripped — v3 hybrid format since 2026-05-21), line number in daily note.
+
+### Step 2 — Match against canonical task surfaces
+
+For each Day Planner item, search task files in this priority order:
+
+1. **`06 Tasks/Today.md`** (🌅 Today board · renamed from `Tasks.md` 2026-05-21)
+2. **`03 Projects/{{PROJECT_A}}/Tasks.md`**
+3. **`03 Projects/{{ORG_B}}/Tasks.md`**
+4. **`06 Tasks/Personal.md`**
+
+**Matching rules (first hit wins, priority order)**:
+1. **Trip-context match (2026-05-14 加入)** — 如果 daily note frontmatter 有 `trip-context: [[...]]` field，先 read 该 trip bundle § 1 行程概览 + § 2 议程 + § 4 议程，匹配 Day Planner items 到 trip 议程 items（trip activity 直接 binding，不需进 Kanban）
+2. **Explicit wikilink** in Day Planner text → exact wikilink in Kanban line
+3. **`[chain-anchor]` token** in Day Planner text → same anchor in Kanban line
+4. **Substring containment** (≥6 char overlap, case-insensitive) — Chinese text matches by character substring without tokenization
+5. If >1 candidate, surface all for user pick
+
+If no match → tag the item `ad-hoc` (time block with no canonical task).
+
+**Long-slipped detection (2026-05-14 加入)**：
+对 `ad-hoc` items，检查是否出现在过去 7 天 Day Planner 中：
+
+```bash
+for d in 1 2 3 4 5 6 7; do
+  past=$(date -d "$d days ago" +%Y-%m-%d 2>/dev/null || date -v-${d}d +%Y-%m-%d)
+  grep -l "{item slug}" "04 Notes/daily notes/${past}.md" 2>/dev/null
+done
+```
+
+如出现 ≥3 次 → 标 `long-slipped`，walk user 时 propose 转 Kanban Backlog（不应继续在 Day Planner 飘）。Source: [[I260514-mid-day-sync-prevents-eod-reconciliation-drift]] § Why It Might Be A Pattern。
+
+### Step 3 — Walk items with the user (one consolidated picker)
+
+Present a single block, items numbered:
+
+```
+Day Planner reconciliation for 2026-05-13:
+
+1. [x] 09:30 携程支付 3 单 (¥2,176)
+   → matched: 03 Projects/{{PROJECT_A}}/Tasks.md:42
+   Status?
+
+2. [x] 10:00 复制 § 8 的 5 条 WeChat 发对应人
+   → no Kanban match — ad-hoc time-block
+   Status?
+
+3. [/] 16:30 Call with tencent Kazuki
+   → matched: 03 Projects/{{PROJECT_A}}/Tasks.md:58
+   Status?
+
+Reply with one letter per item (e.g. "s s p" or "1:s 2:a 3:p"):
+- s = shipped
+- p = partial (note slip reason)
+- n = not done
+- a = ad-hoc skip (no Kanban touch; optional post-hoc capture)
+```
+
+Per the text-mode rendering rule in user CLAUDE.md, do not use `AskUserQuestion` here — output the picker as plain text and wait for the reply.
+
+### Step 4 — Apply the writes
+
+Per item, batch into Edits:
+
+| Status | Kanban write | Daily note write |
+|---|---|---|
+| **shipped** | `[ ]` → `[x]` on matched line + append `✅ YYYY-MM-DD` | Append `- HH:mm <task>` to **Shipped:** in End of Day Review |
+| **partial** | No Kanban change | Append `- HH:mm <task> (partial: <reason>)` to **Slipped:** |
+| **not done** | No Kanban change | Append `- HH:mm <task>` to **Slipped:** |
+| **ad-hoc** | No Kanban write | If user labels it as done → append to **Shipped:** as `(ad-hoc)`; else drop. Offer optional `/task-capture` retro-write. |
+
+The Day Planner checkboxes themselves are **left as-is** during reconciliation — they are the user's source of truth, not derived state. Only the Kanban + EOD section are written.
+
+### Step 5 — Sync frontmatter arrays
+
+Parse body content of the daily note for:
+
+- `cards-spawned` ← all wikilinks matching `[[02 Cards/...]]`
+- `actions-touched` ← all wikilinks matching `[[10 Action/...]]` plus any `[chain-anchor]` tokens present in Day Planner / Active Tracks
+- `people-touched` ← wikilinks matching `[[01 Wiki/.../{Name} ({Org})]]` pattern in Meetings & Conversations and Ingests sections
+
+Replace frontmatter array values with the parsed set (de-duplicated, order-preserved by first appearance). If user has hand-curated entries that aren't body-derived, surface the diff before overwriting.
+
+### Step 6 — Close out
+
+1. Ask: *"Day-mode for today (exec / learning / hybrid / rest)?"* — write to `day-mode` frontmatter.
+2. **Ask 1-line manual rating** (2026-05-14 加入, feeds `/vault-evolve` Phase 5.c metrics):
+   > "EOD rating — `morning-bootstrap` (1-5, 4+ = useful) · `chew-actionability` (1-5, 4+ = tomorrow-seed Top 3 was actionable) · `draft-acceptance` (Y/N for any AI-drafted reply or artifact accepted today). Reply e.g. '4 5 Y' or 'skip'."
+   - Parse user reply into `daily-rating: { morning-bootstrap: N, chew-actionability: N, draft-acceptance: bool }` frontmatter object
+   - "skip" → omit the field for this day (vault-evolve handles missing gracefully)
+3. Set `status: closed` in frontmatter.
+4. Print summary:
+   ```
+   Closed 2026-05-13:
+   - Shipped: N items (M Kanban tickets stamped ✅)
+   - Slipped: N items
+   - Ad-hoc: N items
+   - Frontmatter sync: cards-spawned +N, actions-touched +N, people-touched +N
+   - Rating: morning {n}/5 · chew {n}/5 · draft {Y/N}
+   ```
+
+### Close-mode hard rules
+
+- **Never auto-toggle Day Planner checkboxes.** They're user-authored after Layer 1; reconciliation reads, does not write back into the Day Planner block.
+- **`✅ YYYY-MM-DD` only on the Kanban line.** Task Collector still owns daily-note checkbox cycling — don't preempt it.
+- **Match must be confirmed.** Never silently mark a Kanban item shipped on a fuzzy substring match — always show the matched line and let the user accept or override.
+- **Closure is reversible.** If user re-opens the day (`status: closed` → `active` manually), running `--close` again is idempotent for items not already stamped `✅`.
+- **`/sync-day` is preferred over EOD-only `--close`** for mid-day reconciliation (2026-05-14 加入). Phase 7 close-mode 假设用户必 close — 实际多日 chain / 出差日 / 忘记 close 都常见 → drift 累积。`/sync-day` 是 mid-day 入口。详 [[I260514-mid-day-sync-prevents-eod-reconciliation-drift]]。
+- **Auto-suggest carry-forward** (2026-05-14 加入): 当 Step 4 写 Slipped items 时，**主动 propose 它们作为 tomorrow's daily note Carry forward** — write to today's **`Carry forward to tomorrow:`** section。明天 Phase 3.5 Step 2 会 surface 这些。
+
+---
+
+## Hard Rules
+
+- **Path is **`04 Notes/daily notes/`** — lowercase, with space.** Legacy paths (`Daily/`, **`00 Raw/Daily/`**) exist from earlier vault states; treat anything else as drift, surface as `/inbox-process` candidate.
+- **`parent` frontmatter is non-skippable.** The cascade only works if reverse-navigation works. A daily without a parent weekly is invisible to the Time pillar.
+- **Don't restructure old dailies.** If a 2-week-old daily uses a different format, leave it alone — apply this template forward only. Format drift is cheap; rewriting the user's history isn't.
+- **Bilingual follows context, not the template.** Internal CN tracks → CN body; cross-border / meta → EN. Frontmatter keys stay English regardless.
+
+---
+
+## Failure Modes
+
+| Symptom | Fix |
+|---|---|
+| Sunday's date with ISO week mismatch | ISO week is Monday-start; Sunday belongs to the *previous* week's number. Verify with `date +%Y-W%V`. |
+| Parent weekly exists but lacks a Daily Cascade row for today | Append the row after creating the daily — patch only that one row. |
+| User has dailies in **`00 Raw/Daily/`** or similar | Surface as orphan finding for `/inbox-process` to triage. Don't auto-move user files. |

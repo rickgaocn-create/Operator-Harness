@@ -1,0 +1,130 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\inject-vault-memory.ps1\"",
+            "timeout": 30,
+            "statusMessage": "Loading Obsidian vault memory..."
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\inject-catchup-brief.ps1\"",
+            "timeout": 15,
+            "statusMessage": "Detecting catch-up + draining signal queue..."
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\check-channel-state.ps1\"",
+            "timeout": 15,
+            "statusMessage": "Probing inbound channel state..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\check-pending-signals.ps1\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\discord-topic-rename-counter.ps1\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/hooks/stop-check.py",
+            "timeout": 90
+          },
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\mirror-to-feishu.ps1\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/hooks/post-tool-middleware.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/_eval-fixtures/judgment_capture.py --hook",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "discord@claude-plugins-official": false,
+    "fakechat@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "session-report@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "feishu@local": true,
+    "enterprise-search@knowledge-work-plugins": true,
+    "legal@knowledge-work-plugins": true,
+    "pdf-viewer@knowledge-work-plugins": true,
+    "github@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/anthropics/claude-plugins-official.git"
+      }
+    },
+    "cli-anything": {
+      "source": {
+        "source": "github",
+        "repo": "HKUDS/CLI-Anything"
+      }
+    },
+    "local": {
+      "source": {
+        "source": "directory",
+        "path": "{{USER_HOME}}\\.claude\\plugins\\marketplaces\\local"
+      }
+    },
+    "knowledge-work-plugins": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/anthropics/knowledge-work-plugins.git"
+      }
+    }
+  },
+  "autoUpdatesChannel": "latest",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark-ansi"
+}

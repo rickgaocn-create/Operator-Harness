@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Description>Every 3h: consolidated harness liveness verdict (channels/scheduler/cortex/queues); edge-triggered alert on worsening</Description>
+
+    <URI>\RG-tier7-harness-pulse</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>false</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>false</StopIfGoingOnBatteries>
+
+    <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <StartWhenAvailable>true</StartWhenAvailable>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+
+  </Settings>
+
+  <Triggers>
+
+    <TimeTrigger>
+
+      <StartBoundary>2026-05-26T11:43:07+08:00</StartBoundary>
+
+      <Repetition>
+
+        <Interval>PT3H</Interval>
+
+        <Duration>P365D</Duration>
+
+        <StopAtDurationEnd>true</StopAtDurationEnd>
+
+      </Repetition>
+
+    </TimeTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>{{PYTHON_EXE}}</Command>
+
+      <Arguments>"{{VAULT_ROOT}}\.claude\routines\harness-pulse.py"</Arguments>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

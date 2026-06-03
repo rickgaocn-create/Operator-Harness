@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Description>Daily WeChat ingest from priority work chats 鈥?pulls last 24h messages + media, appends to daily note + Inbox.</Description>
+
+    <URI>\RG-daily-wechat-ingest</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+
+    <ExecutionTimeLimit>PT15M</ExecutionTimeLimit>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <RestartOnFailure>
+
+      <Count>1</Count>
+
+      <Interval>PT30M</Interval>
+
+    </RestartOnFailure>
+
+    <StartWhenAvailable>true</StartWhenAvailable>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+
+  </Settings>
+
+  <Triggers>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-20T06:00:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-20T12:00:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-20T18:00:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-20T00:00:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>{{USER_HOME}}\.claude\skills\daily-wechat-ingest\run_wrapper.cmd</Command>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

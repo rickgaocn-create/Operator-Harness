@@ -1,0 +1,29 @@
+tier: packaged
+entrypoint: SKILL.md
+role: forwardable-quality-organ
+state_reads:
+  - 09 Rules/operator-intents.md
+  - 09 Rules/attribution-discipline.md
+  - 09 Rules/sensitivity-guard.md
+  - 09 Rules/auto-chain-style.md
+  - .claude/_state/underlays/source-graph.json
+  - .claude/_state/underlays/taste-engine.json
+state_writes:
+  - delegated: best-of-n
+  - delegated: biz
+  - delegated: attribution-lint
+  - delegated: localize-cn
+  - delegated: pragmatic
+  - delegated: humanize
+required_evals:
+  - runner.py forwardable-quality
+  - runner.py best-of-n
+  - runner.py biz
+  - runner.py localize-cn
+  - runner.py pragmatic
+  - runner.py humanize
+dashboard_outputs:
+  - quality-gate verdict
+  - grader-verdicts
+  - attribution status
+notes: "Coordinator package for sendable artifacts. Downstream quality gates remain authoritative."

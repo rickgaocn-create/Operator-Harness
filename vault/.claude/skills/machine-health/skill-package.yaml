@@ -1,0 +1,32 @@
+tier: packaged
+entrypoint: SKILL.md
+role: machine-health-organ
+state_reads:
+  - .claude/_state/harness-pulse.json
+  - .claude/_state/autonomous-log.jsonl
+  - .claude/_state/usage.jsonl
+  - .claude/_state/middleware-events.jsonl
+  - .claude/_state/judgment-queue/
+  - .claude/_state/corrections.jsonl
+  - .claude/_state/harness-manifest.json
+  - .claude/profiles/harness-profiles.json
+  - .claude/_eval-fixtures/eval-runs/
+  - .claude/skills/*/skill-package.yaml
+state_writes:
+  - delegated: status
+  - delegated: harness-health
+  - delegated: sanity
+  - delegated: skill-eval
+  - delegated: rearm
+required_evals:
+  - runner.py machine-health
+  - runner.py skill-eval
+  - harness_map.py --check
+dashboard_outputs:
+  - profile status
+  - middleware warnings
+  - learning loop debt
+  - surface diet
+  - eval status
+  - liveness verdict
+notes: "Coordinator package for machine checks. It summarizes diagnostics rather than replacing them."

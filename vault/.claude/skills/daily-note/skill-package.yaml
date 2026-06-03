@@ -1,0 +1,19 @@
+tier: packaged
+entrypoint: SKILL.md
+role: machine-ledger
+state_reads:
+  - 04 Notes/daily notes/{today}.md
+  - 04 Notes/weekly/{iso_week}.md
+  - 06 Tasks/Today.md
+  - 03 Projects/{{PROJECT_A}}/Tasks.md
+  - 03 Projects/{{ORG_B}}/Tasks.md
+state_writes:
+  - 04 Notes/daily notes/{today}.md
+required_evals:
+  - runner.py daily-note
+dashboard_outputs:
+  - Top 3 Priorities
+  - Day Planner
+  - Quick Capture
+  - Ingests
+notes: "Daily notes are canonical backing ledgers optimized for dashboard and /operate parsing, not the primary human UI."

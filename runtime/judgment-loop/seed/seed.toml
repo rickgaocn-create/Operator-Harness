@@ -1,0 +1,50 @@
+# Runnable demo instance — a self-contained judgment-loop you can drive immediately:
+#   python cli.py lens     --config seed/seed.toml --context "strategy decision build"
+#   python cli.py harvest  --config seed/seed.toml
+#   python cli.py distill  --config seed/seed.toml --brief
+#   python cli.py registry --config seed/seed.toml
+# root="." resolves to this file's own directory (seed/), so everything is local.
+
+[paths]
+root = "."
+
+[graph]
+dir = "_judgment"
+
+[lens]
+cap = 4
+
+[distill]
+corrections = "state/corrections.jsonl"
+proposals = "state/distill-proposals.jsonl"
+threshold = 3
+
+[harvest]
+cap = 20
+
+[[harvest.touch_hints]]
+pattern = 'truth|honest|verif|disconfirm'
+nodes = ["v-honesty"]
+[[harvest.touch_hints]]
+pattern = 'leverage|compound|reusab|portab|asset'
+nodes = ["v-leverage"]
+
+[[harvest.sources]]
+kind = "markdown"
+label = "card"
+glob = "cards/**/*.md"
+include_lead_blockquote = true
+sections = ["Mechanism", "Application"]
+tier = "prior"
+base_score = 2
+score_bonus_status = { live = 1 }
+
+[[harvest.sources]]
+kind = "jsonl"
+label = "promoted-correction"
+path = "state/corrections.jsonl"
+filter = { status = "promoted" }
+passage_fields = { rule = "candidate_rule", why = "why" }
+touches_field = "touches"
+tier = "logic"
+base_score = 2

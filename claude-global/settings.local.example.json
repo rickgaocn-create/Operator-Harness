@@ -1,0 +1,13 @@
+{
+  "_comment": "Machine-local Claude Code settings. Copy to settings.local.json (gitignored) and adjust. This minimal example replaces the original 140-row personal allowlist. Add only the permissions you actually want to pre-approve.",
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "_defaultMode_note": "The source machine used 'bypassPermissions' (no prompts). That is convenient but unsafe on a shared/unfamiliar box — start with 'acceptEdits' or 'default' and widen deliberately.",
+    "allow": [
+      "Bash(git --version)",
+      "Bash(python --version)",
+      "Bash(node --version)"
+    ]
+  },
+  "_hooks_note": "Per-machine hook wiring (the CN write-guard, usage-log, etc.) goes here, with absolute paths. See claude-global/settings.json for the shared OS-neutral hook wiring the installer parameterizes."
+}

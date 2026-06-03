@@ -1,0 +1,26 @@
+tier: packaged
+entrypoint: SKILL.md
+role: capture-routing-organ
+state_reads:
+  - .claude/_state/dashboard/capture-inbox.jsonl
+  - .claude/_state/dashboard/operate-request.jsonl
+  - 04 Notes/daily notes/{today}.md
+  - 00 Raw/
+  - 01 Wiki/
+  - 02 Cards/
+  - 06 Tasks/Inbox.md
+state_writes:
+  - delegated: capture-process
+  - delegated: task-capture
+  - delegated: source-ingest
+  - delegated: distill
+  - delegated: meeting-note
+required_evals:
+  - runner.py capture-routing
+  - runner.py task-capture
+dashboard_outputs:
+  - capture-inbox status
+  - operate-request status
+  - routed_to
+  - route_meta
+notes: "Coordinator package for processing raw intake. The dashboard remains display/capture only."

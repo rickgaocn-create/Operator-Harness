@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harness Dashboard — Mockup</title>
+<style>
+  :root{
+    --bg:#1a1a1d; --bg-2:#202024; --panel:#242429; --panel-2:#2a2a30;
+    --border:#34343c; --text:#dcddde; --muted:#8b8b93; --faint:#6a6a72;
+    --accent:#a882ff; --accent-dim:#6c4fd6;
+    --green:#43b581; --amber:#e3b341; --red:#e5534b; --blue:#5b9dff;
+    --radius:10px; --gap:14px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Inter",sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:#101012;color:var(--text);-webkit-font-smoothing:antialiased;}
+
+  /* ---- mockup chrome (not part of real UI) ---- */
+  .chrome{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:12px;
+    padding:10px 16px;background:#0c0c0e;border-bottom:1px solid var(--border);}
+  .chrome b{color:#fff;font-size:13px;}
+  .chrome .sp{flex:1}
+  .seg{display:inline-flex;background:#1c1c20;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{background:none;border:none;color:var(--muted);padding:6px 14px;font-size:12px;cursor:pointer;font-weight:600}
+  .seg button.on{background:var(--accent-dim);color:#fff}
+  .chrome small{color:var(--faint);font-size:11px}
+
+  .stage{padding:22px;display:flex;justify-content:center}
+
+  /* desktop frame mimics an obsidian workspace leaf */
+  .ob{background:var(--bg);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,.5);width:100%;}
+  .ob.desktop{max-width:1180px}
+  .ob.phone{max-width:392px;border-radius:30px;border:10px solid #000;box-shadow:0 18px 50px rgba(0,0,0,.6)}
+
+  .titlebar{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--bg-2);border-bottom:1px solid var(--border)}
+  .titlebar .ic{width:18px;height:18px;color:var(--accent)}
+  .titlebar h1{font-size:14px;margin:0;font-weight:700;letter-spacing:.2px}
+  .titlebar .sp{flex:1}
+  .titlebar .meta{font-size:11px;color:var(--faint)}
+  .refresh{background:var(--panel-2);border:1px solid var(--border);color:var(--muted);
+    border-radius:6px;padding:4px 9px;font-size:11px;cursor:pointer;display:inline-flex;gap:5px;align-items:center}
+
+  .pulsechip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+    padding:4px 10px;border-radius:999px;background:rgba(67,181,129,.13);color:var(--green);border:1px solid rgba(67,181,129,.3)}
+  .dot{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:p 2.4s infinite}
+  @keyframes p{0%{box-shadow:0 0 0 0 rgba(67,181,129,.45)}70%{box-shadow:0 0 0 7px rgba(67,181,129,0)}100%{box-shadow:0 0 0 0 rgba(67,181,129,0)}}
+
+  /* grid */
+  .grid{display:grid;gap:var(--gap);padding:var(--gap)}
+  .desktop .grid{grid-template-columns:repeat(6,1fr)}
+  .phone .grid{grid-template-columns:1fr}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px 15px;min-width:0}
+  /* desktop spans */
+  .desktop .c-pulse{grid-column:span 2}
+  .desktop .c-judg{grid-column:span 4;grid-row:span 2}
+  .desktop .c-actions{grid-column:span 2}
+  .desktop .c-health{grid-column:span 2}
+  .desktop .c-tokens{grid-column:span 3}
+  .desktop .c-auto{grid-column:span 3}
+  .desktop .c-launch{grid-column:span 6}
+
+  .ch{display:flex;align-items:center;gap:8px;margin:0 0 12px}
+  .ch .ti{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+  .ch .badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--panel-2);color:var(--faint)}
+  .ch .emoji{font-size:14px}
+  .featured{border-color:rgba(168,130,255,.4);box-shadow:0 0 0 1px rgba(168,130,255,.12) inset, 0 0 22px rgba(168,130,255,.06)}
+
+  .big{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.5px}
+  .sub{font-size:11px;color:var(--faint);margin-top:5px}
+  .row{display:flex;align-items:center;gap:8px}
+  .between{display:flex;align-items:center;justify-content:space-between}
+  .mt8{margin-top:8px}.mt12{margin-top:12px}.mt6{margin-top:6px}
+
+  .statline{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid var(--border)}
+  .statline:first-of-type{border-top:none}
+  .statline .k{color:var(--muted)}
+  .statline .v{font-weight:700}
+
+  .pillgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:4px}
+  .pill{background:var(--panel-2);border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center}
+  .pill .n{font-size:20px;font-weight:800}
+  .pill .l{font-size:10px;color:var(--faint);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+  .pill.red .n{color:var(--red)} .pill.amber .n{color:var(--amber)} .pill.green .n{color:var(--green)} .pill.blue .n{color:var(--blue)}
+
+  .check{display:flex;align-items:center;gap:8px;font-size:12px;padding:3px 0;color:var(--muted)}
+  .check .ok{color:var(--green)} .check .warn{color:var(--amber)} .check .bad{color:var(--red)}
+
+  /* progress */
+  .bar{height:8px;border-radius:6px;background:var(--panel-2);overflow:hidden;margin-top:6px}
+  .bar > i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent-dim),var(--accent))}
+
+  /* feed */
+  .feed{margin-top:6px}
+  .ev{display:flex;gap:9px;padding:9px 0;border-top:1px solid var(--border)}
+  .ev:first-child{border-top:none}
+  .tag{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 6px;border-radius:5px;height:fit-content;white-space:nowrap}
+  .tag.corr{background:rgba(229,83,75,.15);color:#ff8a82}
+  .tag.val{background:rgba(67,181,129,.15);color:#5fd6a0}
+  .ev .body{min-width:0}
+  .ev .sk{font-size:11px;color:var(--accent);font-weight:600}
+  .ev .wy{font-size:12px;color:var(--text);margin-top:2px;line-height:1.4}
+  .ev .ts{font-size:10px;color:var(--faint);margin-top:3px}
+
+  .tasklist{margin-top:4px}
+  .task{display:flex;align-items:center;gap:9px;font-size:12px;padding:6px 0;border-top:1px solid var(--border)}
+  .task:first-child{border-top:none}
+  .pri{width:8px;height:8px;border-radius:50%;flex:none}
+  .pri.p0{background:var(--red)} .pri.p1{background:#ff8a4c} .pri.p2{background:var(--amber)} .pri.p3{background:var(--blue)}
+  .task .due{margin-left:auto;font-size:10px;color:var(--faint);white-space:nowrap}
+  .task.over .due{color:var(--red)}
+
+  /* token chart */
+  .chart{display:flex;align-items:flex-end;gap:4px;height:80px;margin-top:10px}
+  .chart .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+  .chart .col i{display:block;border-radius:2px 2px 0 0}
+  .chart .col .out{background:var(--accent)} .chart .col .cache{background:var(--accent-dim);opacity:.55}
+  .chart .col span{font-size:8px;color:var(--faint);text-align:center;margin-top:3px}
+  .legend{display:flex;gap:14px;font-size:10px;color:var(--muted);margin-top:8px}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:middle}
+
+  .modelbar{display:flex;align-items:center;gap:8px;font-size:11px;margin-top:7px}
+  .modelbar .name{width:74px;color:var(--muted)}
+  .modelbar .track{flex:1;height:7px;background:var(--panel-2);border-radius:4px;overflow:hidden}
+  .modelbar .track i{display:block;height:100%;background:var(--accent)}
+  .modelbar .amt{width:46px;text-align:right;color:var(--faint);font-variant-numeric:tabular-nums}
+
+  /* launch */
+  .launchgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:4px}
+  .phone .launchgrid{grid-template-columns:1fr 1fr}
+  .lbtn{background:linear-gradient(180deg,var(--panel-2),#222228);border:1px solid var(--border);border-radius:10px;
+    padding:13px 12px;cursor:pointer;text-align:left;color:var(--text);transition:.15s;position:relative}
+  .lbtn:hover{border-color:var(--accent-dim);transform:translateY(-1px)}
+  .lbtn .play{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:7px;
+    background:rgba(168,130,255,.16);color:var(--accent);font-size:12px;margin-bottom:8px}
+  .lbtn .nm{font-weight:700;font-size:13px}
+  .lbtn .ds{font-size:10px;color:var(--faint);margin-top:3px;line-height:1.35}
+  .lbtn .st{position:absolute;top:11px;right:11px;width:7px;height:7px;border-radius:50%}
+  .lbtn .st.up{background:var(--green)} .lbtn .st.off{background:var(--faint)}
+
+  .daemons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .dchip{display:inline-flex;align-items:center;gap:6px;font-size:11px;background:var(--panel-2);border:1px solid var(--border);
+    border-radius:999px;padding:4px 10px;color:var(--muted)}
+  .dchip .d{width:7px;height:7px;border-radius:50%}
+  .dchip .d.up{background:var(--green)} .dchip .d.down{background:var(--red)}
+
+  .note{font-size:10px;color:var(--faint);margin-top:10px;line-height:1.4}
+  .mobnote{display:none}
+  .phone .mobnote{display:block}
+  .phone .deskonly-cell .deskbody{display:none}
+  .footer{padding:10px 16px;border-top:1px solid var(--border);font-size:10px;color:var(--faint);display:flex;gap:14px;background:var(--bg-2)}
+  .footer .sp{flex:1}
+</style>
+</head>
+<body class="view-desktop">
+
+<div class="chrome">
+  <b>⚙️ Harness Dashboard — clickable mockup</b>
+  <small>sample/representative data · not live</small>
+  <span class="sp"></span>
+  <div class="seg">
+    <button id="btnD" class="on" onclick="setView('desktop')">🖥 Desktop</button>
+    <button id="btnM" onclick="setView('phone')">📱 Mobile</button>
+  </div>
+</div>
+
+<div class="stage">
+  <div id="ob" class="ob desktop">
+
+    <!-- title bar -->
+    <div class="titlebar">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <h1>Harness Dashboard</h1>
+      <span class="sp"></span>
+      <span class="meta">updated 14:08 · auto 60s</span>
+      <button class="refresh">⟳ Refresh</button>
+    </div>
+
+    <div class="grid">
+
+      <!-- 1 · PULSE -->
+      <div class="card c-pulse">
+        <div class="ch"><span class="emoji">🫀</span><span class="ti">Harness Pulse</span><span class="badge">3h cadence</span></div>
+        <div class="row" style="gap:12px">
+          <div class="big" style="color:var(--green)">GREEN</div>
+          <span class="pulsechip"><span class="dot"></span>healthy</span>
+        </div>
+        <div class="sub">verdict 2.3 h old · 0 findings</div>
+        <div class="mt12">
+          <div class="check"><span class="ok">✔</span> scheduler firing (tier-7)</div>
+          <div class="check"><span class="ok">✔</span> corrections fresh (&lt;5d)</div>
+          <div class="check"><span class="ok">✔</span> tool error rate 1.2% (24h)</div>
+          <div class="check"><span class="ok">✔</span> pending queue empty</div>
+        </div>
+        <div class="daemons">
+          <span class="dchip"><span class="d up"></span>Discord</span>
+          <span class="dchip"><span class="d up"></span>Feishu</span>
+        </div>
+      </div>
+
+      <!-- 2 · JUDGMENT (featured) -->
+      <div class="card c-judg featured">
+        <div class="ch"><span class="emoji">⚖️</span><span class="ti">Judgment Distillation</span><span class="badge">priority signal</span></div>
+
+        <div class="pillgrid">
+          <div class="pill amber"><div class="n">6</div><div class="l">queue files</div></div>
+          <div class="pill amber"><div class="n">~42</div><div class="l">candidates</div></div>
+          <div class="pill blue"><div class="n">12</div><div class="l">corrections</div></div>
+        </div>
+
+        <div class="mt12 between">
+          <span style="font-size:12px;color:var(--muted)">Distill threshold</span>
+          <span style="font-size:12px;font-weight:700">3 / 5 new events</span>
+        </div>
+        <div class="bar"><i style="width:60%"></i></div>
+        <div class="sub">below threshold — auto-distill not due · 0 proposals pending review</div>
+
+        <div class="feed">
+          <div class="ev">
+            <span class="tag corr">correction</span>
+            <div class="body">
+              <div class="sk">/interactive-report · CV export</div>
+              <div class="wy">Forwardable visual artifacts must fill width + use larger type — exports were oversized &amp; thin.</div>
+              <div class="ts">2026-05-26 · touches v-pragmatic-ambition · status: distilled</div>
+            </div>
+          </div>
+          <div class="ev">
+            <span class="tag val">validation</span>
+            <div class="body">
+              <div class="sk">/auto-chain-style · deal-debrief</div>
+              <div class="wy">Confirmed the terse anchor-first debrief format reads correctly to leadership.</div>
+              <div class="ts">2026-05-25 · status: promoted → 09 Rules/auto-chain-style.md</div>
+            </div>
+          </div>
+          <div class="ev">
+            <span class="tag corr">correction</span>
+            <div class="body">
+              <div class="sk">/day-digest</div>
+              <div class="wy">Lead with diagnosis + fix + structural preventer; no apology loop on errors.</div>
+              <div class="ts">2026-05-24 · touches v-truth-over-comfort · status: new</div>
+            </div>
+          </div>
+        </div>
+        <button class="refresh mt12">⤴ Extract 6 queue files → corrections.jsonl</button>
+      </div>
+
+      <!-- 3 · ACTIONABLE ITEMS -->
+      <div class="card c-actions">
+        <div class="ch"><span class="emoji">✅</span><span class="ti">Actionable Items</span></div>
+        <div class="pillgrid">
+          <div class="pill red"><div class="n">2</div><div class="l">overdue</div></div>
+          <div class="pill amber"><div class="n">7</div><div class="l">this week</div></div>
+          <div class="pill blue"><div class="n">3</div><div class="l">inbox</div></div>
+        </div>
+        <div class="tasklist mt12">
+          <div class="task over"><span class="pri p0"></span>荣耀二轮 | 确认报价 <span class="due">overdue 1d</span></div>
+          <div class="task over"><span class="pri p1"></span>{{PROJECT_A}}发行 | 打样确认 <span class="due">overdue</span></div>
+          <div class="task"><span class="pri p2"></span>3rd · AIX 需求拆解 <span class="due">today</span></div>
+          <div class="task"><span class="pri p3"></span>Personal · 续签合同 <span class="due">Fri</span></div>
+        </div>
+        <div class="note">Top-3 today: ① 荣耀二轮 ② {{PROJECT_A}}打样 ③ AIX 拆解</div>
+      </div>
+
+      <!-- 4 · VAULT HEALTH -->
+      <div class="card c-health">
+        <div class="ch"><span class="emoji">🩺</span><span class="ti">Vault Health</span><span class="badge">good</span></div>
+        <div class="check"><span class="warn">◐</span> Today's note: open · EOD review pending</div>
+        <div class="check"><span class="ok">✔</span> Daily streak: 6 weekdays</div>
+        <div class="check"><span class="ok">✔</span> Cards this week: 4 <span style="color:var(--faint)">(target 3–5)</span></div>
+        <div class="check"><span class="warn">◐</span> Card inbox: 5 drafts to file</div>
+        <div class="check"><span class="ok">✔</span> Raw inbox: oldest 2d</div>
+        <div class="check"><span class="ok">✔</span> Active workstreams: 9 · 0 stale</div>
+        <div class="statline mt12"><span class="k">Frontmatter compliance</span><span class="v" style="color:var(--green)">98%</span></div>
+      </div>
+
+      <!-- 5 · TOKEN USAGE -->
+      <div class="card c-tokens deskonly-cell">
+        <div class="ch"><span class="emoji">🔢</span><span class="ti">Claude Token Usage</span><span class="badge">7-day</span></div>
+        <div class="deskbody">
+          <div class="row" style="gap:18px;align-items:baseline">
+            <div><div class="big">$18.40</div><div class="sub">est. spend · 7d</div></div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.7">
+              <div>today <b style="color:var(--text)">$3.10</b></div>
+              <div>tokens <b style="color:var(--text)">61.2M</b> <span style="color:var(--faint)">(92% cache-read)</span></div>
+            </div>
+          </div>
+          <div class="chart">
+            <div class="col"><i class="out" style="height:9px"></i><i class="cache" style="height:22px"></i><span>21</span></div>
+            <div class="col"><i class="out" style="height:14px"></i><i class="cache" style="height:30px"></i><span>22</span></div>
+            <div class="col"><i class="out" style="height:7px"></i><i class="cache" style="height:16px"></i><span>23</span></div>
+            <div class="col"><i class="out" style="height:18px"></i><i class="cache" style="height:40px"></i><span>24</span></div>
+            <div class="col"><i class="out" style="height:11px"></i><i class="cache" style="height:25px"></i><span>25</span></div>
+            <div class="col"><i class="out" style="height:20px"></i><i class="cache" style="height:46px"></i><span>26</span></div>
+            <div class="col"><i class="out" style="height:13px"></i><i class="cache" style="height:33px"></i><span>27</span></div>
+          </div>
+          <div class="legend"><span><i style="background:var(--accent)"></i>output</span><span><i style="background:var(--accent-dim);opacity:.55"></i>cache/input</span></div>
+          <div class="mt12">
+            <div class="modelbar"><span class="name">opus-4-7</span><span class="track"><i style="width:78%"></i></span><span class="amt">$14.4</span></div>
+            <div class="modelbar"><span class="name">sonnet-4-6</span><span class="track"><i style="width:18%"></i></span><span class="amt">$3.3</span></div>
+            <div class="modelbar"><span class="name">haiku-4-5</span><span class="track"><i style="width:5%"></i></span><span class="amt">$0.7</span></div>
+          </div>
+        </div>
+        <div class="mobnote note">📱 On mobile this reads a <b>token-usage.json</b> snapshot written into the vault by the desktop collector (raw logs live outside the vault).</div>
+      </div>
+
+      <!-- 6 · AUTOMATION / ROUTINES -->
+      <div class="card c-auto">
+        <div class="ch"><span class="emoji">🔁</span><span class="ti">Automation &amp; Routines</span></div>
+        <div class="statline"><span class="k">Scheduler</span><span class="v" style="color:var(--green)">firing · last 41m ago</span></div>
+        <div class="statline"><span class="k">Next routine</span><span class="v">harness-pulse · ~18m</span></div>
+        <div class="statline"><span class="k">Active routines</span><span class="v">7 tiers</span></div>
+        <div class="statline"><span class="k">Tool calls (24h)</span><span class="v">183 · 1.2% err</span></div>
+        <div class="statline"><span class="k">Pending signals</span><span class="v" style="color:var(--green)">0</span></div>
+        <div class="statline"><span class="k">Last vault-evolve</span><span class="v">today 06:02</span></div>
+      </div>
+
+      <!-- 7 · QUICK LAUNCH -->
+      <div class="card c-launch">
+        <div class="ch"><span class="emoji">🚀</span><span class="ti">Quick Launch</span><span class="badge">desktop spawns · mobile queues</span></div>
+        <div class="launchgrid">
+          <button class="lbtn"><span class="st off"></span><span class="play">▶</span><div class="nm">claude</div><div class="ds">base CLI · interactive session</div></button>
+          <button class="lbtn"><span class="st off"></span><span class="play">▶</span><div class="nm">claude-bd</div><div class="ds">business-day context <span style="color:var(--amber)">⚑ define cmd</span></div></button>
+          <button class="lbtn"><span class="st up"></span><span class="play">▶</span><div class="nm">fs-claude</div><div class="ds">Feishu DM bridge · consumer up</div></button>
+          <button class="lbtn"><span class="st up"></span><span class="play">▶</span><div class="nm">afk-claude2</div><div class="ds">Discord bridge · daemon up</div></button>
+        </div>
+        <div class="daemons">
+          <span class="dchip"><span class="d up"></span>feishu-event-consumer-daemon</span>
+          <span class="dchip"><span class="d up"></span>afk-code-claude2-daemon</span>
+          <span class="dchip"><span class="d up"></span>healthcheck (5m)</span>
+          <span class="dchip"><span class="d down"></span>afk-code-daemon (legacy)</span>
+        </div>
+        <div class="mobnote note">📱 On mobile, a tap writes a <b>launch-request</b> file into the vault; the always-on desktop watcher picks it up and spawns the session within seconds.</div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <span>Platform: <b id="plat">desktop</b></span>
+      <span class="sp"></span>
+      <span>Reads: vault <code>.claude/_state/</code> · daily notes · tasks</span>
+      <span>v0 mockup</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setView(v){
+    document.body.className = 'view-'+v;
+    const ob=document.getElementById('ob');
+    ob.className='ob '+(v==='phone'?'phone':'desktop');
+    document.getElementById('btnD').classList.toggle('on',v==='desktop');
+    document.getElementById('btnM').classList.toggle('on',v==='phone');
+    document.getElementById('plat').textContent=v;
+  }
+</script>
+</body>
+</html>

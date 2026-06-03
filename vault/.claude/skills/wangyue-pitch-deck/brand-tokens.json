@@ -1,0 +1,265 @@
+{
+  "version": "0.1.0",
+  "derived-from": "99 Attachments/Files/产品介绍示意(2).pptx (2026-05-15 新版{{PROJECT_A}}介绍书)",
+  "extracted-at": "2026-05-15",
+
+  "canvas": {
+    "aspect": "16:9",
+    "width_inches": 13.333,
+    "height_inches": 7.5,
+    "width_pt": 960,
+    "height_pt": 540
+  },
+
+  "tagline": {
+    "text": "ONE / UNITY / RISK EVERYTHING",
+    "placement": "every content slide (top-right or bottom area depending on layout)",
+    "font": "Barlow SemiBold",
+    "size_pt": 11,
+    "color": "white-or-brand-accent (on dark bg)"
+  },
+
+  "typography": {
+    "chinese_display": {
+      "name": "玄度",
+      "use": "primary display + main body text",
+      "fallback": "思源黑体 / Source Han Sans CN"
+    },
+    "chinese_heading": {
+      "name": "方正VDL LOGO黑 简 SemiBold",
+      "use": "section titles / emphasis headings",
+      "fallback": "思源黑体 Bold"
+    },
+    "chinese_heavy": {
+      "name": "方正VDL LOGO黑 简 ExtraBold",
+      "use": "hero numbers / strong emphasis (sparse)",
+      "fallback": "思源黑体 Heavy"
+    },
+    "latin": {
+      "name": "Barlow SemiBold",
+      "use": "English tagline + Latin labels",
+      "fallback": "Inter SemiBold / system-ui SemiBold"
+    },
+    "latin_fallback": {
+      "name": "Arial",
+      "use": "last-resort body Latin"
+    }
+  },
+
+  "type_scale_pt": {
+    "hero_display": 72,
+    "section_title": 44,
+    "slide_title": 32,
+    "body_emphasis": 28,
+    "subtitle": 18,
+    "body": 16,
+    "footnote": 14,
+    "caption": 11
+  },
+
+  "color_palette": {
+    "accent_primary_gold": {
+      "hex": "#FFD800",
+      "usage": "标志性 — 标题下方 underline (5.02x0.21in) / feature 底部 underline (0.14in) / 事件 banner 文本框 / hero 章节扉页大色块 / 节点页黄色 callout",
+      "frequency": "52 fill instances (top palette)",
+      "rule": "每张内容页必出现至少一次 (最常见: title underline)"
+    },
+    "accent_secondary_blue": {
+      "hex": "#0045E0",
+      "usage": "标签 chips (1.59x0.39in 蓝底白字) / callout 文本框 / 强调 panel 背景",
+      "frequency": "28 fills + 3 lines",
+      "rule": "用于子分类标签 / panel 区块强调；不与 GOLD 同位置叠加"
+    },
+    "text_primary_white": {"hex": "#FFFFFF", "usage": "正文文字主色 (深色背景之上)", "frequency": "84 font color instances"},
+    "border_black": {"hex": "#000000", "usage": "细描边 (timeline dots / panel 边界) + GOLD 背景上文字 (高对比)", "frequency": "5 lines + 2 fills"},
+    "background_default": {"hex": "#0A0A14", "usage": "深色 base — 近黑带 indigo 一丝", "note": "PPT 原文件用 theme:BACKGROUND_1, 实际渲染色由整体氛围决定"},
+    "image_placeholder_gray": {"hex": "#202030 panel / #606080 label", "usage": "模板中的图占位区底色 + 占位文字色"}
+  },
+
+  "title_convention": {
+    "pattern": "[节] - [副标]",
+    "examples": [
+      "产品预约进展",
+      "产品里程碑 - 上线时间2027年",
+      "产品进展 - 核心卖点",
+      "美术 - 中式写实都市",
+      "玩法-人灵玩法",
+      "发行节点-广州美林天地试玩会"
+    ],
+    "spacing": "破折号前后均有空格 (除『玩法-』『发行节点-』偶尔紧贴), 推荐统一带空格"
+  },
+
+  "section_structure": {
+    "default_arc": [
+      "1. 封面 (image-only)",
+      "2. 数据页 (KPI hero, e.g., 累计预约 / 平台分布)",
+      "3. 时间线 (milestone columns 4-5 列)",
+      "4. 章节扉页 1 (核心卖点 - 美术)",
+      "5-10. 内容页 (写实角色 / 场景 / 渲染 / TOD 等子主题)",
+      "11. 章节切换 (回扣 + 衔接)",
+      "12-13. 章节扉页 2 (玩法 / 人灵玩法)",
+      "14-18. 内容页 (玩法设计 / 战斗 / 体验)",
+      "19-20. 发行节点 (试玩会 / 漫展 等关键节点)",
+      "21. 封底 (image-only)"
+    ],
+    "min_slides": 8,
+    "max_slides": 30,
+    "typical_business_use": "12-21 张"
+  },
+
+  "slide_type_library": {
+    "cover": {
+      "elements": ["全屏背景图", "（可选）项目 logo 叠加", "无文字 OR 极少品牌字符"],
+      "layout_name": "标题幻灯片"
+    },
+    "data_kpi": {
+      "elements": ["大字号数据 (e.g., 600万)", "数据分布 break-down", "时间标签 (e.g., 截止2026年4月)", "Slogan/tagline 角落"],
+      "example_slide": 2
+    },
+    "timeline_milestones": {
+      "elements": ["4-5 columns (时段 / 事件 / 描述)", "时间轴指示物", "事件 brief 12-30 字 each", "tagline 顶部"],
+      "example_slide": 3
+    },
+    "section_divider": {
+      "elements": ["大章节名 + 副标", "Slogan/tagline", "可选大图背景"],
+      "example_slides": [4, 11, 12]
+    },
+    "content_image_heavy": {
+      "elements": ["标题: [节] - [副标]", "tagline 角落", "主图 1-3 张 (实机 / 渲染 / 对比 / 概念)", "图注 + 1-2 段说明文字", "可选玩家评价或第三方引言"],
+      "example_slides": [5, 6, 8, 9, 10, 14, 16]
+    },
+    "content_comparison": {
+      "elements": ["左右 / 上下对比 panel", "标签 (e.g., 现实采风 vs 场景原画)", "数据或品质指标 overlay"],
+      "example_slides": [9]
+    },
+    "feature_grid": {
+      "elements": ["3-4 个 feature 并列 (e.g., 增强战斗 / 提升都市 / 长线体验)", "每 feature 配图 + 1 行说明"],
+      "example_slides": [16, 17]
+    },
+    "distribution_event": {
+      "elements": ["事件名 + 场地信息", "花费规模 (e.g., 超500W)", "嘉宾阵容", "联动合作 / 媒体支持", "节点信息时序"],
+      "example_slides": [19, 20]
+    },
+    "closing": {
+      "elements": ["大图 (与封面呼应)", "可选 thanks / 联系方式"],
+      "layout_name": "标题幻灯片"
+    }
+  },
+
+  "image_strategy": {
+    "rule": "图驱动 + 文字辅助 — 每张内容页 1-3 张图占视觉主导, 文字作 caption / 数据点",
+    "categories": [
+      "概念原画 (角色 / 场景)",
+      "建模渲染 (in-engine + 后期合成)",
+      "实机截图 (有 watermark 标识)",
+      "现实采风 vs 场景对比",
+      "玩家评价 / 媒体引言 (引用形式)",
+      "嘉宾 / coser / 联动伙伴 logo 矩阵"
+    ]
+  },
+
+  "signature_visual_primitives": {
+    "title_underline_bar": {
+      "shape": "RECTANGLE",
+      "size_inches": [5.02, 0.21],
+      "position_inches": [0.72, 1.67],
+      "fill": "#FFD800",
+      "appears_on_slides": "5/6/7/8/9/10/12/13/14/15/16/17/18 (13 张 — 内容页签名标记)",
+      "rule": "标题文本框紧贴其上方，y=0.85, height=0.7, size=32pt 方正VDL SemiBold 白色"
+    },
+    "tagline": {
+      "text": "ONE / UNITY / RISK EVERYTHING",
+      "size_pt": 11,
+      "font": "Barlow SemiBold",
+      "position_inches": [8.6, 0.30],
+      "width_inches": 4.5,
+      "align": "right",
+      "rule": "每张内容页右上角"
+    },
+    "blue_label_chip": {
+      "shape": "RECTANGLE",
+      "size_inches": [1.59, 0.39],
+      "fill": "#0045E0",
+      "text_color": "#FFFFFF",
+      "text_size_pt": 14,
+      "usage": "子分类标签 (e.g. 珠宝材质 / 丝绸材质 / 建模细节)",
+      "appears_on_slides": "5/6/7"
+    },
+    "gold_event_banner": {
+      "shape": "RECTANGLE",
+      "size_inches_range": "[3.28-5.74, 0.28-0.34]",
+      "fill": "#FFD800",
+      "text_color": "#000000 (黑字)",
+      "text_size_pt": 14,
+      "usage": "节点页嘉宾 / 联动 / 场地 callout",
+      "appears_on_slides": "19/20"
+    },
+    "timeline_dot": {
+      "shape": "OVAL",
+      "size_inches": [0.15, 0.15],
+      "fill": "#FFD800 (template) / #000000 (原 PPT)",
+      "rule": "横向 4-5 个均匀分布，配合 thin 0.02in 高的横向 connector line",
+      "appears_on_slides": "3 (timeline)"
+    },
+    "section_hero_block": {
+      "shape": "RECTANGLE",
+      "size_inches": [5.15, 3.77],
+      "fill": "#FFD800",
+      "text_color": "#000000",
+      "text_size_pt": 44,
+      "usage": "章节扉页大 hero",
+      "appears_on_slides": "4"
+    },
+    "feature_grid_underline": {
+      "shape": "RECTANGLE",
+      "size_inches": [2.68, 0.14],
+      "fill": "#FFD800",
+      "usage": "feature 卡片下方装饰短线 (位置: 各 panel center)",
+      "appears_on_slides": "16/17"
+    },
+    "left_brace_accent": {
+      "shape": "LEFT_BRACE",
+      "size_inches": [0.3, 2.42],
+      "usage": "稀有装饰 — 包裹内容组的视觉边框",
+      "appears_on_slides": "14"
+    }
+  },
+
+  "position_grid": {
+    "canvas_origin": [0, 0],
+    "title_text_box": "left=0.72, top=0.85, width=11.0, height=0.7",
+    "title_underline": "left=0.72, top=1.67, width=5.02, height=0.21",
+    "content_area_start": "top=2.3 (just below underline)",
+    "content_area_end": "top=6.9",
+    "tagline_top": "0.30",
+    "tagline_right": "13.1 (8.6 + 4.5)",
+    "node_page_variant": "title underline 偏左 left=0.13 (slide 19/20 满幅风格)",
+    "footer_area_y": "6.92 (与原文件 master 一致)"
+  },
+
+  "template_file": {
+    "path": ".claude/skills/wangyue-pitch-deck/templates/wangyue-master.pptx",
+    "slides": 9,
+    "slide_index_to_type": {
+      "1": "cover",
+      "2": "data_kpi",
+      "3": "timeline_milestones",
+      "4": "section_divider",
+      "5": "content_image_heavy",
+      "6": "content_comparison",
+      "7": "feature_grid",
+      "8": "distribution_event",
+      "9": "closing"
+    },
+    "regeneration_script": ".claude/skills/wangyue-pitch-deck/templates/_build-template.py",
+    "size_kb": 40,
+    "license": "Wangyue internal use"
+  },
+
+  "v0_2_to_extend": [
+    "从原 PPT 形状采样实际背景渐变色值",
+    "提取主 logo 文件路径 + 标准位置",
+    "建立 5-6 个常见 chart / table 模板 (BD 用 capability matching / ROI matrix)",
+    "中英双语版 type scale (英文版可能字号略调)"
+  ]
+}

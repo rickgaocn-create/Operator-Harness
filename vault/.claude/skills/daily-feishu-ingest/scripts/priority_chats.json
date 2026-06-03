@@ -1,0 +1,12 @@
+{
+  "_comment": "Priority Feishu chat_ids to ingest, polled in addition to whatever `im +chat-list --as user` enumerates. Profile = 'business-morty' (corporate bot). lark-cli's chat-list only returns chats the bot/user can enumerate; for any work group not listed, add its oc_... chat_id here so it's always polled.",
+  "_how_to_find_chat_id": "lark-cli --profile business-morty im +chat-list --as user  (shows groups the corporate bot can see). Or im +chat-search --query <name>. The bot must be a member of a group to read its messages.",
+  "_retired": "2026-05-27 removed personal 'morty' p2p placeholder (oc_3f79e597...) — personal bot retired in favor of corporate 'business-morty'.",
+  "chats": [
+    {
+      "chat_id": "{{FEISHU_CHAT_ID}}",
+      "name": "{{PROJECT_A}} x 抖音 试玩会专项",
+      "kind": "group"
+    }
+  ]
+}

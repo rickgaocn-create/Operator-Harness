@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.3" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Description>Weekly Sunday 21:00 鈫?write /reflect-back signal (run reflect.py --reflect-back, present to {{USER_NAME}}, record confirm/correct via promotion_predictions.py --observe 鈥?closes the learning loop)</Description>
+
+    <URI>\RG-signal-reflect-back</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+
+    <ExecutionTimeLimit>PT5M</ExecutionTimeLimit>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <RestartOnFailure>
+
+      <Count>1</Count>
+
+      <Interval>PT5M</Interval>
+
+    </RestartOnFailure>
+
+    <StartWhenAvailable>true</StartWhenAvailable>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>false</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+    <UseUnifiedSchedulingEngine>true</UseUnifiedSchedulingEngine>
+
+  </Settings>
+
+  <Triggers>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-06-02T21:00:00+08:00</StartBoundary>
+
+      <ScheduleByWeek>
+
+        <WeeksInterval>1</WeeksInterval>
+
+        <DaysOfWeek>
+
+          <Sunday />
+
+        </DaysOfWeek>
+
+      </ScheduleByWeek>
+
+    </CalendarTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>{{USER_HOME}}\.claude\hooks\RG-signal-reflect-back.cmd</Command>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

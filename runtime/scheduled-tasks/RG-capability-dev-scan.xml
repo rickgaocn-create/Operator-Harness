@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Description>Daily snapshot-diff of the capability surface (tasks/skills/launchers/plugins/afk-code git/routines). Appends to 04 Notes\_system\capability-dev-log.md; consumed by vault-evolve. Created 2026-05-29.</Description>
+
+    <URI>\RG-capability-dev-scan</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+  </Settings>
+
+  <Triggers>
+
+    <CalendarTrigger>
+
+      <StartBoundary>2026-05-29T23:35:00+08:00</StartBoundary>
+
+      <ScheduleByDay>
+
+        <DaysInterval>1</DaysInterval>
+
+      </ScheduleByDay>
+
+    </CalendarTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>powershell.exe</Command>
+
+      <Arguments>-NoProfile -ExecutionPolicy Bypass -File "{{VAULT_ROOT}}\.claude\routines\capability-dev-scan.ps1"</Arguments>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

@@ -1,0 +1,116 @@
+---
+category: work
+name: replan
+description: Rewrite today's Day Planner when the schedule changes. Preserve completed items, plugin-compatible timing syntax, BREAK/END markers, and time order.
+model: claude-sonnet-4-6
+allowed-tools: Read, Edit, Glob, Bash
+---
+# Skill: Replan Day Planner
+
+Rewrite today's `## Day Planner` block when reality diverges from the morning plan — meeting rescheduled, task superseded, urgent insert. Day Planner OG has no diff/merge mechanic; this skill is the merge. The output is a single Edit replacing the section body, keeping completed history intact while making the rest of the day match what's actually happening.
+
+> **Contract reference:** [[09 Rules/tasks.md]] § Day Planner Integration defines the strict input syntax + `completePastItems: false` semantics. When this skill and the rule file disagree, the rule file wins.
+
+## When to Use
+
+- User says "重排", "/replan", "今天安排变了", "改时间", "重新排今天", "今天计划变了", "Day Planner 重排"
+- Mid-day reality drift: meeting moved, task superseded, urgent insert, block of time freed up
+- After a meeting that reshuffles the afternoon
+- After `/inbox-process` triages new items that need same-day time
+
+**Don't use for:**
+- End-of-day reconciliation → that's `/daily-note --close` (Phase 7)
+- A single new task at a known time → that's `/task-capture --schedule HH:mm`
+- Tomorrow's plan → that's morning curation against `/daily-note`, not this skill
+
+---
+
+## How It Works
+
+1. **Resolve target file.** Compute today's date with `date +%Y-%m-%d`. Target = **`04 Notes/daily notes/{date}.md`**. If it doesn't exist, stop and tell the user to run `/daily-note` first.
+2. **Read the current `## Day Planner` section.** Capture every line between the `## Day Planner` heading and the next `##` heading (or `---` separator, whichever comes first). Note any existing HTML comments (e.g. `<!-- Day Planner (OG) reads this section · syntax: ... -->`) — they must survive the rewrite.
+3. **Parse each line.** For lines matching `^- \[(.)\] (\d{2}:\d{2}) (.+)$`, record: checkbox state (`[ ]` / `[x]` / `[/]` / `[-]`), time `HH:mm`, task body. Keep `BREAK` and `END` keyword lines as structural markers.
+4. **Confirm what changed.** If the user already stated the change in this conversation, use that. Otherwise output **one line**: *"What changed?"* — wait for the reply before editing. Do NOT use `AskUserQuestion` (per user CLAUDE.md, the picker doesn't render in Discord).
+5. **Decide per item — stays / moves / drops / new.** Apply the Hard Rules below. Build the new ordered list.
+6. **Sort by time ascending.** Keep `BREAK` slots in their new time position. `END` stays as the terminal line.
+7. **Edit the file.** Single `Edit` replacing only the section body. Don't touch the `## Day Planner` heading itself, the existing comment(s), or anything outside the section.
+8. **Summarize.** 1–2 lines: what moved, what's new, what stayed. Example: *"Replanned 2026-05-13: moved Kazuki 16:30→17:30, dropped 14:00 B站沙龙 (cancelled), added 14:30 emergency call with 诸葛. 3 completed items preserved."*
+
+---
+
+## Hard Rules
+
+1. **Never toggle `[x]` → `[ ]`.** Completed items stay completed. They may be reordered to a new time slot only if the user explicitly says so (e.g. "the 9:30 thing actually happened at 11:00, fix the log"). Default behavior: leave the checkbox AND the time alone.
+2. **Never drop a `[x]` item from the rewrite.** Even if it doesn't fit the new plan, keep it — it could be a "done early" item that belongs in the timeline as history. Use `/daily-note --close` to remove things from the day, not this skill.
+3. **Preserve `[/]` (in-progress) items unless the user explicitly says they're abandoned.** If the user moves an in-progress item to a new time, keep the `[/]` state — don't reset to `[ ]`.
+4. **Day Planner OG line syntax is strict.** Format is `- [ ] HH:mm task` — single space after the checkbox, single space after the time, 24-hour format, **no brackets around `HH:mm`** (the plugin doesn't recognize `[09:30]`). `BREAK` and `END` keyword lines follow the same syntax: `- [ ] 16:00 BREAK` / `- [ ] 18:00 END`.
+5. **Sort by time ascending** after the rewrite. The plugin renders the timeline by line order × time; out-of-order lines confuse the status-bar "next" indicator.
+6. **Day Planner lines carry ONLY time-block metadata (v3 hybrid, since 2026-05-21).** Allowed: `{{datetimeStart:: YYYY-MM-DDTHH:mm:00}}` and `{{datetimeEnd:: YYYY-MM-DDTHH:mm:00}}` (Operon Calendar Time Grid bridge). Banned: `{{operonId}}`, `{{dateDue}}`, `{{priority}}`, `{{status}}`, `{{contexts}}`, `{{assignees}}` (those belong on the canonical project surface task line). Also banned: legacy `📅`, priority emoji, `✅` stamps; and `#context-tag` (decorative-only and adds noise here). When inserting NEW lines or moving an existing line to a new time, emit/update `{{datetimeStart}}` to match the new `HH:mm`. BREAK / END lines stay plain — no Operon block.
+7. **Don't touch the rest of the daily note.** Only the body between `## Day Planner` and the next `---` or `##` heading. Frontmatter, Top 3 Priorities, Active Tracks, Quick Capture, EOD Review — all untouched.
+8. **Preserve existing HTML comments** in the section verbatim (e.g. the syntax-reminder comment Day Planner OG users often keep at the top). Re-emit them in the new section body.
+9. **If user hasn't said what changed,** ask once — single line, plain text, not `AskUserQuestion`. Don't lecture, don't enumerate options unless the user asks.
+10. **`END` is the terminal marker.** If present in the original, it stays as the last line. New items go before `END`. If user explicitly extends the day past the old `END`, push `END` later — never delete it.
+11. **`BREAK` is a slot, not metadata.** Treat `BREAK` lines exactly like task lines for sort + preservation purposes. They can be moved, dropped (if user explicitly removes a break), or added.
+
+---
+
+## Worked Example
+
+**Before (read from file):**
+
+```markdown
+## Day Planner
+<!-- Day Planner (OG) + Operon Calendar Time Grid 双读 · syntax: - [ ] HH:mm task {{datetimeStart:: YYYY-MM-DDTHH:mm:00}} (v3 hybrid since 2026-05-21) -->
+
+- [x] 09:30 改 xlsx 3 处占位 + 发申请邮件 {{datetimeStart:: 2026-05-13T09:30:00}}
+- [x] 11:00 携程支付 3 单 {{datetimeStart:: 2026-05-13T11:00:00}}
+- [ ] 11:30 BREAK
+- [ ] 14:00 B站「跨次元营销沙龙」 {{datetimeStart:: 2026-05-13T14:00:00}}
+- [ ] 16:00 BREAK
+- [ ] 16:30 Call with tencent Kazuki {{datetimeStart:: 2026-05-13T16:30:00}}
+- [ ] 18:00 END
+```
+
+**User says:** *"Kazuki 推到 17:30 了，B站沙龙取消，14:30 临时加诸葛紧急沟通。"*
+
+**After (single Edit replaces the section body):**
+
+```markdown
+## Day Planner
+<!-- Day Planner (OG) + Operon Calendar Time Grid 双读 · syntax: - [ ] HH:mm task {{datetimeStart:: YYYY-MM-DDTHH:mm:00}} (v3 hybrid since 2026-05-21) -->
+
+- [x] 09:30 改 xlsx 3 处占位 + 发申请邮件 {{datetimeStart:: 2026-05-13T09:30:00}}
+- [x] 11:00 携程支付 3 单 {{datetimeStart:: 2026-05-13T11:00:00}}
+- [ ] 11:30 BREAK
+- [ ] 14:30 与诸葛紧急沟通 {{datetimeStart:: 2026-05-13T14:30:00}}
+- [ ] 16:00 BREAK
+- [ ] 17:30 Call with tencent Kazuki {{datetimeStart:: 2026-05-13T17:30:00}}
+- [ ] 18:00 END
+```
+
+**Summary line:**
+
+> Replanned 2026-05-13: moved Kazuki 16:30 → 17:30 (datetimeStart 同步), dropped 14:00 B站沙龙 (cancelled), added 14:30 临时与诸葛紧急沟通. 2 completed items preserved.
+
+Notes on this example:
+- `[x]` items at 09:30 and 11:00 are untouched (Rule 1 + 2). Their `{{datetimeStart}}` stays as-is.
+- 14:00 B站沙龙 is `[ ]` and unticked, so dropping is fine — Rule 2 only protects `[x]`.
+- New 14:30 item inserted between the 11:30 BREAK and the 16:00 BREAK, time-ordered. `{{datetimeStart}}` matches the new HH:mm.
+- Kazuki moved 16:30 → 17:30 — `{{datetimeStart}}` updated to `T17:30:00` (Rule 6: when moving an item, datetimeStart must match the new HH:mm).
+- `BREAK` and `END` keep their original positions and stay plain (no Operon block per Rule 6).
+- No `#tag`, no `{{dateDue}}` / `📅` added (Rule 6) — the matching project surface line (if one exists) carries those.
+
+---
+
+## Failure Modes
+
+| Symptom | Fix |
+|---|---|
+| Daily note doesn't exist | Tell user: *"Today's daily note doesn't exist yet — run `/daily-note` first, then `/replan`."* Don't auto-create. |
+| `## Day Planner` section missing in today's note | Tell user the section is missing; offer to add a fresh empty section *only if* user confirms. Otherwise stop. |
+| Two existing items share the same `HH:mm` | Keep both, but surface to user: *"09:30 has two items — keep both, or merge?"* Wait for reply. |
+| User says "shift everything 30 minutes later" | Apply uniform offset to all `[ ]` / `[/]` / `BREAK` / `END` lines. Leave `[x]` lines untouched (Rule 1). |
+| User describes the change but it's ambiguous (e.g. "the call moved") and multiple lines could match | Quote the candidates back to user — one line each — and ask which one they meant. Don't guess. |
+| New item time conflicts with `END` (later than `END` time) | Push `END` to a later time that accommodates the new item; ask user to confirm the new end-of-day. Never delete `END`. |
+| User wants to wipe the whole section and start over | This isn't `/replan` — it's morning curation. Tell user to delete the section body manually or re-run `/daily-note` flow; this skill preserves history by design. |
+| Section body has non-Day-Planner lines (stray notes, bullet points without time) | Preserve them in place if they're between task lines; if obviously orphaned, surface to user before dropping. |

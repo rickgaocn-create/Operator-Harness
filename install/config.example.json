@@ -1,0 +1,24 @@
+{
+  "_comment": "Copy to config.json and edit. bootstrap.ps1 reads this to substitute machine placeholders. Leave a value as null to let the installer auto-detect it.",
+
+  "vaultRoot": "C:\\Users\\you\\Documents\\vault",
+  "_vaultRoot": "Where the Obsidian vault (the contents of ./vault) will be installed. Required.",
+
+  "userHome": null,
+  "_userHome": "Your home dir. null = auto ($env:USERPROFILE). The contents of ./claude-global install into <userHome>\\.claude.",
+
+  "pythonExe": null,
+  "_pythonExe": "Absolute path to Python 3.12+. null = auto (Get-Command python).",
+
+  "taskUser": null,
+  "_taskUser": "DOMAIN\\user that scheduled tasks run as. null = auto ($env:USERDOMAIN\\$env:USERNAME).",
+
+  "hostname": null,
+  "_hostname": "null = auto ($env:COMPUTERNAME).",
+
+  "registerScheduledTasks": false,
+  "_registerScheduledTasks": "If true, bootstrap registers the 38 tasks in runtime/scheduled-tasks after substituting placeholders. Review them first; default false.",
+
+  "installDaemons": false,
+  "_installDaemons": "If true, copies runtime/daemons launchers into <userHome> homes (~/.afk-code-claude2 etc). You still must supply tokens separately."
+}

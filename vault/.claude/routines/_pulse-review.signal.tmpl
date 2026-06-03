@@ -1,0 +1,14 @@
+[harness-pulse 7-day false-positive review — armed 2026-05-26, due 2026-06-02]
+
+Review the harness-pulse routine's first week before trusting it blindly.
+
+1. Read .claude/_state/autonomous-log.jsonl — filter routine="harness-pulse" entries since 2026-05-26.
+2. Count pulses by severity (green/yellow/red); tally which finding codes recurred.
+3. Judge false positives:
+   - scheduler-stalled firing while the Tier-7 scheduler was actually healthy
+   - vault-evolve-missing firing before the 06:00 report was due (the check gates on local hour>=9 — confirm that held)
+   - feishu-down transients during normal consumer restarts
+4. If false positives found -> propose threshold tweaks in .claude/routines/harness-pulse.py
+   (the >150min scheduler window, the hour>=9 cortex gate, the >15% error-rate / >12 pending bounds).
+5. If clean -> note the pulse is trustworthy; promote past its observation window.
+6. Report findings to the user. Then delete the consumed _pending signal file.

@@ -1,0 +1,18 @@
+{
+  "_note": "Edit this file to control which chats the daily ingest scans. Removing a chat skips it. The script also auto-picks up new groups with >threshold messages whose name contains the keyword list below. The entries below are ILLUSTRATIVE PLACEHOLDERS — replace with your own chat IDs and names.",
+  "groups": [
+    {"id": "00000000001@chatroom", "name": "{{PROJECT_A}} × Partner A 对接群"},
+    {"id": "00000000002@chatroom", "name": "{{PROJECT_A}} × Partner B 对接群"},
+    {"id": "00000000003@chatroom", "name": "{{ORG_A}} × Partner C 商务小群"}
+  ],
+  "dms": [
+    {"id": "example_contact_1", "name": "Partner A — Contact Name", "process_media": true},
+    {"id": "example_contact_2", "name": "Partner B — Contact Name", "process_media": true},
+    {"id": "example_contact_3", "name": "{{PERSON_1}} ({{ORG_C}})", "process_media": false, "_note": "personal-mixed; text digest only, no media auto-process"}
+  ],
+  "auto_discover": {
+    "enabled": true,
+    "min_messages_in_window": 5,
+    "name_keywords": ["{{PROJECT_A}}", "{{ORG_A}}", "Partner A", "Partner B", "Partner C"]
+  }
+}

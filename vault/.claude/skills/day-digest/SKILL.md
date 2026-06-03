@@ -1,0 +1,300 @@
+---
+category: work
+name: day-digest
+description: Run the 23:00 daily reflection job: read today's note + vault context, write 4 AI-Chew sections and tomorrow-seed. Trigger on /day-digest, /day-digest --autonomous, EOD reflection, or the 23:00 Windows Task.
+model: opus
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash
+companion-rules:
+  - "[[09 Rules/digest-job.md]]"
+  - "[[09 Rules/tomorrow-seed.md]]"
+created: 2026-05-14
+created-by: claude
+audit-trace: "[[_prototype-2026-05-13-chew.md]] v2 baseline approved → automation build"
+---
+# Skill: Day Digest (EOD 咀嚼)
+
+EOD 反刍 job. 读 today's daily note + 14 data sources → 输出 4 段 AI-Chew + tomorrow-seed.
+
+> **Contract reference**: [[09 Rules/digest-job.md]] is source of truth for output schema + Hard Content Rules. When skill ≠ rule, rule wins.
+
+> **Quality baseline**: [[_prototype-2026-05-13-chew.md]] v2 (user-approved 2026-05-14). Match or exceed.
+
+## 🚦 Invocation Mode (2026-05-14 pivot)
+
+**Primary path (NOW)**: **On-demand manual invoke via Max account session**
+- {{USER_NAME}} 在 EOD 时（22:00-23:30 区间）敲 `/day-digest` → 当前 Claude Code session 跑完
+- 用 {{USER_NAME}} 已认证的 Max account，不消耗 API credit
+- 用户在线 → quality 可以现场调 (Phase 7 confirm 看 highlights)
+
+**Autonomous path (DEFERRED)**: Windows Task `RG-day-digest` 23:00 daily
+- 已建 setup_schedule.ps1 但 unregistered（API credit 不足）
+- 未来 if API budget OR Claude Code Max auth 可用于 unattended subprocess → revive
+- Setup scripts 保留在 **`.claude/skills/day-digest/scripts/`** 作 future reference
+
+## When to Use
+
+- `/day-digest` / `/day-digest --autonomous` 显式触发
+- "咀嚼今天" / "反刍今天" / "看看今天" / "做今日 digest"
+- Windows Task `RG-day-digest` 23:00 daily 自动触发（autonomous mode）
+
+**Don't use for:**
+- New daily note 创建 → `/daily-note`（interactive）or `/daily-emit`（autonomous 08:00）
+- EOD reconciliation → `/daily-note --close` Phase 7 (mid-day sync 用 `/sync-day`)
+- Multi-day digest → 暂未建（future: weekly digest）
+
+## How It Works
+
+### Phase 0 — Resolve Mode + Date
+
+```bash
+today=$(date +%Y-%m-%d)
+tomorrow=$(date -d "tomorrow" +%Y-%m-%d 2>/dev/null || date -v+1d +%Y-%m-%d)
+daily_note="04 Notes/daily notes/${today}.md"
+seed_file="04 Notes/vault-evolve/_tomorrow-seed-${tomorrow}.md"
+log_file="04 Notes/vault-evolve/_digest-log.md"
+```
+
+**Autonomous mode** (`--autonomous` flag or Windows Task): no interactive prompts; write outputs + log; exit
+**Interactive mode** (manual invoke): show key decisions to user; accept tweaks before write
+
+如 daily note 不存在 → log error + 仍 attempt seed build (with sparse data) + exit。
+
+### Phase 1 — Read All 14 Data Sources
+
+⛔ **Hard rule (2026-05-15 incident-driven)**: **MUST grep every source listed below — no "abbreviated" or "context-budget" skip allowed**. Sources 4-6 (Kanbans + Inbox) are the **most-skipped** and the **most-load-bearing** for tomorrow-seed Top 3. If any source can't be read (file missing / permissions), log explicit warning + flag in Phase 6 log — never silently skip.
+
+Origin: 2026-05-14 EOD /day-digest abbreviated 跑漏 [[03 Projects/{{PROJECT_A}}/Tasks.md]] § `{{dateDue:: 2026-05-15}} {{priority:: 2}}` B站 沙龙 item → tomorrow-seed 漏 → /daily-emit 5/15 daily note 漏 → user 5/15 09:xx manually correct. Codified as [[I260515-day-digest-must-grep-kanban-tomorrow-before-sign-off]]. (Original 📅/⏫ emoji syntax in legacy historical reference — current syntax is Operon `{{key:: val}}` per 2026-05-21 migration · [[09 Rules/tasks.md]].)
+
+per [[09 Rules/digest-job.md]] § Data Sources：
+
+1. Today daily note (entire file) — primary signal
+2. Yesterday daily note § EOD § Carry forward — continuity
+3. Past 7 days daily notes (light scan, headlines + EOD section) — pattern detection
+4. Project Kanbans: **`03 Projects/{{PROJECT_A}}/Tasks.md**` + `**03 Projects/{{ORG_B}}/Tasks.md`**
+5. Personal Kanban: **`06 Tasks/Personal.md`**
+6. Inbox.md: **`06 Tasks/Inbox.md`**
+7. Active Action files: glob **`10 Action/12 Active/T*.md`**
+8. Q2 OKR: **`04 Notes/12-week/2026-Q2.md`**
+9. This week file: **`04 Notes/weekly/2026-W{ISO week}.md`**
+10. Today modified Cards: find **`02 Cards/**/C${YYMMDD}-*.md`** modified today
+11. Today modified instincts: find **`02 Cards/instincts/I${YYMMDD}-*.md`**
+12. Today modified wikis: find **`01 Wiki/**/*.md`** newer than yesterday
+13. Active trip bundle: grep **`03 Projects/*/03 行程计划/*.md`** for `trip-date` 含 today
+14. `_decisions.md` recent entries + today's WeChat ingest digest (if exists)
+
+Build internal map: `{source → relevant signals}`. Use as scaffolding for chew sections.
+
+### Phase 1.5 — Pre-flight Kanban verification (2026-05-15 incident-driven)
+
+⛔ **Non-skippable.** Before moving to Phase 2, explicitly verify that every surface task with `{{dateDue:: {tomorrow}}}` (date = tomorrow's ISO YYYY-MM-DD) has been surfaced into the working map for Phase 4 tomorrow-seed Top 3 candidacy.
+
+```bash
+tomorrow=$(date -d "tomorrow" +%Y-%m-%d 2>/dev/null || date -v+1d +%Y-%m-%d)
+# Grep all project surfaces for tomorrow-dated items (Operon syntax)
+grep -nE "\{\{dateDue:: ${tomorrow}\}\}" "06 Tasks/Today.md" "03 Projects/{{PROJECT_A}}/Tasks.md" "03 Projects/{{ORG_B}}/Tasks.md" "06 Tasks/Personal.md" 2>/dev/null
+```
+
+For each hit, classify by `{{priority:: <0|1|2|3|4|5|/>}}` and `{{status:: Project.<lane>}}` and **must mention in tomorrow-seed Top 3 candidacy pool**. If a `0`/`1`/`2` priority item (or Overdue/ThisWeek status) is not in the seed's Top 3, surface as warning in Phase 6 log. If no surface tasks are dated tomorrow, log "Surface verified · 0 items {{dateDue:: {tomorrow}}}" — explicit zero, never silent.
+
+### Phase 2 — Produce 4 AI-Chew Sections
+
+按 [[09 Rules/digest-job.md]] § Hard Content Rules：
+
+**🤖 Shape of Today**:
+- 1-2 段 (~120-200 字)
+- 今天本质形状定性
+- Q2 OKR alignment 一句话挂钩 (e.g., "O1 优秀 / O2-O3 starving")
+- Pattern detection vs yesterday / 同周 / 类似 day type
+- 一句话 take-away（quotable）
+
+**🤖 What Resisted**:
+- Slipped items × business consequence 表（每个 ≤2 行）
+- 找共同形状（如果存在）
+- Root-cause 分析（不止描述）
+- 应对建议（next-day actionable）
+
+**🤖 What Emerged**:
+- 3-5 个 work-actionable signals
+- 每个含: observation + 业务含义 + next action
+- 重点：non-obvious 信号（user 没在 EOD 写但 vault 数据 surface）
+- **❌ NOT**: AI/vault meta-patterns（image injection / push-back / vault grep / etc.）
+
+**🤖 Insight Candidates**:
+- 3-5 candidates，按 promote value 排序
+- 每个含: trigger + action + confidence + propose-path（Card / Rule / Skill / SOP）
+- **✅ Work SOP 候选优先**（"evening surge squeezes outreach"），**❌ NOT vault rules**
+
+### Phase 3 — Write Deliverable A (4 段到 today's daily note)
+
+Insert position: **在 `## End of Day Review` 之前**，user 手填的 EOD 不动。
+
+如 4 段已存在（同日多次跑）→ **覆盖**（idempotent）。
+
+Section anchor 用 `## 🤖 ` prefix 便于精确替换：
+
+```bash
+# Edit 模式
+- 如 daily note 已有 `## 🤖 Shape of Today` section → replace 4 段
+- 如 daily note 没有 → insert before `## End of Day Review`
+```
+
+### Phase 4 — Produce Deliverable B (tomorrow-seed)
+
+Per [[09 Rules/tomorrow-seed.md]] full schema：
+
+**Top 3** (ranked by Q2 OKR leverage):
+- 每个 mapping `O{n}.KR{m}` — 显式 OKR tag
+- 含 priority emoji + 2-4 行说明 + 失败模式 (optional)
+
+**Day Planner Pre-populated**:
+- Trip itinerary (如明天是 trip day) 或 typical work blocks
+- AI-added work blocks 用 ⚡ 标记
+- 24h syntax, no brackets
+
+**Active Tracks Auto-populate**:
+- Per project: Overdue count + This Week count + In-progress
+- Carry forward from today's Slipped
+
+**Drift Signals**:
+- 持续 slip pattern / silent slipped / day-mode drift
+
+**Q2 OKR Alignment 表**: 各 KR × tomorrow contribution × status
+
+### Phase 5 — Write Deliverable B (overwrite seed file)
+
+Write to **`04 Notes/vault-evolve/_tomorrow-seed-${tomorrow}.md`**.
+
+如 seed file 已存在（同日多次跑）→ **覆盖**。
+
+### Phase 5.5 — Auto-spawn Cards / Instincts from high-confidence Insight Candidates (2026-05-14, threshold tightened 2026-05-14 v2)
+
+> Per [[09 Rules/digest-job.md]] § ✅ DO updated rules.
+> Threshold raised 0.85 → **0.90** to reduce auto-Card noise debt per {{USER_NAME}}'s strategic-D feedback.
+
+#### Noise-Reduction Mechanisms (5 explicit gates — all must pass before auto-write)
+
+1. **Confidence gate (raised)** — Card auto-spawn requires confidence **≥ 0.90** (was 0.85). Instincts: 0.70 ≤ c < 0.90. Below 0.70 → list only, no auto-create.
+2. **De-dup pre-write** — compute candidate slug; glob **`02 Cards/**/{slug-stem}.md`**. If existing Card with ≥ 60% slug-stem overlap → STOP, surface as "candidate overlaps with existing [[Card]] — propose update vs. new". Skip auto-spawn for that candidate.
+3. **Source attribution required** — frontmatter must include `source-project: {domain}` AND `source-context: {1-line citation from today's daily note or vault data}`. If domain genuinely ambiguous → drop to instinct or list-only (no `_inbox/` dumping by digest).
+4. **14-day archive-deadline tag enforced** — `archive-deadline: {today+14}` mandatory + `auto-generated: true` + `generated-by: /day-digest`. `/card-lint --mode=stale` and `/vault-evolve` Phase 5.b read these for periodic prune.
+5. **Cascade depth ≤ 3** — track `CASCADE_DEPTH` env/param; per Phase 5.7. Auto-spawn from digest is depth 1; chained `/card-lint --mode=bridge` is depth 2; downstream Card creation within bridge = depth 3 STOP.
+
+#### Per-Candidate Action
+
+For each Insight Candidate from Phase 2:
+- **confidence ≥ 0.90 AND gates 1-5 pass** → auto-write **full Card** to **`02 Cards/{domain}/C{date}-{slug}.md`**:
+  - Full body: Evidence (from chew observation) + Mechanism (AI synthesis) + Application (next-use cases) + Related (initial wikilinks)
+  - frontmatter: `type: card`, `created: {today}`, `created-by: claude (/day-digest)`, `source-project: {inferred domain}`, `source-context: {citation}`, `auto-generated: true`, `generated-by: /day-digest`, `confidence: 0.X`, `archive-deadline: {today+14}`, `status: draft`
+  - After write, chain `/card-lint --mode=bridge` (cascade depth 1)
+- **0.70 ≤ confidence < 0.90** → auto-write **instinct** to **`02 Cards/instincts/I{date}-{slug}.md`** per [[09 Rules/instincts.md]] template
+- **confidence < 0.70 OR any gate fails** → list in Insight Candidates section (Phase 2 output), no auto-create
+
+#### Calibration Loop (weekly via /vault-evolve)
+
+`/vault-evolve` reads `archive-deadline:` cards weekly. For each:
+- If user kept (no manual archive in 14d) → 升 `confidence` +0.05 (cap 0.95), reset `archive-deadline` +30d
+- If user archived → decrement digest's auto-spawn threshold confidence by 0.01 OR flag pattern for review
+
+This forms the **calibration loop** — digest's threshold is not static; it learns from user dispositions.
+
+Auto-spawn logged to `_digest-log.md`:
+```
+{ts} · auto-spawned {N} Cards, {M} instincts · {list of files}
+```
+
+### Phase 5.7 — Cascade Trigger (max depth 3)
+
+For each auto-spawned Card (Phase 5.5), check current cascade depth:
+- `CASCADE_DEPTH` env var or param (default 0)
+- If `depth < 3` → invoke `/card-lint --mode=bridge` (anchor = new Card) with `CASCADE_DEPTH = depth + 1`
+- If `depth >= 3` → STOP, log "cascade limit hit"
+
+Same applies if any Phase 2 work prompts other auto-chains.
+
+### Phase 5.9 — Weekend Light Mode (auto-detect)
+
+Check `(date +%u)` — if 6 (Sat) or 7 (Sun) AND today's daily note has < 200 chars in non-Day-Planner sections:
+- **Skip** Shape of Today / What Resisted / What Emerged / Insight Candidates (4 full sections)
+- **Write** minimal section instead:
+  ```markdown
+  ## 🤖 Weekend Light Mode (周末轻量)
+  Daily note sparse — no full chew. Carry forward yesterday's pending items to next workday.
+  ```
+- **Still write** tomorrow-seed but minimal (Carry forward + Pending decisions only)
+- Log: `weekend light mode · skipped 4 sections · minimal seed written`
+
+### Phase 6 — Log Run
+
+Append to **`04 Notes/vault-evolve/_digest-log.md`**:
+
+```
+{timestamp} · {mode} · {today} daily chew written · seed for {tomorrow} written · {N} Cards auto-spawned · {M} instincts auto-spawned · cascade-depth {D} · {E} errors · {W} warnings
+```
+
+如有 errors/warnings，details append 到 log（缩进 2 格）。
+
+### Phase 6.5 — Delete Signal File (autonomous mode)
+
+如 mode 是 autonomous + 触发来源是 signal file (per **`.claude/_pending/{ts}-day-digest.signal`**):
+- Delete signal file after successful write
+- Log "signal consumed: {filename}"
+
+### Phase 7 — Confirm (interactive mode only)
+
+> "5/14 digest 完成。4 段写到 daily note，seed 写到 _tomorrow-seed-2026-05-15.md.
+>
+> Highlights:
+> - Shape: {1-line}
+> - 主要 emerged: {1-line}
+> - Top tomorrow priority: {1-line}
+>
+> 看 [[04 Notes/daily notes/2026-05-14]] § AI-Chew sections / [[_tomorrow-seed-2026-05-15]] 完整版.
+> 如不满意某段，敲 '/day-digest fix {section}' 让我重写那段."
+
+Autonomous mode 跳过 Phase 7（无用户）。
+
+## Hard Rules
+
+按 [[09 Rules/digest-job.md]] § Hard Content Rules:
+
+1. **NEVER write AI/vault meta-patterns** in 4 段 chew output — vault grep / image injection / push-back / etc. 都不进 chew。
+2. **NEVER write generic LLM platitudes** — "今天很充实" / "继续加油" 全砍。
+3. **NEVER 改 user 手填的 `## End of Day Review`** — 那是 truth-source。
+4. **NEVER 删 yesterday's tomorrow-seed** — archived 作 accuracy 评估。
+5. ~~NEVER auto-promote Insight Candidates~~ → **2026-05-14 update**: auto-spawn Cards (confidence ≥ 0.85) + instincts (0.7-0.85) allowed; must标 `auto-generated: true` + `archive-deadline: {today+14}`; user 周扫 archive 不准的。
+6. **ALWAYS Q2 OKR alignment** in Shape of Today + Tomorrow seed Top 3 explicit tag.
+7. **ALWAYS business consequence** framing in What Resisted.
+8. **ALWAYS Day Planner OG syntax** in Tomorrow seed (`- [ ] HH:mm task`, 24h, no brackets, ⚡ for AI-added).
+9. **ALWAYS idempotent** — 同日多次跑覆盖式更新，不重复 append.
+10. **ALWAYS respect cascade depth limit** — track `CASCADE_DEPTH` env/param; max depth 3; STOP further chain at limit (per [[09 Rules/digest-job.md]] § Don't).
+11. **ALWAYS delete signal file** if triggered by **`.claude/_pending/{ts}-day-digest.signal`** and run completed successfully.
+12. **AUTO weekend light mode** — Sat/Sun + daily note sparse → skip 4 full sections, minimal seed only.
+
+## Failure Modes
+
+| Symptom | Behavior |
+|---|---|
+| Today daily note 不存在 | Log error, skip Deliverable A, still attempt B (sparse data) |
+| Today daily note § EOD 不存在 | Insert 4 段 + empty EOD scaffold + warning |
+| 7 天某 daily 缺失 | Pattern detection 用可用数据 + warning |
+| Q2 OKR file 不存在 | Skip OKR alignment 段 in Shape + warning |
+| Active trip bundle 含 today's date 但 trip bundle 不可读 | Fall back to non-trip framing + warning |
+| Multiple trip bundles 含 today（多 trip 同日重叠）| 用 most recent mtime + log all |
+| Tomorrow seed already exists | Overwrite (idempotent design) |
+| User 手填 EOD 后才跑 chew | 4 段插入到 EOD 之前，不动 user content |
+| Autonomous mode 跑时 daily note 已 closed (`status: closed`) | 仍写 4 段（user 可能后续 reopen）+ warning |
+| 调用时 prompt token budget 紧 | Phase 1 light-scan 7-day daily 仅读 headlines + EOD section, 不读全文 |
+
+## Cross-skill Chain
+
+- **Upstream** (谁喂数据给我): `/daily-note` 创建当日 note · `/sync-day` mid-day 写入 frontmatter · `/source-ingest` / `/card-lint` append to § Ingests/Lint · `/vault-evolve` daily report
+- **Downstream** (谁吃我的产出): `/daily-emit` 08:00 读 tomorrow-seed → 写明天 daily note · `/vault-evolve` 周报读 chew 历史 · 未来 `/weekly-digest`
+- **Sibling**: `/daily-note --close` Phase 7 EOD reconciliation — chew 不取代 close，是 close 之前的 AI-prelude
+
+## Worked Example
+
+详 [[_prototype-2026-05-13-chew.md]] v2（user-approved baseline）。
+
+---
+
+*23:00 自动 job 的 executor。Quality bar: chew output 读起来像 {{USER_NAME}} EOD 30 min 反思 — work-focused, OKR-aligned, actionable.*

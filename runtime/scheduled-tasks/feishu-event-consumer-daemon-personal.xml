@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-16"?>
+
+<Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
+
+  <RegistrationInfo>
+
+    <Date>2026-05-28T11:29:24</Date>
+
+    <Author>{{HOSTNAME}}\Administrator</Author>
+
+    <URI>\feishu-event-consumer-daemon-personal</URI>
+
+  </RegistrationInfo>
+
+  <Principals>
+
+    <Principal id="Author">
+
+      <UserId>S-1-5-21-3323412737-987631274-1346458851-500</UserId>
+
+      <LogonType>InteractiveToken</LogonType>
+
+    </Principal>
+
+  </Principals>
+
+  <Settings>
+
+    <DisallowStartIfOnBatteries>true</DisallowStartIfOnBatteries>
+
+    <StopIfGoingOnBatteries>true</StopIfGoingOnBatteries>
+
+    <Enabled>false</Enabled>
+
+    <MultipleInstancesPolicy>IgnoreNew</MultipleInstancesPolicy>
+
+    <IdleSettings>
+
+      <Duration>PT10M</Duration>
+
+      <WaitTimeout>PT1H</WaitTimeout>
+
+      <StopOnIdleEnd>true</StopOnIdleEnd>
+
+      <RestartOnIdle>false</RestartOnIdle>
+
+    </IdleSettings>
+
+  </Settings>
+
+  <Triggers>
+
+    <LogonTrigger>
+
+      <StartBoundary>2026-05-28T11:29:00</StartBoundary>
+
+    </LogonTrigger>
+
+  </Triggers>
+
+  <Actions Context="Author">
+
+    <Exec>
+
+      <Command>{{USER_HOME}}\.claude\channels\feishu\launch-consumer-personal.cmd</Command>
+
+    </Exec>
+
+  </Actions>
+
+</Task>
+

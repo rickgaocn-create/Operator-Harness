@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "smart-connections": {
+      "command": "npx",
+      "args": ["-y", "@yejianye/smart-connections-mcp@1.0.0"],
+      "env": {
+        "OBSIDIAN_VAULT": "{{VAULT_ROOT}}"
+      }
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@0.0.75"]
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "_comment": "REFERENCE SNAPSHOT (captured 2026-05-27) of the hook + plugin wiring from the LIVE per-machine ~/.claude/settings.json on the Windows work desktop. This is NOT loaded by Claude Code — it is the recovery source of truth for the control plane, which by design lives in the per-machine (gitignored) global settings (see CLAUDE.md § Platform). To reconstruct on a fresh Windows box: deploy global-hooks/* to ~/.claude/hooks/, then merge this 'hooks' block into ~/.claude/settings.json. Paths are machine-absolute on purpose; adjust the python.exe path + vault path ({{VAULT_ROOT}}) if they differ.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\inject-vault-memory.ps1\"", "timeout": 30, "statusMessage": "Loading Obsidian vault memory..." },
+          { "type": "command", "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\inject-catchup-brief.ps1\"", "timeout": 15, "statusMessage": "Detecting catch-up + draining signal queue..." },
+          { "type": "command", "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\check-channel-state.ps1\"", "timeout": 15, "statusMessage": "Probing inbound channel state..." }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [ { "type": "command", "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\check-pending-signals.ps1\"", "timeout": 10 } ] }
+    ],
+    "Stop": [
+      { "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/hooks/stop-check.py", "timeout": 90 },
+        { "type": "command", "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"{{USER_HOME}}\\.claude\\hooks\\mirror-to-feishu.ps1\"", "timeout": 15 }
+      ] }
+    ],
+    "PostToolUse": [
+      { "matcher": ".*", "hooks": [ { "type": "command", "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/hooks/post-tool-middleware.py", "timeout": 5 } ] }
+    ],
+    "SessionEnd": [
+      { "hooks": [ { "type": "command", "command": "{{PYTHON_EXE}} {{VAULT_ROOT}}/.claude/_eval-fixtures/judgment_capture.py --hook", "timeout": 20 } ] }
+    ],
+    "_PreToolUse_note": "The PreToolUse Write|Edit|NotebookEdit -> cn-zero-english-guard.py hook is wired in the VAULT's per-machine .claude/settings.local.json (gitignored) as of 2026-05-27 — NOT in the tracked settings.json (which stays OS-neutral) and not here. See bootstrap README § cn-guard wiring for the per-OS command."
+  },
+  "_enabledPlugins_reference": {
+    "_comment": "Plugin enablement is also per-machine global state. Captured here for reproducibility; re-enable via the live ~/.claude/settings.json.",
+    "feishu@local": true,
+    "claude-md-management@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "hookify@claude-plugins-official": true,
+    "session-report@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "enterprise-search@knowledge-work-plugins": true,
+    "legal@knowledge-work-plugins": true,
+    "pdf-viewer@knowledge-work-plugins": true
+  }
+}
