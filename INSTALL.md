@@ -88,4 +88,11 @@ It's a fork of clharman/afk-code with an added `src/feishu/` module. Prefer clon
 
 ## macOS
 
-The `.harness/` adapter resolves paths/python/scheduler per OS, and skills tagged `platform: macos` activate there. Automation uses launchd/cron instead of Task Scheduler, and hooks are wired with `python3 $CLAUDE_PROJECT_DIR` in `settings.local.json`. The Windows scheduled-task XMLs and PowerShell daemons do not apply. There is no macOS installer in this snapshot — wire `settings.local.json` by hand.
+macOS is a **first-class install** via the port in [`macos/`](macos/README.md). Automation uses **launchd** (generated from the same 38 task XMLs by `install/macos/taskxml_to_launchd.py`), hooks are ported to `python3` in `macos/hooks/`, and remote-control daemons run as bash launchers under launchd KeepAlive.
+
+```bash
+bash install/bootstrap.sh --vault-root "$HOME/Documents/RG" --dry-run        # preview
+bash install/bootstrap.sh --vault-root "$HOME/Documents/RG" --register-agents # install + schedule
+```
+
+Full parity table, mac-only extras (native notifications, clipboard capture), and known partial ports: **[`macos/README.md`](macos/README.md)**. The one capability that does not cross over is WeChat ingest (it reads the Windows WeChat client DB).

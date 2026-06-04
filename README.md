@@ -35,7 +35,8 @@ operator-harness/
 │   ├── afk-code/          #   AFK bridge SOURCE (fork of clharman/afk-code + custom Feishu module)
 │   ├── daemons/           #   24/7 daemon launchers + healthchecks (Discord / Feishu)
 │   └── scheduled-tasks/   #   38 Windows Task Scheduler definitions (.xml) — the automation backbone
-├── install/               # bootstrap.ps1 installer + config template + task registration
+├── install/               # bootstrap.ps1 (Windows) + bootstrap.sh (macOS) + launchd generator
+├── macos/                 # macOS port: python hook ports, daemon launchers, mac-only extras
 └── docs/                  # architecture notes
 ```
 
@@ -51,7 +52,9 @@ Claude Code runs with a set of **lifecycle hooks** (`SessionStart` / `UserPrompt
 
 ## Quick start
 
-> **Prerequisites:** Windows 10/11, [Claude Code](https://claude.com/claude-code), Python 3.12+, Node 18+, Obsidian, PowerShell 5.1+. (The framework is Windows-first; the `.harness/` layer has macOS hooks but the scheduled jobs assume Task Scheduler + PowerShell.)
+> **Prerequisites:** [Claude Code](https://claude.com/claude-code), Python 3.12+, Node 18+, Obsidian.
+> **Windows:** PowerShell 5.1+ + Task Scheduler (use `install/bootstrap.ps1`).
+> **macOS:** launchd + `python3` (use `install/bootstrap.sh`; see [`macos/README.md`](macos/README.md) for the port — full parity minus WeChat ingest).
 
 ```powershell
 git clone https://github.com/<you>/operator-harness.git

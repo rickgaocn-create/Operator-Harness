@@ -1,0 +1,42 @@
+{
+  "_comment": "macOS per-machine Claude Code settings. bootstrap.sh substitutes {{PYTHON_EXE}}/{{VAULT_ROOT}}/{{USER_HOME}} and writes this to ~/.claude/settings.local.json. Mirrors the Windows hook wiring using python3 instead of powershell.exe. The 5 framework hooks (stop-check, post-tool-middleware, judgment_capture, success_miner, cn-zero-english-guard) are already cross-platform Python; only SessionStart/UserPromptSubmit/Feishu-mirror are macOS ports under ~/.claude/hooks.",
+  "permissions": {
+    "defaultMode": "acceptEdits",
+    "_defaultMode_note": "Safer than the Windows box's 'bypassPermissions'. Widen deliberately if you want zero prompts."
+  },
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{USER_HOME}}/.claude/hooks/inject-vault-memory.py\"", "timeout": 30 },
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{USER_HOME}}/.claude/hooks/check-channel-state.py\"", "timeout": 15 }
+      ] }
+    ],
+    "UserPromptSubmit": [
+      { "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{USER_HOME}}/.claude/hooks/check-pending-signals.py\"", "timeout": 10 }
+      ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Write|Edit|NotebookEdit", "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{VAULT_ROOT}}/.claude/hooks/cn-zero-english-guard.py\"", "timeout": 10 }
+      ] }
+    ],
+    "PostToolUse": [
+      { "matcher": ".*", "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{VAULT_ROOT}}/.claude/hooks/post-tool-middleware.py\"", "timeout": 5 }
+      ] }
+    ],
+    "Stop": [
+      { "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{VAULT_ROOT}}/.claude/hooks/stop-check.py\"", "timeout": 90 },
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{USER_HOME}}/.claude/hooks/mirror-to-feishu.py\"", "timeout": 15 }
+      ] }
+    ],
+    "SessionEnd": [
+      { "hooks": [
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{VAULT_ROOT}}/.claude/_eval-fixtures/judgment_capture.py\" --hook", "timeout": 20 },
+        { "type": "command", "command": "{{PYTHON_EXE}} \"{{VAULT_ROOT}}/.claude/_eval-fixtures/success_miner.py\" --hook", "timeout": 20 }
+      ] }
+    ]
+  }
+}
