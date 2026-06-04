@@ -30,6 +30,16 @@ LABEL_PREFIX = "com.operator-harness."
 DOW = {"Sunday": 0, "Monday": 1, "Tuesday": 2, "Wednesday": 3,
        "Thursday": 4, "Friday": 5, "Saturday": 6}
 
+# launchd-native upgrades: tasks better expressed as event-driven WatchPaths than as polling
+# daemons. The Windows FileSystemWatcher (clippings) becomes a real WatchPaths trigger that fires
+# only on change and writes a signal the session hooks drain.
+WATCHPATHS_OVERRIDE = {
+    "RG-watcher-clippings": {
+        "watch": ["{VAULT_ROOT}/00 Raw/Clippings", "{VAULT_ROOT}/02 Cards/_inbox"],
+        "program": ["/bin/bash", "{USER_HOME}/.claude/macos/launchd-native/on-clippings-change.sh"],
+    },
+}
+
 # powershell daemon tasks -> their mac bash launcher (installed by bootstrap.sh under USER_HOME)
 DAEMON_MAP = {
     "afk-code-claude2-daemon":            "{USER_HOME}/.afk-code-claude2/launch-daemon.sh",
@@ -130,6 +140,20 @@ def convert(xml_path, python, vault_root, user_home):
         return None  # nothing to run
     name = os.path.splitext(os.path.basename(xml_path))[0]
     label = LABEL_PREFIX + name
+
+    # launchd-native WatchPaths override (event-driven file trigger, no polling)
+    if name in WATCHPATHS_OVERRIDE:
+        ov = WATCHPATHS_OVERRIDE[name]
+        fmt = lambda s: s.format(VAULT_ROOT=vault_root, USER_HOME=user_home)  # noqa: E731
+        plist = {
+            "Label": label,
+            "ProgramArguments": [fmt(x) for x in ov["program"]],
+            "WatchPaths": [fmt(w) for w in ov["watch"]],
+            "StandardOutPath": f"{user_home}/Library/Logs/operator-harness/{name}.out.log",
+            "StandardErrorPath": f"{user_home}/Library/Logs/operator-harness/{name}.err.log",
+            "WorkingDirectory": vault_root,
+        }
+        return label, plist
 
     plist = {"Label": label, "ProgramArguments":
              build_program_args(name, exec_el, python, vault_root, user_home)}
