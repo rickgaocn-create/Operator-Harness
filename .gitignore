@@ -35,3 +35,7 @@ __pycache__/
 .smart-env/
 .obsidian/workspace*.json
 .obsidian/cache
+
+# keep example env templates
+!*.example.env
+!**/*.example.env

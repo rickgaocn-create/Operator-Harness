@@ -12,7 +12,7 @@ This brings the operator harness to macOS with **full capability parity** plus a
 | 38 autonomous routines (daily/weekly/interval/daemon) | Task Scheduler | ✅ | **launchd** via `taskxml_to_launchd.py` |
 | Remote control (Discord/Feishu AFK) | `.ps1` daemons | ✅ | bash launchers + launchd KeepAlive |
 | Learning loop (feeders, judgment, reflect) | ✅ | ✅ | Python; runs under launchd |
-| WeChat ingest | ✅ | ❌ | WeFlow reads the Windows WeChat DB — no mac equivalent |
+| WeChat ingest | ✅ (WeFlow) | ✅ | native reader in [`wechat/`](wechat/README.md) — drops WeFlow, reads SQLCipher DB directly |
 | Native notifications | via Feishu push | ✅ **mac-only** | `mac-extras/notify.py` (Notification Center) |
 | One-key clipboard capture | FileSystemWatcher | ✅ **mac-only** | `mac-extras/clip-capture.sh` (`pbpaste`) |
 | **Local on-device inference** | ❌ cloud-only | ✅ **mac-only** | `ai/` router (MLX / Ollama / Foundation Models) |
