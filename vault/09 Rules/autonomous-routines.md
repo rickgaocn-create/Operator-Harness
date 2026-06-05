@@ -35,11 +35,11 @@ last-major-rewrite: 2026-05-21
 6. Use `notify_feishu(ROUTINE, message)` for user-facing alerts.
 7. Register in `_setup.ps1` with appropriate trigger.
 8. Document in ****`.claude/skills/autonomous-routines/SKILL.md`**** § routines table.
-9. Run `_setup.ps1` to install. Verify with `Get-ScheduledTask -TaskName 'RG-tier7-*'`.
+9. Run `_setup.ps1` to install. Verify with `Get-ScheduledTask -TaskName '{{USER_NAME}}-tier7-*'`.
 
 ## Removing a routine
 
-1. `Unregister-ScheduledTask -TaskName RG-tier7-<name> -Confirm:$false`
+1. `Unregister-ScheduledTask -TaskName {{USER_NAME}}-tier7-<name> -Confirm:$false`
 2. Delete the script (preserve in git history)
 3. Update SKILL.md docs
 
@@ -49,7 +49,7 @@ Each new routine starts in notification-only mode for ≥7 days. Promote to writ
 - Reviewing log entries (every event makes sense)
 - Confirming the routine fires when expected (no missed conditions)
 - Confirming no false positives (no spurious alerts)
-- **Confirming the task is actually registered AND firing** — `Get-ScheduledTask -TaskName RG-tier7-<name>` returns `Ready` *and* a fresh `autonomous-log.jsonl` entry appears on schedule. `_setup.ps1` registration can silently fail; never assume "I ran setup" means the task exists (incident 2026-05-26: the whole layer was dead 4.5 days, unregistered).
+- **Confirming the task is actually registered AND firing** — `Get-ScheduledTask -TaskName {{USER_NAME}}-tier7-<name>` returns `Ready` *and* a fresh `autonomous-log.jsonl` entry appears on schedule. `_setup.ps1` registration can silently fail; never assume "I ran setup" means the task exists (incident 2026-05-26: the whole layer was dead 4.5 days, unregistered).
 - **Confirming the live `notify()` path delivers** end-to-end — fire one real alert and verify receipt, not just a DRY-mode "would notify" log line. A broken send command (e.g. the phantom `+send`) stays invisible as long as everything runs in DRY (same incident).
 
 Write-mode routines MAY still fail safely: e.g. `eod-snapshot` only edits HTML comments inside reserved anchor lines, never user-authored content.

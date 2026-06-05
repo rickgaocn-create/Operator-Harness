@@ -34,14 +34,14 @@ The cron job runs whether `ANTHROPIC_API_KEY` is set or not — its output is mo
 
 Same 13 chats baselined 2026-05-12. Defined in **`scripts/priority_chats.json`** and editable in-place:
 
-- {{PROJECT_A}}× TapTap対接群, {{PROJECT_A}} × 4399 対接群, bili × {{PROJECT_A}} 联运対接
+- 《{{PROJECT_A}}》× TapTap対接群, {{PROJECT_A}} × 4399 対接群, bili × {{PROJECT_A}} 联运対接
 - 美林 × {{PROJECT_A}} — 6月大型线下活动, {{PROJECT_A}} × 美林 — 目标广州新地标
-- {{ORG_A}} × 前进街道办, 小鹏 × {{ORG_A}}, 广文旅 × {{PROJECT_A}}, 月月月月 (internal), 模之屋 × {{PROJECT_A}}
-- DM: {{PERSON_1}}（{{ORG_C}}）— filtered for personal mix per `me.md` § Personal Context (text only, no media surfacing without explicit ask)
-- DM: {{ORG_B}} — {{PERSON}} (Japan ops)
+- 诗悦 × 前进街道办, 小鹏 × 诗悦, 广文旅 × {{PROJECT_A}}, 月月月月 (internal), 模之屋 × {{PROJECT_A}}
+- DM: Cathy（{{ORG_A}}）— filtered for personal mix per `me.md` § Personal Context (text only, no media surfacing without explicit ask)
+- DM: {{ORG_B}} — 娇娇 (Japan ops)
 - DM: 珍珍 — TapTap
 
-Add/remove chats by editing `priority_chats.json`. The script also auto-picks up new chats with > 5 messages in the window from groups whose names contain `{{PROJECT_A}}`/`3rd`/`{{ORG_A}}` (configurable threshold).
+Add/remove chats by editing `priority_chats.json`. The script also auto-picks up new chats with > 5 messages in the window from groups whose names contain `{{PROJECT_A}}`/`{{ORG_B}}`/`诗悦` (configurable threshold).
 
 ## Output shape (in daily note)
 
@@ -54,16 +54,16 @@ Appends a section under the templated `## Ingests` header:
 ### 🤖 daily-wechat-ingest 06:00 → 12 messages from 5 chats, 3 media files
 
 **Tasks surfaced** (sent to [[Inbox]]):
-- [ ] follow up on Epic Shanghai animation event date — image from Robin 2026-05-12 09:15 #3rd-inc
-- [ ] confirm 5/29 PV final assets — `{{WECHAT_ID}}` to {{PROJECT_A}} × 4399 群 2026-05-12 11:23
+- [ ] follow up on Epic Shanghai animation event date — image from Robin 2026-05-12 09:15 #{{ORG_B}}-inc
+- [ ] confirm 5/29 PV final assets — `{{REDACTED}}` to {{PROJECT_A}} × 4399 群 2026-05-12 11:23
 
 **Media saved** → `04 Notes/daily notes/2026-05-12-attachments/`:
 - `09-15-Robin-shanghai-animation-event.jpg` — Epic Games DM (Robin)
-- `11-23-zhaomu-questionnaire.xlsx` — {{PROJECT_A}} × 4399 ({{WECHAT_ID}})
+- `11-23-zhaomu-questionnaire.xlsx` — {{PROJECT_A}} × 4399 ({{REDACTED}})
 
 **Chat highlights** (newest → oldest):
 - `{{PROJECT_A}} × 4399 対接群` @ 11:29 — 招募问卷已发，4399 端确认开始处理；100 名单+手机号待回填
-- `{{PROJECT_A}}× TapTap対接群` @ 09:46 — 5.28→5.29 调整同步完成
+- `《{{PROJECT_A}}》× TapTap対接群` @ 09:46 — 5.28→5.29 调整同步完成
 
 *Full digest: `.daily-ingest-queue/2026-05-12/digest.md`*
 ```
@@ -75,7 +75,7 @@ Appends a section under the templated `## Ingests` header:
 powershell -ExecutionPolicy Bypass -File ".claude\skills\daily-wechat-ingest\scripts\setup_schedule.ps1"
 
 # Verify
-Get-ScheduledTask -TaskName 'RG-daily-wechat-ingest' | Format-List
+Get-ScheduledTask -TaskName '{{USER_NAME}}-daily-wechat-ingest' | Format-List
 ```
 
 The scheduled task runs `python <ingest.py>` at 06:00 daily; logs to `.claude\.daily-ingest-queue\{date}\run.log`.
@@ -88,4 +88,4 @@ The scheduled task runs `python <ingest.py>` at 06:00 daily; logs to `.claude\.d
 
 ## Personal Context handling
 
-{{PERSON_1}} DM is in the priority list but messages are **never surfaced** as work-tasks or auto-OCR'd — per `me.md` § Personal Context, treat that channel as personal-mixed. Only fact-level text digest (sender, count, last timestamp); no media auto-extraction.
+Cathy DM is in the priority list but messages are **never surfaced** as work-tasks or auto-OCR'd — per `me.md` § Personal Context, treat that channel as personal-mixed. Only fact-level text digest (sender, count, last timestamp); no media auto-extraction.

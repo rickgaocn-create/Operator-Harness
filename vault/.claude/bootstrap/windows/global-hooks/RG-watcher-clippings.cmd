@@ -1,2 +1,2 @@
 @echo off
-start "" /MIN powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "{{VAULT_ROOT}}\.claude\_state\watch_clippings.ps1"
+start "" /MIN powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "D:\Administrator\Documents\{{USER_NAME}}\.claude\_state\watch_clippings.ps1"

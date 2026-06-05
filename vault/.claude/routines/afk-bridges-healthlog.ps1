@@ -1,12 +1,12 @@
 # afk-bridges-healthlog.ps1 — daily health snapshot of the 4 AFK bridges.
 # Appends ONE summary line per run; adds indented detail lines only on anomaly/drift.
-# Scheduled via task RG-afk-bridges-healthlog (daily 23:40, before RG-vault-autocommit
+# Scheduled via task {{USER_NAME}}-afk-bridges-healthlog (daily 23:40, before {{USER_NAME}}-vault-autocommit
 # 23:50 so the line is committed same night). Deterministic, no LLM / token cost.
 # Design map: 04 Notes\_system\(C) afk-bridges-overview-2026-05-28.md
 # Created 2026-05-29 (option 1 of the autolog choice).
 
 $ErrorActionPreference = 'Continue'
-$log = '{{VAULT_ROOT}}\04 Notes\_system\afk-bridges-healthlog.md'
+$log = 'D:\Administrator\Documents\{{USER_NAME}}\04 Notes\_system\afk-bridges-healthlog.md'
 
 function Get-TaskState($name) {
   $t = Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue
@@ -69,7 +69,7 @@ if (-not (Test-Path $log)) {
   $out += ''
   $out += '# AFK Bridges - Daily Health Log'
   $out += ''
-  $out += 'Append-only, one line per daily run by `RG-afk-bridges-healthlog` (23:40). Indented `WARN` detail lines appear only when a bridge drifted from its expected state. Curated architecture + fixes live in `(C) afk-bridges-overview-2026-05-28.md`; this file is the diary.'
+  $out += 'Append-only, one line per daily run by `{{USER_NAME}}-afk-bridges-healthlog` (23:40). Indented `WARN` detail lines appear only when a bridge drifted from its expected state. Curated architecture + fixes live in `(C) afk-bridges-overview-2026-05-28.md`; this file is the diary.'
   $out += ''
   $out += 'Legend: claude2 = active Discord bridge | rickgao-retired = the disabled old stack stays disabled (token retired, no old-stack proc) | fs-claude q= = Feishu inbound queue depth | feishu-codex up/idle = on-demand daemon (idle is normal).'
   $out += ''

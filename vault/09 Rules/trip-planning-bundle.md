@@ -57,8 +57,8 @@ trip-purpose: 一行 概要                  # ≤80 字
 chain-anchor: {anchor}                   # immutable，see [[09 Rules/action.md]]
 chain-anchor-note: "{anchor 的 immutable 提醒（如行程后期调整后 anchor 与实际日期不一致）}"  # 可选
 travelers:                               # 多人时用 list
-  - {{USER_NAME}} ({{USER_NAME}}) - 商务 / BD
-  - {{PERSON}} (小K) - 市场负责人
+  - 高培尧 ({{USER_NAME}}) - 商务 / BD
+  - 顾诗尧 (小K) - 市场负责人
 sensitivity: contains-pii-links          # 含敏感 PII 时声明
 ---
 ```

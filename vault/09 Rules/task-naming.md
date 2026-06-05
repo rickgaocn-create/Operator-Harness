@@ -51,9 +51,9 @@ Match `\d{1,2}/\d{1,2}(-\d{1,2})?` in `action_phrase`:
 - if date is an **event date** (not task due) → strip from title, append description line `节奏：<date> <event>`
 
 ### R3 · assignee-name-in-title
-Detect names: `{{USER_NAME}}`, `小K` / `小k`, `诸葛`, `宗寰`, `珂洁`, `煎饼`, etc.
+Detect names: `{{USER_NAME}}`, `小K` / `小k`, `{{PERSON}}`, `宗寰`, `珂洁`, `煎饼`, etc.
 - if person ∈ `{{assignees}}` field → strip from title
-- **Exception:** keep if person is the **noun of action** (the target, not the actor): `回执曾启琦`, `跟王鑫 follow-up`, `约 林芳羽 90min` — the counterparty's name IS what makes the task distinguishable
+- **Exception:** keep if person is the **noun of action** (the target, not the actor): `回执曾启琦`, `跟{{PERSON_3}} follow-up`, `约 林芳羽 90min` — the counterparty's name IS what makes the task distinguishable
 
 ### R4 · parenthetical scope
 Content inside `（...）` or `(...)`:

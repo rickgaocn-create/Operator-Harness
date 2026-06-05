@@ -15,12 +15,12 @@ created: 2026-05-21
 
 | 条线 | 落档目标（canonical 2026-05-15 起）|
 |---|---|
-| **{{PROJECT_A}}** BD / 供应商 / 异业 / 渠道 / 政企 | **`03 Projects/{{PROJECT_A}}/04 会议纪要/【{{ORG_D}}商务】[对方]-[议题]会议纪要.md`** |
+| **{{PROJECT_A}}** BD / 供应商 / 异业 / 渠道 / 政企 | **`03 Projects/{{PROJECT_A}}/04 会议纪要/【{{ORG_C}}商务】[对方]-[议题]会议纪要.md`** |
 | **{{ORG_B}}** M&A / 标的尽调 | **`03 Projects/{{ORG_B}}/04 会议纪要/YYYY-MM-DD-[标的].md`** |
 | **{{ORG_B}}** AIX 供应商 | **`03 Projects/{{ORG_B}}/04 会议纪要/YYYY-MM-DD-[供应商]-AIX.md`** |
 | **跨项目 / 个人 / 其他** | **`04 Notes/Meetings/YYYY-MM-DD-[主题].md`** |
 
-{{PROJECT_A}}文件命名：`【{{ORG_D}}商务】[对方简称]-[议题关键词]会议纪要.md` 或 `[活动名]-YYYY-MM-DD.md`（峰会 / 多发言人场景）。
+{{PROJECT_A}}文件命名：`【{{ORG_C}}商务】[对方简称]-[议题关键词]会议纪要.md` 或 `[活动名]-YYYY-MM-DD.md`（峰会 / 多发言人场景）。
 
 **Auto-chain 影响**：**`03 Projects/{{PROJECT_A}}/04 会议纪要/**/*.md**` 与 `**03 Projects/{{ORG_B}}/04 会议纪要/**/*.md`** 均触发 [[CLAUDE.md]] § Skill Auto-Chain Rules 的 `/biz` 评估链。
 
@@ -252,7 +252,7 @@ The 6-event miss streak proved that instruction-driven chains have ~0% reliabili
 
 ## What makes deep format "clear" (the load-bearing rules)
 
-These are what 诸葛 reacted to:
+These are what {{PERSON}} reacted to:
 
 1. **概要 永远第一屏** — `核心结论` 5 条内闭环。上级不翻屏就能做判断。
 2. **Q&A 结构化不散文化** — 问题是小标题；答复是编号列表；每条一句独立事实。No "首先…其次…最后…" prose.

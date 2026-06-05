@@ -68,7 +68,7 @@ quality-status: "auto" 或 "manual-curated"
 
 按 project：
 
-### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+### 《{{PROJECT_A}}》— `03 Projects/{{PROJECT_A}}/`
 - **⚠️ Overdue (N)**: count + 列前 3
 - **🔺 This Week (N)**: count + 列前 3 by chain-anchor
 - **🔁 In-progress (N)**: 所有 `[/]` items across Kanban (any project)
@@ -111,7 +111,11 @@ Source: [[04 Notes/12-week/2026-Q2.md]] 当前 KR list。
 
 ## 🤖 Pending Decisions / Open Threads
 
-未 close 的 grill threads / 等回复的 outreach / 已发但未确认的 commits。简短 list。
+未 close 的 grill threads / 等回复的 outreach / 已发但未确认的 commits。简短 list。含两类 auto-surfaced（来自 day-digest data sources 15-16）：
+- **决策到期 review**: `05 Decisions/` 中 `review_on` ≤ tomorrow → 链接 + 一句话 the call + reversibility（per [[09 Rules/decisions.md]]）
+- **CRM 跟进**: `crm: true` 联系人中 `next_followup` ≤ tomorrow 或逾期 cadence → who + what's owed（per [[09 Rules/crm.md]]）
+
+两类皆空 → 省略该子项，不强制留白。
 ```
 
 ## Hard Rules

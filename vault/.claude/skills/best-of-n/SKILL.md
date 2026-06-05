@@ -7,8 +7,8 @@ allowed-tools: Task, Read, Edit, Glob, Grep
 companion-rules:
   - "[[09 Rules/auto-chain-style.md]]"
 created: 2026-05-27
-created-by: claude (codify eval finding, corrected by {{USER_NAME}} human judgment)
-audit-trace: "判断源 — judgment-loop/evals/RESULTS.md 多轮对照 + 【人工 ground truth 修正 2026-05-27】。LLM 判官(盲判/priors/full-OS)曾误判 harness pipeline ≈ priors+best-of-N;{{USER_NAME}}亲评推翻:full pipeline 7/10,剥到 priors+best-of-N 3/10。两个修正:(1) best-of-N 是叠在【完整 pipeline】上的可靠性乘数,不剥框架;(2) LLM 判官在质量排序上不可信,故择优交给人,LLM 只做"滤废稿+抽强 move"两件可靠的地基活。"
+created-by: claude (codify eval finding, corrected by 高培尧 human judgment)
+audit-trace: "判断源 — judgment-loop/evals/RESULTS.md 多轮对照 + 【人工 ground truth 修正 2026-05-27】。LLM 判官(盲判/priors/full-OS)曾误判 harness pipeline ≈ priors+best-of-N;高培尧亲评推翻:full pipeline 7/10,剥到 priors+best-of-N 3/10。两个修正:(1) best-of-N 是叠在【完整 pipeline】上的可靠性乘数,不剥框架;(2) LLM 判官在质量排序上不可信,故择优交给人,LLM 只做"滤废稿+抽强 move"两件可靠的地基活。"
 ---
 
 # Skill: Best-of-N 重大输出可靠性门

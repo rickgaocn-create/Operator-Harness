@@ -105,7 +105,7 @@ $t::mouse_event(0x04, 0,0,0,0, [System.UIntPtr]::Zero)
 
 ```powershell
 [Environment]::GetFolderPath('MyDocuments')
-# → {{USER_HOME}}\Documents
+# → D:\Administrator\Documents
 ```
 
 The Save As dialog opens at the right location by default, so just type the bare filename. After first save, subsequent saves are plain `Ctrl+S`.
@@ -140,7 +140,7 @@ The pane handles dense, structured natural language well. Effective patterns fro
 
 - **Permission dialogs**: always pick "Dangerously always allow" — see [`feedback_claude_excel_permissions`](file:///{{USER_HOME}}/.claude/projects/C--Users-Administrator/memory/feedback_claude_excel_permissions.md) auto-memory entry.
 - **File naming**: `[XXXX]_[YYMMDD].xlsx` — 4-char descriptive prefix (e.g., `WCAL` for weekly calendar, `SALE` for sales table), then 6-digit date.
-- **Save target**: `{{USER_HOME}}\Documents\<filename>` (redirected Documents folder).
+- **Save target**: `D:\Administrator\Documents\<filename>` (redirected Documents folder).
 - **AFK reality**: user monitors this via Discord and can't respond to mid-task prompts. Bias toward completing the whole multi-step task in one go rather than pausing for each permission.
 
 ## When this skill does NOT apply

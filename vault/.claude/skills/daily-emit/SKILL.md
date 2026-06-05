@@ -27,7 +27,7 @@ audit-trace: "[[_prototype-2026-05-13-chew.md]] v2 baseline § Artifact B → em
 - Read tomorrow-seed (yesterday `/day-digest` generated) → write today's daily note
 - Max account, no API credit consumed
 
-**Autonomous path (DEFERRED)**: Windows Task `RG-daily-emit` 08:00 daily
+**Autonomous path (DEFERRED)**: Windows Task `{{USER_NAME}}-daily-emit` 08:00 daily
 - 已建 setup_schedule.ps1 但 unregistered（同 day-digest 原因）
 - Setup scripts 保留 作 future reference
 
@@ -37,7 +37,7 @@ audit-trace: "[[_prototype-2026-05-13-chew.md]] v2 baseline § Artifact B → em
 
 - `/daily-emit` / `/daily-emit --autonomous` 显式触发
 - "emit today" / "起今天 note" / "auto daily note"
-- Windows Task `RG-daily-emit` 08:00 daily 自动触发（autonomous mode）
+- Windows Task `{{USER_NAME}}-daily-emit` 08:00 daily 自动触发（autonomous mode）
 
 **Don't use for:**
 - 没有 tomorrow-seed 的天（seed file 不存在）→ fallback `/daily-note` interactive flow
@@ -169,7 +169,7 @@ actions-touched: []
 
 ## Active Tracks
 
-### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+### 《{{PROJECT_A}}》— `03 Projects/{{PROJECT_A}}/`
 - **⚠️ Overdue ({N})**: {从 seed Active Tracks 复制}
 - **🔺 This Week ({N})**: {同上}
 - **🔁 In-progress ({N})**: {同上}

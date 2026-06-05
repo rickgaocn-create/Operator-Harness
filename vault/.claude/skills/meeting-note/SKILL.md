@@ -6,6 +6,8 @@ model: claude-sonnet-4-6
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 companion-rules:
   - "[[09 Rules/tasks.md]]"
+  - "[[09 Rules/decisions.md]]"
+  - "[[09 Rules/crm.md]]"
   - "[[09 Rules/attribution-discipline.md]]"
 companion-skills:
   - "[[.claude/skills/meeting-summary/SKILL.md]]"
@@ -26,7 +28,7 @@ Turn meeting input into a structured vault note. Default = plain mode (5-phase l
 |---|---|
 | `/meeting-note` (no flag) OR plain triggers | **Plain** — internal sync, 1:1, quick partner call, casual intake |
 | `/meeting-note --deep` OR `/meeting-note-deep` OR any deep trigger phrase | **Deep** — board-grade memo |
-| Auto-detect → **Deep** when *any* of: external counterparty at BD/C-level · commercial terms on table · strategic alternatives in play · output will forward to 诸葛/董事会/JP board · ≥3 structured Q&A exchanges |
+| Auto-detect → **Deep** when *any* of: external counterparty at BD/C-level · commercial terms on table · strategic alternatives in play · output will forward to {{PERSON}}/董事会/JP board · ≥3 structured Q&A exchanges |
 | Cross-meeting synthesis (≥2 source notes) | **Switch to [[.claude/skills/meeting-summary/SKILL.md]]** — that skill enforces attribution discipline structurally |
 
 If auto-detect flips to deep but user invoked plain — surface plain-text 1-line: *"Looks board-grade — switch to `--deep`?"* and await reply.
@@ -97,13 +99,17 @@ status: completed
 [Paste original notes or transcript here]
 ```
 
-#### Phase 4: Surface RG-owned action items
+#### Phase 4: Surface {{USER_NAME}}-owned action items
 For each action item where **{{USER_NAME}} is the owner**, propose appending to **`06 Tasks/Inbox.md`** per `/task-capture` rules — same line format, context tag, priority, due date. Show what will be written before appending; confirm.
 
 Counterparty-owned items stay in the meeting note's `## Action Items` section only.
 
+#### Phase 4.5: Surface decisions & CRM touches
+- **Decisions** — if `## Decisions Made` holds an {{USER_NAME}}-owned call (decided / go-no-go / a chosen option among alternatives / a reversal), propose a decision file per [[09 Rules/decisions.md]] (one file in `05 Decisions/`, from `07 Templates/decision.md`, ≤3 per write, confirm before writing). Counterparty decisions stay in the note.
+- **CRM** — for each attendee whose `01 Wiki` note has `crm: true`, per [[09 Rules/crm.md]]: bump `last_contact` to the meeting date and append a `## Log` line; if an {{USER_NAME}}-owned action targets them, set `owed` + `next_followup`. Enrolled people only — never auto-enrol.
+
 #### Phase 5: Confirm
-> "Meeting note saved: [[path/to/note.md]]. [n] action items queued to Inbox."
+> "Meeting note saved: [[path/to/note.md]]. [n] action items queued to Inbox. [d] decisions logged. [c] contacts updated."
 
 ---
 
@@ -111,7 +117,7 @@ Counterparty-owned items stay in the meeting note's `## Action Items` section on
 
 Process a high-stakes business meeting (vendor negotiation, partnership pitch, M&A diligence, board-adjacent) into a **scannable, 概要-forward** minute that can be forwarded to leadership without further editing.
 
-**Origin:** Template extracted from `【{{ORG_D}}商务】EPIC Games-Unreal Engine 商务洽谈会议纪要` (2026-03-18) — praised by 诸葛 as "very clear." The structure encodes SCORARO grammar (Situation → Complication → Answer → Rationale → Action) into a 4-section layout.
+**Origin:** Template extracted from `【{{ORG_C}}商务】EPIC Games-Unreal Engine 商务洽谈会议纪要` (2026-03-18) — praised by {{PERSON}} as "very clear." The structure encodes SCORARO grammar (Situation → Complication → Answer → Rationale → Action) into a 4-section layout.
 
 ### Deep · phase index (load references as needed)
 
@@ -131,6 +137,7 @@ Process a high-stakes business meeting (vendor negotiation, partnership pitch, M
 
 - **Never Fabricate Q&A.** Use Variant B if user didn't actually ask questions. ([[references/deep-mode-core.md]] § HARD RULE)
 - **Party-Attribution Discipline.** Any `**[party]**：[claim]` must trace to that party's literal source. Cross-source synthesis → switch to `/meeting-summary`. Canonical: [[09 Rules/attribution-discipline.md]].
+- **Decisions + CRM.** {{USER_NAME}}-owned decisions → `05 Decisions/` per [[09 Rules/decisions.md]]; enrolled-attendee (`crm: true`) contact state → per [[09 Rules/crm.md]]. Surface alongside the Phase 4 action items.
 - **Voice Register C** for executive summary sections. ([[references/deep-mode-core.md]])
 - **Source Verification** for AI-transcripts + official agendas. ([[references/source-verification.md]])
 - **NDA marking** in frontmatter + section headers if applicable. ([[references/nda-and-bilingual.md]])

@@ -17,7 +17,7 @@ This is **infrastructure**, not a slash command. The PostToolUse hook now enters
   "ts": "2026-05-21T22:30:15+00:00",
   "session": "c2260ee5-f2",
   "tool": "Edit",
-  "file": "{{VAULT_ROOT}}/04 Notes/daily notes/2026-05-21.md",
+  "file": "D:/Administrator/Documents/{{USER_NAME}}/04 Notes/daily notes/2026-05-21.md",
   "ok": true,
   "ms": 12,
   "err": "(only on failure)"

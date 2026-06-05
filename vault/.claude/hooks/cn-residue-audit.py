@@ -16,13 +16,13 @@ from collections import Counter
 if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-VAULT_ROOT = Path(r'{{VAULT_ROOT}}')
+VAULT_ROOT = Path(r'D:\Administrator\Documents\{{USER_NAME}}')
 
 CN_AUDIENCE_GLOBS = [
     '01 Wiki/{{PROJECT_A}}/**/*.md',
     '01 Wiki/{{ORG_B}}/**/*.md',
     '01 Wiki/AIX/**/*.md',
-    '01 Wiki/{{FUND}}/**/*.md',
+    '01 Wiki/{{ORG_D}}/**/*.md',
     '02 Cards/**/*.md',
     '03 Projects/{{PROJECT_A}}/04 会议纪要/**/*.md',
     '03 Projects/{{PROJECT_A}}/09 Reports/**/*.md',

@@ -6,7 +6,7 @@ $ErrorActionPreference = "Continue"
 # inject as system reminder so Claude knows to handle them. Cheap — only runs
 # if dir has files.
 
-$vault = "{{VAULT_ROOT}}"
+$vault = "D:\Administrator\Documents\{{USER_NAME}}"
 $pendingDir = "$vault\.claude\_pending"
 $stateDir = "$vault\.claude\_state"
 $lastCheckFile = "$stateDir\last-pending-check.timestamp"

@@ -1,11 +1,11 @@
 # run_card_lint.ps1 — invoke Claude Code in autonomous mode to run /card-lint
-# Called by Windows Task `RG-card-lint` weekly on Sunday at 23:30.
+# Called by Windows Task `{{USER_NAME}}-card-lint` weekly on Sunday at 23:30.
 # Manual run:
 #   powershell -ExecutionPolicy Bypass -File "<vault>\.claude\skills\card-lint\scripts\run_card_lint.ps1"
 
 $ErrorActionPreference = 'Stop'
 
-$vaultRoot = '{{VAULT_ROOT}}'
+$vaultRoot = 'D:\Administrator\Documents\{{USER_NAME}}'
 $claudeExe = '{{USER_HOME}}\.local\bin\claude.exe'
 $logDir    = "$vaultRoot\04 Notes\vault-evolve"
 $today     = (Get-Date).ToString('yyyy-MM-dd')

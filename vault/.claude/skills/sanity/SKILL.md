@@ -212,7 +212,7 @@ ls "06 Tasks/"
 ls "03 Projects/{{PROJECT_A}}/Tasks.md" "03 Projects/{{ORG_B}}/Tasks.md" 2>/dev/null
 ```
 
-- **Inbox.md backlog drift** — **`06 Tasks/Inbox.md`** accumulating tagged items (`#{{PROJECT_A}}*` / `#3rd` / `#aix` / `#nonsense`) that should have been triaged into project Kanban: 🟡 propose `/inbox-process`
+- **Inbox.md backlog drift** — **`06 Tasks/Inbox.md`** accumulating tagged items (`#{{PROJECT_A}}*` / `#{{ORG_B}}` / `#aix` / `#nonsense`) that should have been triaged into project Kanban: 🟡 propose `/inbox-process`
 - **Overdue cards in `⚠️ Overdue` lane >14d** — a Kanban with `⚠️ Overdue` lane carrying long-aged cards: 🟡 propose triage (reschedule / kill / move)
 - **Duplicate titles within same Kanban lane** (same title appearing on multiple cards): 🟡 propose merge
 - **Per-project Kanban missing 6-lane shape** (lanes don't match [[09 Rules/tasks.md]] canonical set): 🟡 propose lane normalization
@@ -248,18 +248,18 @@ find ".claude/_pending/" -name "*.signal" -mmin +1440 2>/dev/null   # >24h old
 **Scheduled-task liveness** (via Bash → PowerShell):
 
 ```bash
-powershell.exe -NoProfile -Command "Get-ScheduledTask -TaskName 'RG-*' -ErrorAction SilentlyContinue | Select-Object TaskName,State | ConvertTo-Json -Compress" 2>/dev/null
+powershell.exe -NoProfile -Command "Get-ScheduledTask -TaskName '{{USER_NAME}}-*' -ErrorAction SilentlyContinue | Select-Object TaskName,State | ConvertTo-Json -Compress" 2>/dev/null
 ```
 
 Expected task names + cadence (from **`.claude/_state/setup_all_schedules.ps1`** + **`setup_watcher.ps1`**):
 
 | Task | Cadence | Symptom if dead |
 |---|---|---|
-| `RG-watcher-clippings` | Logon trigger (FileSystemWatcher) | Clippings + Card inbox don't auto-trigger ingest |
-| `RG-signal-day-digest` | Daily 23:00 | Yesterday-not-chewed catch-up brief stops appearing |
-| `RG-signal-daily-emit` | Daily 08:00 | No tomorrow-seed daily note skeleton |
-| `RG-signal-card-lint` | Sunday 23:30 | Weekly Card-graph hygiene skipped silently |
-| `RG-signal-vault-evolve` | Daily 06:00 | Telemetry + skill drift checks skipped |
+| `{{USER_NAME}}-watcher-clippings` | Logon trigger (FileSystemWatcher) | Clippings + Card inbox don't auto-trigger ingest |
+| `{{USER_NAME}}-signal-day-digest` | Daily 23:00 | Yesterday-not-chewed catch-up brief stops appearing |
+| `{{USER_NAME}}-signal-daily-emit` | Daily 08:00 | No tomorrow-seed daily note skeleton |
+| `{{USER_NAME}}-signal-card-lint` | Sunday 23:30 | Weekly Card-graph hygiene skipped silently |
+| `{{USER_NAME}}-signal-vault-evolve` | Daily 06:00 | Telemetry + skill drift checks skipped |
 
 Findings:
 - **Task missing** (any of the 5 not registered): 🔴 — propose re-running `.claude/_state/setup_all_schedules.ps1` or `setup_watcher.ps1`

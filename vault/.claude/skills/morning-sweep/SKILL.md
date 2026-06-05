@@ -36,7 +36,7 @@ The sweep **reuses the ingests' pull code** (via `scripts/sweep_pull.py`, which 
 | **Commit** | `/morning-sweep --commit` | Re-read the section, take the items {{USER_NAME}} kept (un-deleted), route them via `/task-capture` to Inbox/project surfaces. Writes `lastCommitAt` to state file. |
 | **Backfill** | `/morning-sweep --since-days N` | Widen the window (e.g. after a weekend / trip). Overrides the since-last default. |
 | **Explicit window** | `/morning-sweep --since YYYY-MM-DDTHH:MM` | ISO-8601 start, useful for replaying a known boundary. |
-| **Pre-built cache** | Windows Task `RG-morning-sweep-pull` @ 07:00 daily | Runs `sweep_pull.py --since-last` (LLM-free) so the raw bundle is warm before {{USER_NAME}} opens the sweep. Phase 1 re-pulls fresh (authoritative), so a transient-empty 07:00 cache self-corrects. |
+| **Pre-built cache** | Windows Task `{{USER_NAME}}-morning-sweep-pull` @ 07:00 daily | Runs `sweep_pull.py --since-last` (LLM-free) so the raw bundle is warm before {{USER_NAME}} opens the sweep. Phase 1 re-pulls fresh (authoritative), so a transient-empty 07:00 cache self-corrects. |
 | **Dashboard button** | "Sweep now" in Today panel | Shells out to `claude -p "/morning-sweep --since-last"` headless; whole skill runs end-to-end. |
 | **Autonomous (full)** | — | DEFERRED: the extraction half needs {{USER_NAME}}'s Max session (opus), same as `/daily-emit` / `/day-digest`. Only the *pull* is scheduled. |
 
@@ -53,7 +53,7 @@ daily_note="04 Notes/daily notes/${today}.md"
 ### Phase 1 — Pull dialogs since last sweep
 Run the pull script (Python 3.11; WeFlow must be running for WeChat). Default uses `--since-last`, which reads `lastRunAt` from `.claude/_state/dashboard/sweep-state.json` and pulls everything since. Falls back to `--since-days 1` automatically when the state file is missing or has no `lastRunAt`:
 ```bash
-"{{PYTHON_EXE}}" \
+"{{USER_HOME}}\AppData\Local\Programs\Python\Python311\python.exe" \
   ".claude/skills/morning-sweep/scripts/sweep_pull.py" --since-last
 ```
 For backfill or replay, pass `--since-days N` or `--since YYYY-MM-DDTHH:MM` instead. `sweep_pull.py` writes `lastRunAt` + `lastWindow` + `lastStatus` + `lastCounts` to the state file on success (preserving `lastCommitAt`).
@@ -64,13 +64,13 @@ It prints one JSON line `{bundle, status:[...]}` and writes the raw bundle to
 - Feishu `EMPTY` → known coverage gap (see § Source coverage).
 
 ### Phase 2 — Extract candidate to-dos (the judgment work)
-Read the bundle. For each dialog, pull out **only RG-actionable to-dos** — things {{USER_NAME}} must *do, decide, send, confirm, or follow up*. Apply:
+Read the bundle. For each dialog, pull out **only {{USER_NAME}}-actionable to-dos** — things {{USER_NAME}} must *do, decide, send, confirm, or follow up*. Apply:
 
 - **Attribution is mandatory** — every candidate carries `渠道·群/人·发件人 MM-DD HH:MM` so {{USER_NAME}} can verify against the source.
 - **Dedup** — grep `06 Tasks/Inbox.md` + the project surfaces (`03 Projects/{{PROJECT_A}}/Tasks.md`, `03 Projects/{{ORG_B}}/Tasks.md`, `06 Tasks/Personal.md`) and the WeChat ingest's prior auto-pushes. If a candidate is already captured, drop it (or note "已在 Inbox").
-- **Propose routing** per [[09 Rules/tasks.md]] § Context Tag Registry: `#{{PROJECT_A}}发行` / `#{{PROJECT_A}}情报` / `#{{PROJECT_A}}ai` / `#3rd` / `#aix` / `#nonsense`. Propose `{{status}}` + priority via the Status–Priority parity table. These are *proposals* — {{USER_NAME}} edits before commit.
+- **Propose routing** per [[09 Rules/tasks.md]] § Context Tag Registry: `#{{PROJECT_A}}发行` / `#{{PROJECT_A}}情报` / `#{{PROJECT_A}}ai` / `#{{ORG_B}}` / `#aix` / `#nonsense`. Propose `{{status}}` + priority via the Status–Priority parity table. These are *proposals* — {{USER_NAME}} edits before commit.
 - **Title hygiene** per [[09 Rules/task-naming.md]] (strip dates/assignees/scope; vague-verb fix; one action per line).
-- **Personal-context exclusion** — never surface the {{PERSON_1}} DM ({{ORG_C}}) as a work task; per `me.md` § Personal Context it's personal-mixed (digest-only). Honor any other personal channel the same way.
+- **Personal-context exclusion** — never surface the Cathy DM ({{ORG_A}}) as a work task; per `me.md` § Personal Context it's personal-mixed (digest-only). Honor any other personal channel the same way.
 - **Be conservative.** A sweep that surfaces 5 real to-dos beats one that surfaces 20 with noise. If a line is ambiguous chatter, leave it out.
 
 ### Phase 3 — Merge candidates into the 待确认 section
@@ -123,7 +123,7 @@ Brief the user: N candidates written, the source status, and the confirm instruc
 2. **Never invent a to-do not grounded in a dialog line.** Every candidate must trace to a real message (attribution proves it).
 3. **Always carry attribution** (channel · chat · sender · timestamp) on every candidate.
 4. **Always surface source status** in the section header — a thin/empty sweep must say *why* (WeFlow down / Feishu blind / no activity), never look like "nothing happened".
-5. **Honor personal-context exclusions** ({{PERSON_1}} DM etc.) — digest-only, never a work task.
+5. **Honor personal-context exclusions** (Cathy DM etc.) — digest-only, never a work task.
 6. **Idempotent via merge, not overwrite** — re-running default mode preserves un-deleted rows (user edits + un-triaged candidates) and appends only fingerprint-new candidates. Never stacks duplicates; never wipes work-in-progress triage.
 7. **Respect the task batch ceiling** on commit (≤3 per Write) and `/task-capture` routing — don't hand-write task lines that bypass it.
 8. **Reuse the ingest pull code** — do not fork a third channel-pull implementation; extend `sweep_pull.py` / the ingest scripts instead.

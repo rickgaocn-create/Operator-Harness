@@ -18,13 +18,13 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-VAULT_ROOT = Path(r'{{VAULT_ROOT}}')
+VAULT_ROOT = Path(r'D:\Administrator\Documents\{{USER_NAME}}')
 SCRIPT_DIR = Path(__file__).parent
 QUEUE_DIR = VAULT_ROOT / '.claude' / '.daily-ingest-queue'
 WEFLOW_BASE = os.environ.get('WEFLOW_BASE', 'http://127.0.0.1:5031')
 
 # Token — try env first, fallback to known-good (re-rotates per session in practice; user can override via env)
-WEFLOW_TOKEN = os.environ.get('WEFLOW_TOKEN', '')
+WEFLOW_TOKEN = os.environ.get('WEFLOW_TOKEN', '1c6c31d82f8e5e2c912fc4f3cf763374')
 ANTHROPIC_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 
 # ---------- HTTP helpers ----------

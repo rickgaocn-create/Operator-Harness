@@ -4,7 +4,7 @@ $ErrorActionPreference = "Continue"
 # Opt-in kill-switch: skip injection entirely when BH_NO_INJECT=1 (behavioral-ablation naked arm).
 if ($env:BH_NO_INJECT -eq "1") { exit 0 }
 
-$vault = "{{VAULT_ROOT}}"
+$vault = "D:\Administrator\Documents\{{USER_NAME}}"
 
 # cwd-aware skip: when the session is launched INSIDE the vault (Claudian), vault CLAUDE.md
 # auto-loads and @imports me.md + MEMORY.md in full natively — so this static injection would be

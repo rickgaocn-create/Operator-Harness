@@ -4,7 +4,7 @@ $ErrorActionPreference = "Continue"
 # inject-catchup-brief.ps1 - SessionStart hook
 # Detects gap since last session + drains _pending/ signal queue + writes catch-up brief.
 
-$vault = "{{VAULT_ROOT}}"
+$vault = "D:\Administrator\Documents\{{USER_NAME}}"
 $pendingDir = "$vault\.claude\_pending"
 $stateDir = "$vault\.claude\_state"
 $lastStartFile = "$stateDir\last-session-start.timestamp"
@@ -124,7 +124,7 @@ if ($yesterdayExists) {
 $seedFile = "$vault\04 Notes\vault-evolve\_tomorrow-seed-$todayDate.md"
 $seedExists = Test-Path -LiteralPath $seedFile
 
-# 7b. Harness pulse — consolidated liveness verdict (RG-tier7-harness-pulse, every 3h).
+# 7b. Harness pulse — consolidated liveness verdict ({{USER_NAME}}-tier7-harness-pulse, every 3h).
 # Surface the single verdict here so harness health is visible at session start
 # without running /harness-health. Channels are NOT re-shown — check-channel-state.ps1
 # owns the live channel view (more current than this file); this surfaces the
@@ -186,7 +186,7 @@ if ($pulseSeverity -eq "red" -or $pulseSeverity -eq "yellow") {
     foreach ($m in $pulseFindings) { $brief.Add("  ! $m") }
 }
 if ($null -ne $pulseAgeHours -and $pulseAgeHours -gt 4) {
-    $brief.Add("  ! pulse verdict stale (${pulseAgeHours}h) - check RG-tier7-harness-pulse")
+    $brief.Add("  ! pulse verdict stale (${pulseAgeHours}h) - check {{USER_NAME}}-tier7-harness-pulse")
 }
 
 # The do-list, or nothing.

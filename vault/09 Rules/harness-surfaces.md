@@ -51,8 +51,8 @@ The harness is engaged through **windows** (the reframe: one harness, many windo
 | **Claude Code CLI** | primary agent window (full tools) | — | — |
 | **Discord · afk-claude2** | hardened bridge (claude2#6213) | `node …/.afk-code-claude2/` | `schtasks /End` then `/Run /TN afk-code-claude2-daemon`; auto-memory: `afk-claude2-daemon` |
 | **Discord · afk-code (legacy)** | older 2nd install, separate bot | `node …/afk-code/dist/cli` | task `afk-code-daemon`; auto-memory: `afk-claude2-daemon` (NB: 2nd install) |
-| **Feishu · Business Morty** | company bot `{{FEISHU_APP_ID}}` (inbound work channel) | `channels/feishu/launch-consumer` | `schtasks /Run /TN feishu-event-consumer-daemon`; auto-memory: `agent-morty-feishu-bridge` · `feishu-reader-architecture` |
-| **Feishu/codex · Open Morty** | bot `{{FEISHU_APP_ID}}` → `codex.exe` via `\\.\pipe\codex-afk-feishu-daemon` | `codex.exe -C` | auto-memory: `open-morty-codex-bridge` |
+| **Feishu · Business Morty** | company bot `{{REDACTED}}` (inbound work channel) | `channels/feishu/launch-consumer` | `schtasks /Run /TN feishu-event-consumer-daemon`; auto-memory: `agent-morty-feishu-bridge` · `feishu-reader-architecture` |
+| **Feishu/codex · Open Morty** | bot `{{REDACTED}}` → `codex.exe` via `\\.\pipe\codex-afk-feishu-daemon` | `codex.exe -C` | auto-memory: `open-morty-codex-bridge` |
 
 Notes:
 - `harness-pulse` alerts only on the **Feishu** lane; Discord keeps its own healthcheck (`afk-code-claude2-healthcheck`). The legacy Discord + codex bridges are informational here, not pulse-alerted.

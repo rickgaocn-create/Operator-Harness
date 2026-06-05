@@ -272,7 +272,7 @@ filter: "Daily Drum (today + overdue · open)"
 
 ## Active Tracks
 
-### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+### 《{{PROJECT_A}}》— `03 Projects/{{PROJECT_A}}/`
 - **Today:**
 
 ### {{ORG_B}} — `03 Projects/{{ORG_B}}/`

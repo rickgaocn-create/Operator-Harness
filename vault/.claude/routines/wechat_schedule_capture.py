@@ -21,7 +21,7 @@ if sys.platform == "win32" and not getattr(sys.stdout, "_h_utf8", False):  # sen
 VAULT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # routines -> .claude -> {{USER_NAME}}
 OUT = os.path.join(VAULT, ".claude", "_state", "schedule-candidates.jsonl")
 BASE = os.environ.get("WEFLOW_BASE", "http://127.0.0.1:5031")
-TOKEN = os.environ.get("WEFLOW_TOKEN", "")
+TOKEN = os.environ.get("WEFLOW_TOKEN", "1c6c31d82f8e5e2c912fc4f3cf763374")
 
 # --- scheduling signal patterns (zh + en) ---------------------------------------------------------
 TIME_RE = re.compile(r"(\d{1,2}[:：]\d{2})|([上下]午\s*\d{1,2}\s*点)|(\d{1,2}\s*点(?:半|\d{1,2}分?)?)"

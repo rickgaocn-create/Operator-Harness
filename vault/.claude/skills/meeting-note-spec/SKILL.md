@@ -9,7 +9,7 @@ companion-rules:
   - "[[feedback-meeting-spec-operations-sync]]"
 created: 2026-05-20
 created-by: claude
-audit-trace: "{{USER_NAME}} 2026-05-20 Option B request — 防止结构反复 flip 的 pre-flight ask。沪差0519 20+ 轮迭代触发。"
+audit-trace: "高培尧 2026-05-20 Option B request — 防止结构反复 flip 的 pre-flight ask。沪差0519 20+ 轮迭代触发。"
 ---
 
 # Skill: meeting-note-spec（纪要预热）
@@ -52,7 +52,7 @@ audit-trace: "{{USER_NAME}} 2026-05-20 Option B request — 防止结构反复 f
 |---|---|---|---|
 | **product-feedback** | 产品反馈会 | demo + 接收对方反馈 + 推进合作（沪差0519 三场）| feedback_meeting-spec-product-feedback |
 | **roadshow-debrief** | 路演 / deal 速报 | 多 counterparty 路演，deal 推进为主、反馈为辅（内部 pragmatic 速报）| feedback_meeting-spec-roadshow-debrief |
-| **operations-sync** | 项目内同步 | {{PERSON}}双周 / 诸葛 sync / PMO 周会 | feedback_meeting-spec-operations-sync |
+| **operations-sync** | 项目内同步 | {{PERSON_1}}双周 / {{PERSON}} sync / PMO 周会 | feedback_meeting-spec-operations-sync |
 | **vendor-evaluation** | 厂商评估 | epic 引擎评估 / Parametrix AI / 美林供应商 | （待 lock） |
 | **knowledge-share** | 行业知识 inflow | epic 动画峰会 / 行业讲座 | （待 lock） |
 | **ma-screening** | M&A 标的评估 | {{ORG_B}} target deep dive | （待 lock） |
@@ -94,7 +94,7 @@ audit-trace: "{{USER_NAME}} 2026-05-20 Option B request — 防止结构反复 f
 - `/localize-cn` — 中文 monolingual，zero 英文 残留校验
 - `/humanize` — AI 痕迹消除（如适用）
 - `/pragmatic` — 项目内简报风格（如适用）
-- 称谓 + 人名规则（{{USER_NAME}} / 我方）
+- 称谓 + 人名规则（高培尧 / 我方）
 
 ---
 
@@ -132,7 +132,7 @@ audit-trace: "{{USER_NAME}} 2026-05-20 Option B request — 防止结构反复 f
 → Phase 2 跳过（默认 spec 已 lock）
 → Phase 3 直接读 product-feedback spec + 出草稿
 
-**Case B**：用户说「{{PERSON}}双周 sync 纪要」
+**Case B**：用户说「{{PERSON_1}}双周 sync 纪要」
 
 → Phase 1 推断：operations-sync
 → Phase 2 跳过

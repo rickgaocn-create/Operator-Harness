@@ -24,7 +24,7 @@ Capture **personal synthesis**, not external facts. External facts live in **`01
 ├── (C) README.md            Pillar overview
 ├── _inbox/                  Unprocessed / fleeting capture — process weekly
 ├── {{PROJECT_A}}/                    BD, partnership, channel insights
-├── 3rd-Inc/                 M&A patterns, JP board dynamics, AIX vendor reads
+├── {{ORG_B}}-Inc/                 M&A patterns, JP board dynamics, AIX vendor reads
 ├── cross-border/            CN↔JP arbitrage principles, cultural mechanics
 ├── ops/                     Personal performance, workflow, biohacks
 ├── meta/                    Frameworks about frameworks (e.g., this one)

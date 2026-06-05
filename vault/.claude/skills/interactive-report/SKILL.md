@@ -18,7 +18,7 @@ audit-trace: "2026-05-15 EPIC Summit Interactive HTML v0.1→v0.2 build session 
 
 Convert an MD-source vault artifact into a **self-contained interactive HTML report** designed for human readers who would otherwise skim a wall of MD. Cinematic editorial aesthetic, 6-9 inline SVG visualizations, zero CDN deps, print + mobile friendly.
 
-> **Why this skill exists** — Per Thariq Shihipar's "Unreasonable Effectiveness of HTML" (2026-05-08): *"Markdown is a report; HTML is an interface. Reports are for reading. Interfaces are for continuing the work."* The bottleneck isn't Claude reading — it's humans reading Claude's output. For high-stakes forwardable artifacts (诸葛/board/team), HTML render meaningfully changes whether the work gets engaged with.
+> **Why this skill exists** — Per Thariq Shihipar's "Unreasonable Effectiveness of HTML" (2026-05-08): *"Markdown is a report; HTML is an interface. Reports are for reading. Interfaces are for continuing the work."* The bottleneck isn't Claude reading — it's humans reading Claude's output. For high-stakes forwardable artifacts ({{PERSON}}/board/team), HTML render meaningfully changes whether the work gets engaged with.
 >
 > **Pattern origin** — 2026-05-15 EPIC Summit Interactive HTML v0.2. Reference exemplar at `<vault>/03 Projects/{{PROJECT_A}}/09 Reports/(C) EPIC Summit Interactive-2026-05-15.html`.
 
@@ -27,8 +27,8 @@ Convert an MD-source vault artifact into a **self-contained interactive HTML rep
 ## When to Use
 
 - `/interactive-report` or "render to HTML" explicit trigger
-- Source MD will be forwarded to 诸葛 / 董事会 / 工作室决策层 / 跨部门
-- Source MD is a binding-deliverable that 诸葛 or upline is likely to skim
+- Source MD will be forwarded to {{PERSON}} / 董事会 / 工作室决策层 / 跨部门
+- Source MD is a binding-deliverable that {{PERSON}} or upline is likely to skim
 - Multi-section document with values/comparisons/decisions worth visualizing
 - Companion to one of these source skills (chain after):
   - `/biz` (business evaluation) — `--render=html` flag
@@ -51,7 +51,7 @@ Convert an MD-source vault artifact into a **self-contained interactive HTML rep
 Ask plain text (NOT AskUserQuestion — Discord rendering):
 
 1. **Source MD path** — wikilink or **`03 Projects/.../*.md`** path. Default = most recently created `(C) *.md` in `09 Reports/` or `Pitches/`
-2. **Audience** — (a) internal forward to 诸葛 / board (b) team-educational (动画团队 / 工作室) (c) sandbox / workflow validation
+2. **Audience** — (a) internal forward to {{PERSON}} / board (b) team-educational (动画团队 / 工作室) (c) sandbox / workflow validation
 3. **🔑 Mode** (this is the most important question) — (a) **decision-grade** (含决策请示 Q1-Q4 + 决策门 + Gantt 时间轴 + 致 X 框架) OR (b) **pure-share** (纯分享 · 无决策请示 · 无时间轴 · 见 [**`references/pure-share-mode.md`**](references/pure-share-mode.md))
 4. **🌐 Language register** (NEW · v0.7 · ratified by {{USER_NAME}} on EPIC Summit) — (a) **CN-first localized** (Chinese audience: 动画团队 / 团队分享 / 工作室 / 行业观察 — full Chinese prose + Tier B/C English-with-tooltips + § 术语注释 glossary · see prefs 19-21 in [**`references/pure-share-mode.md`**](references/pure-share-mode.md)) OR (b) **CN/EN mixed** (technical peer audience comfortable with code-switching) OR (c) **EN-only** (international audience). *Pure-share + Chinese team audience → (a) is the default — {{USER_NAME}}: "the audience will be a general audience that is Chinese and needs footnotes".*
 5. **Format** — (a) scrollable single-page hybrid [recommended] (b) slide-deck-style (c) dashboard
@@ -66,7 +66,7 @@ If user says "go with recommended": pure-share Chinese team audience (most {{USE
 
 **Heuristic for auto-detecting pure-share mode** (if user doesn't explicitly say):
 - Source MD has no `## 决策请示` / `## Decision Asks` / `## 行动项` section
-- Source MD frontmatter has no `audience: 诸葛` / decision-maker
+- Source MD frontmatter has no `audience: {{PERSON}}` / decision-maker
 - Source MD title contains `分享` / `观察` / `update`
 - The artifact section "Appendix" is marked "不录入" / "FYI only"
 - User has explicitly removed 致 X framing language
@@ -101,7 +101,7 @@ Propose 8-11 sections matching the source MD's structure. Standard archetype (ad
 6. **N 个具体含义** — **quadrant matrix** (投入 × 价值) + card grid detail
 7. **决策门 / Decision gates** — unified decision tree SVG
 8. **价值评估 / Value analysis** — value mechanism table + **sensitivity tornado** + complexity callout
-9. **致诸葛 / Decision asks** — Q1-Q4 ask-card grid with {{USER_NAME}}-recommends
+9. **致{{PERSON}} / Decision asks** — Q1-Q4 ask-card grid with {{USER_NAME}}-recommends
 10. **时间线** — **Gantt timeline** with date axis, parallel tracks, diamond gates
 11. **附录** — vault refs, public sources, NDA disclaimer
 
@@ -161,7 +161,7 @@ Solicit feedback on:
 - IA flow + section order
 - Color palette / typography intensity
 - Specific visualizations — too many / too few / wrong type
-- Length — collapse sections if 诸葛 audience prefers shorter
+- Length — collapse sections if {{PERSON}} audience prefers shorter
 
 Iterate with Edit (not Write) for surgical updates.
 
@@ -184,7 +184,7 @@ After user accepts:
 1. **NEVER skip Phase 2 IA sign-off** — building without scope agreement = waste of effort + user can't course-correct mid-build
 2. **NEVER use AskUserQuestion** — Discord rendering issue per user CLAUDE.md. Plain text questions only.
 3. **NEVER embed NDA content without explicit authorization** in Phase 0. Default = minimum (option b). Banner all NDA sections with red border + "INTERNAL — 不外发"
-4. **NEVER skip print-friendly CSS** — 诸葛 audience may print + read on paper; dark sections must convert to white-bg with dark text via `@media print`
+4. **NEVER skip print-friendly CSS** — {{PERSON}} audience may print + read on paper; dark sections must convert to white-bg with dark text via `@media print`
 5. **NEVER embed CDN JS / CSS dependencies** — fully self-contained file. Inline everything. Hot-linked images via `<img src="...">` is OK (graceful degrade).
 6. **NEVER fabricate quantified numbers** that aren't in the source MD. Reuse source MD's basis values (¥720K, etc.) verbatim. Cite source-MD assumptions block when shown.
 7. **NEVER produce HTML > 200KB** — bigger means too much content, time to split. Compress aggressively (inline SVG paths simplified, redundant CSS removed).
@@ -200,7 +200,7 @@ After user accepts:
 | Symptom | Fix |
 |---|---|
 | Source MD < 200 lines | Tell user: "Source too thin for interactive treatment; HTML overhead > value. Recommend send MD as-is OR expand source first." |
-| User can't decide audience in Phase 0 | Default to (a) internal forward 诸葛 — most common case. Confirm. |
+| User can't decide audience in Phase 0 | Default to (a) internal forward {{PERSON}} — most common case. Confirm. |
 | WebFetch fails on 1-2 image sources | Use Wikipedia commons fallback OR convert to inline SVG illustration. Don't block on a single failed image. |
 | Source has NDA content but user wants public-shareable | Two-build path: build NDA-stripped version first, then NDA-included version if explicitly authorized after release-边界 confirmation. |
 | User asks "can I check on phone" | Spin tunnel per **`references/tunnel-runbook.md`**. Confirm Python + cloudflared available; install cloudflared via winget if missing. |
@@ -216,7 +216,7 @@ After user accepts:
 |---|---|
 | **`03 Projects/<proj>/Pitches/(C) <name> 业务评估 <date>.md**` | `**03 Projects/<proj>/09 Reports/(C) <name> Interactive-<date>.html`** |
 | **`03 Projects/<proj>/04 会议纪要/<name>.md**` | `**03 Projects/<proj>/09 Reports/(C) <stem> Interactive-<date>.html`** |
-| **`03 Projects/<proj>/09 Reports/(C) <name> v1 致诸葛-<date>.md**` | `**03 Projects/<proj>/09 Reports/(C) <name> Interactive-<date>.html`** |
+| **`03 Projects/<proj>/09 Reports/(C) <name> v1 致{{PERSON}}-<date>.md**` | `**03 Projects/<proj>/09 Reports/(C) <name> Interactive-<date>.html`** |
 | **`04 Notes/vault-evolve/<date>.md**` (digest output) | `**04 Notes/vault-evolve/(C) Dashboard-<date>.html`** |
 | Cross-project / other | **`04 Notes/Interactive Reports/(C) <name>-<date>.html`** |
 
@@ -226,12 +226,12 @@ Always `(C)` prefix per [[09 Rules/file-types.md]] § AI-generated.
 
 | Trigger | Hand-off |
 |---|---|
-| `/biz` output saved + audience = 诸葛/board | Propose `/interactive-report --source=<biz-eval>` next |
-| `/meeting-note --deep` saved + forward target = 诸葛/board | Propose `/interactive-report --source=<meeting-note>` |
+| `/biz` output saved + audience = {{PERSON}}/board | Propose `/interactive-report --source=<biz-eval>` next |
+| `/meeting-note --deep` saved + forward target = {{PERSON}}/board | Propose `/interactive-report --source=<meeting-note>` |
 | `/periodic-report --biweekly` saved | Propose `/interactive-report` for the PMO 双周报 |
 | `/to-internal-briefing` saved | Propose `/interactive-report` for the 1-page brief |
 | User asks "let me check on phone" | Spin tunnel via **`references/tunnel-runbook.md`** |
-| HTML rendered + audience = 诸葛 + 诸葛 hasn't read in 24h | Surface ping reminder in next /day-digest |
+| HTML rendered + audience = {{PERSON}} + {{PERSON}} hasn't read in 24h | Surface ping reminder in next /day-digest |
 
 ## References
 

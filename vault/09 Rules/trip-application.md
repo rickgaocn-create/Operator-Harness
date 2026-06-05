@@ -16,7 +16,7 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F3"
 
 > trip 已订/已发生 — 申请表 + 邮件备案 + 携程订单 + reschedule 调度的**报销文件**。
 >
-> **Mechanism = platform** (archetype below). **Concrete defaults = instance** — the xlsx baseline, 行政对接人 + Cc roster, 申请人 identity, 合同主体 live in [[09 Rules/_instance/trip-application]]. Names below ({{PERSON}} / {{USER_NAME}} / {{ORG_D}}) are illustrative; the authoritative defaults are the instance config.
+> **Mechanism = platform** (archetype below). **Concrete defaults = instance** — the xlsx baseline, 行政对接人 + Cc roster, 申请人 identity, 合同主体 live in [[09 Rules/_instance/trip-application]]. Names below (木木 / 高培尧 / {{ORG_C}}发行) are illustrative; the authoritative defaults are the instance config.
 
 ## 适用范围 vs 不适用
 
@@ -32,7 +32,7 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F3"
 用户在 work trip 上下文里提到任何以下措辞 → **默认 = 本 archetype 的 § 0 申请表 xlsx + § 1 标准邮件**：
 
 - 「差旅邮件和 excel」/「差旅邮件 + 申请表」/「申请表和邮件」
-- 「(给行政) 提单 / 报备」/「发邮件给{{PERSON}}」
+- 「(给行政) 提单 / 报备」/「发邮件给木木」
 - 「按上次 5/14 那种方式」/「同上次差旅流程」
 - 「重新做申请表 / 重新做差旅邮件」
 
@@ -93,8 +93,8 @@ sensitivity: contains-pii-links
 
 | 字段 | 值 | 来源 |
 |---|---|---|
-| 申请人 | {{USER_NAME}}（{{USER_NAME}}） | [[About Me/identity-documents]] |
-| 部门 | {{ORG_D}} | [[About Me/employment.md]] |
+| 申请人 | 高培尧（{{USER_NAME}}） | [[About Me/identity-documents]] |
+| 部门 | {{ORG_C}}发行 | [[About Me/employment.md]] |
 | 项目组 | {{PROJECT_A}} | ... |
 | 差旅时间 | ... | ... |
 | 身份证号 | ... | ... |
@@ -114,7 +114,7 @@ sensitivity: contains-pii-links
 
 **主题：** `差旅申请-{名}-{开始日期}-{终止日期}-{地点}`
 
-**收件人 / 抄送：** {{PERSON}}（行政 · {{PERSON}}） / 抄送 直接上级 / 行政人事总监 / 财务 / CEO
+**收件人 / 抄送：** 梁艳琳（行政 · 木木） / 抄送 直接上级 / 行政人事总监 / 财务 / CEO
 
 **正文：** {标准 5 字段格式 — 出差人 / 同行人 / 出差时间 / 出差地 / 出差事宜}
 

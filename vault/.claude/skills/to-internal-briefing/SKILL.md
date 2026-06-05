@@ -34,7 +34,7 @@ Take the **current conversation context** + 相关 vault state and synthesize a 
 ### Phase 1 — Synthesize From Context (no interview)
 
 1. **Identify the workstream + chain-anchor** from conversation. If unclear, **single-line ask**: "这份汇报关联哪个 workstream / chain-anchor？"
-2. **Identify the upline target** (诸葛 / 何宗寰 / 路奇 / 团长等). Read [[01 Wiki/{{PROJECT_A}}/公司信息/团队/{name}.md]] for § 三 协同路径 (when need sign-off) + § 四 待补 (沟通偏好).
+2. **Identify the upline target** ({{PERSON}} / 何宗寰 / 路奇 / 团长等). Read [[01 Wiki/{{PROJECT_A}}/公司信息/团队/{name}.md]] for § 三 协同路径 (when need sign-off) + § 四 待补 (沟通偏好).
 3. **Identify what changed** — what specifically triggers the escalation. State this in 1 sentence (will go in 概要 "触发").
 4. **Extract decision points** from conversation. Each Q with multiple plausible answers = a `Q{n}`. Aim for **3-4 Qs** (>5 = split into two briefings).
 5. **For each Q, draft 2-4 方案 ABCD** with 利/弊 + recommend one. (This is Matt's PRD "implementation decisions" adapted to BD multi-option).
@@ -89,4 +89,4 @@ Path: **`03 Projects/{project}/03 行程计划/(C) {chain-anchor} 内部汇报-{
 
 ---
 
-*Vault-adapted from Matt Pocock's [/to-prd](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-prd/SKILL.md). Output archetype shifted from "engineering PRD" to "internal briefing per [[09 Rules/internal-briefing.md]]". User-stories format dropped (irrelevant to BD); Q1-QN decision points format kept (matches今天手写的诸葛汇报 pattern).*
+*Vault-adapted from Matt Pocock's [/to-prd](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-prd/SKILL.md). Output archetype shifted from "engineering PRD" to "internal briefing per [[09 Rules/internal-briefing.md]]". User-stories format dropped (irrelevant to BD); Q1-QN decision points format kept (matches今天手写的{{PERSON}}汇报 pattern).*

@@ -40,20 +40,20 @@ Appends to the templated `## Ingests` section:
 
 当前实现是 pull all chats. 后续可加 **`scripts/priority_chats.json`** 类似 daily-wechat-ingest，过滤到 priority subset。Priority 候选（待 lock）:
 
-- {{PERSON}}（PMO 双周）
-- 诸葛（郭子川）
+- {{PERSON_1}}（PMO 双周）
+- {{PERSON}}（{{USER_NAME}}）
 - 何宗寰（工作室）
-- 张茂威 / {{PERSON}} / {{PERSON}}
+- 张茂威 / 罗逸 / 顾诗尧
 - {{PROJECT_A}} 项目群
 - 4 楼 美林 群
-- {{FUND}} / {{ORG_B}} 相关 chats
+- {{ORG_D}} / {{ORG_B}} 相关 chats
 
 ## Setup (already run during install)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File ".claude\skills\daily-feishu-ingest\scripts\setup_schedule.ps1"
 
-Get-ScheduledTask -TaskName 'RG-daily-feishu-ingest' | Format-List
+Get-ScheduledTask -TaskName '{{USER_NAME}}-daily-feishu-ingest' | Format-List
 ```
 
 ## Cost note

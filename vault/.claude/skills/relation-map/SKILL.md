@@ -32,12 +32,12 @@ It is the `01 Wiki/` analog of `card-lint --mode=bridge` (which is hard-scoped t
 2. **Never invent a relationship.** A name match is a *candidate*, not a fact. If the connection isn't substantive, drop it — don't manufacture a gloss.
 3. **Bidirectional by default.** A relation is two-way: write the link into both files' `## 关联文档`, each with its own directional gloss.
 4. **House format only.** Links live in a trailing `## 关联文档` section, sub-bucketed per `[[09 Rules/channel-person-wiki.md]]` — never a flat dump, never frontmatter `related:` as the primary store.
-5. **🔴 Isolation is absolute.** NEVER propose a cross-lane link ({{PROJECT_A}} ↔ 3rd / 米飞 / {{FUND}}). The detector drops these by construction; you re-check every candidate before writing. A cross-lane link is an isolation leak (`[[02 Cards/{{PROJECT_A}}/C260508-cross-project-references-leak-attention-signal]]`).
+5. **🔴 Isolation is absolute.** NEVER propose a cross-lane link ({{PROJECT_A}} ↔ {{ORG_B}} / {{ORG_A}} / {{ORG_D}}). The detector drops these by construction; you re-check every candidate before writing. A cross-lane link is an isolation leak (`[[02 Cards/{{PROJECT_A}}/C260508-cross-project-references-leak-attention-signal]]`).
 6. **Patch, don't rewrite.** Add to the `## 关联文档` section via Edit; if the section is missing, insert it at file end. Never touch body content, 概要, or claims.
 
 ## Granularity standard — the 美林版本 bar
 
-A relation node is **not** "two notes share a string." It is a **named, directional, purposeful** connection whose gloss carries the *reasoning* — including how the two entities stay **distinct**. Canonical exemplar (already in the vault, RG-confirmed 2026-05-29, in `游戏系统/(C) {{PROJECT_A}}游戏系统-研发与项目管理.md` § 美林版本范围):
+A relation node is **not** "two notes share a string." It is a **named, directional, purposeful** connection whose gloss carries the *reasoning* — including how the two entities stay **distinct**. Canonical exemplar (already in the vault, {{USER_NAME}}-confirmed 2026-05-29, in `游戏系统/(C) {{PROJECT_A}}游戏系统-研发与项目管理.md` § 美林版本范围):
 
 > **美林版本** (a dev/build milestone), **美林M·LIVE天地** (a venue), and **2026端午试玩会** (an event) are THREE distinct nodes with distinct timing + purpose — yet coupled: *美林版本 = the build prepared **for** the 试玩会 **held at** 美林M·LIVE天地, and named after that venue.* Evidence in the gloss: 进包 5.29 = 招募开启同日; demo 6.12 = 试玩会前一周; build carries a dedicated 「线下试玩模式」.
 
@@ -81,7 +81,7 @@ Write a **one-line directional gloss** per surviving link (the "why"), e.g. `[[(
 
 ### Phase 3 — Isolation re-check (hard gate)
 
-Before proposing, re-verify every candidate: drop any where source-lane ≠ target-lane and both ∈ {{{PROJECT_A}}, 3rd, 米飞, {{FUND}}}. Belt-and-suspenders over the detector's own drop. Log the count dropped.
+Before proposing, re-verify every candidate: drop any where source-lane ≠ target-lane and both ∈ {{{PROJECT_A}}, {{ORG_B}}, {{ORG_A}}, {{ORG_D}}}. Belt-and-suspenders over the detector's own drop. Log the count dropped.
 
 ### Phase 4 — Propose per cluster (picker)
 
@@ -116,7 +116,7 @@ For each accepted link, on BOTH files:
 ## Hard Rules
 
 - **NEVER write a link without Phase 4 approval.**
-- **🔴 NEVER create a cross-lane link** ({{PROJECT_A}} ↔ 3rd / 米飞 / {{FUND}}) — isolation gate, no exceptions.
+- **🔴 NEVER create a cross-lane link** ({{PROJECT_A}} ↔ {{ORG_B}} / {{ORG_A}} / {{ORG_D}}) — isolation gate, no exceptions.
 - **NEVER flat-list `## 关联文档`** — always sub-bucketed (per `channel-person-wiki.md` hard rule).
 - **NEVER rewrite a file** — Edit the `## 关联文档` section only; body / 概要 / claims are untouchable.
 - **NEVER fabricate a gloss** — pure character match with no substance → drop, don't dress it up.
@@ -141,4 +141,4 @@ For each accepted link, on BOTH files:
 | 100+ unlinked-mention candidates first run | Expected graph debt. Triage by `confidence=high` + by cluster; do the gameplay island first, defer the rest. |
 | Same coincidental candidate resurfaces weekly | Add target to the source's `## 关联文档` as an explicit non-link note, OR accept it's noise — the detector is recall-tuned. |
 | A proposed link is cross-lane | Bug — drop it and check `lane_of()` in the detector. Isolation never yields. |
-| Person mention won't resolve (`[[李响]]` dead) | Target needs `李响` in `aliases:` — surface for approval, don't silent-add. |
+| Person mention won't resolve (`[[{{PERSON_4}}]]` dead) | Target needs `{{PERSON_4}}` in `aliases:` — surface for approval, don't silent-add. |

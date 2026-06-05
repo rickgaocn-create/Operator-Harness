@@ -1,2 +1,2 @@
 @echo off
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "{{VAULT_ROOT}}\.claude\_state\write_signal.ps1" -Skill "vault-evolve"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "D:\Administrator\Documents\{{USER_NAME}}\.claude\_state\write_signal.ps1" -Skill "vault-evolve"

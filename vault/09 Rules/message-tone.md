@@ -27,17 +27,17 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 3. **Stakes** (low routine ↔ high urgency / high stakes / 战略决定)
 4. **Direction** (peer-to-peer / 上行 / 下行 / external partner)
 
-不同 axes 组合产生不同 register。**统一一种 tone 是错的** — 钟馨场 WeChat ≠ 诸葛汇报 ≠ 政府副局长邮件。
+不同 axes 组合产生不同 register。**统一一种 tone 是错的** — {{PERSON_5}}场 WeChat ≠ {{PERSON}}汇报 ≠ 政府副局长邮件。
 
 ## Register A 矩阵
 
 ### A1 · WeChat 1-on-1 · 熟人 / Peer / 低 stakes (default external partner)
 
-**典型场景**: 跟李响 / 钟馨 / 47 / 林芳羽 等已经熟悉的 BD 对接人日常聊节奏 / 顺一件事 / 同步状态。
+**典型场景**: 跟{{PERSON_4}} / {{PERSON_5}} / 47 / 林芳羽 等已经熟悉的 BD 对接人日常聊节奏 / 顺一件事 / 同步状态。
 
 **特征**:
 - 长度: 1-3 行 ideal, 极少 > 6 行
-- 称呼: "X 哥" / "X 姐" / "Bubble" / "李响哥" / first name + 哥姐 / 极熟可以直 first name
+- 称呼: "X 哥" / "X 姐" / "Bubble" / "{{PERSON_4}}哥" / first name + 哥姐 / 极熟可以直 first name
 - 抬头/落款: **无**（消息流自带 context）
 - emoji: 1-2 个 inline, 不滥用。`👍 / 🙏 / 哈哈` OK；不发整段表情
 - 句式: 短句 + 省略主语 ("收到，回头看下" 而不是 "我收到了，回头我会看一下")
@@ -51,7 +51,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 **Example**:
 ```
-李响哥, 刚才聊到 Tiff 那个口子让我惦记 — 5/19-21 SH 想约你坐下来 1h 聊聊 (
+{{PERSON_4}}哥, 刚才聊到 Tiff 那个口子让我惦记 — 5/19-21 SH 想约你坐下来 1h 聊聊 (
 带最新包体). 5/19 PM 16:00 之前我都行, 你看哪个时段
 ```
 
@@ -74,7 +74,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - 抬头: 一行身份 + 引荐 source ("XX 介绍过来" / "刚才会议上加的")
 - 落款: 无 (消息流) 或 "—— {{USER_NAME}} · {{PROJECT_A}} BD" 一行 if 第一条触达
 - emoji: 接近无 (1 个 🙏 OK)
-- 句式: 完整句 + 主语 ("我是{{ORG_A}}/{{PROJECT_A}}的 {{USER_NAME}}" 不是 "{{ORG_A}}{{PROJECT_A}} {{USER_NAME}}")
+- 句式: 完整句 + 主语 ("我是诗悦/{{PROJECT_A}}的 {{USER_NAME}}" 不是 "诗悦{{PROJECT_A}} {{USER_NAME}}")
 - 时态: 具体 ("下周二上午 / 5/20 PM")
 - bilingual: 谨慎 — bilingual mix 默认 OK 但避免高频英文
 - action ask: 单 ask + 明确价值
@@ -82,14 +82,14 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 **Example**:
 ```
-张总好，我是{{ORG_A}}/{{PROJECT_A}}的 {{USER_NAME}}。{{ORG_B}} 那边 何宗寰 老师转过 contact 给我。
+张总好，我是诗悦/{{PROJECT_A}}的 {{USER_NAME}}。{{ORG_B}} 那边 何宗寰 老师转过 contact 给我。
 
 听说您下月会到广州，想约个 30-min 咖啡聊聊 — 我们这边在 M&A 角度
-有一个想法可能跟 {{FUND}} 的 sourcing 角度对得上。
+有一个想法可能跟 {{ORG_D}} 的 sourcing 角度对得上。
 
 您方便时回我个时段就行，不急。
 
-—— {{USER_NAME}} · {{ORG_A}} / {{ORG_B}} M&A advisor
+—— {{USER_NAME}} · 诗悦网络 / {{ORG_B}} M&A advisor
 ```
 
 **禁忌**:
@@ -106,8 +106,8 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 **特征**:
 - 长度: 3-6 行 ideal (相对 A1 长，因为 information density + 礼貌 buffer)
 - 称呼: 职位 + 姓 ("张主任 / 李书记 / 周老师") + "您好" / "好"
-- 抬头: 短身份 reminder + 议题 anchor ("我是{{ORG_A}}的 {{USER_NAME}}，上次 EPIC 峰会您说过的...")
-- 落款: "—— {{USER_NAME}} · {{ORG_A}} / {{PROJECT_A}} BD"
+- 抬头: 短身份 reminder + 议题 anchor ("我是诗悦网络的 {{USER_NAME}}，上次 EPIC 峰会您说过的...")
+- 落款: "—— {{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD"
 - emoji: **极少 (0-1)** — 仅 🙏 用于诚意
 - 句式: 完整 + 主语 + 客气词；**"您"替代"你"** throughout
 - 礼貌词:
@@ -118,12 +118,12 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - 时效: implicit ("方便时" "不急" "您 schedule 允许时")
 - 表态: ambiguous on commitments ("初步看 / 大致方向是 / 我们的理解是")
 - 拒绝/否定: 不直接 ("可能需要再 align 一下" 替代 "不行 / 不可以")
-- bilingual: **大幅缩** — 中文 monolingual 为主，仅在术语必要时插英文（{{FUND}} / IPO / etc.）
+- bilingual: **大幅缩** — 中文 monolingual 为主，仅在术语必要时插英文（{{ORG_D}} / IPO / etc.）
 - bullet/分行: 可以 (帮助阅读) 但每行不超 20 字
 
 **Example**:
 ```
-张主任好，我是{{ORG_A}}的 {{USER_NAME}}。
+张主任好，我是诗悦网络的 {{USER_NAME}}。
 
 关于上次您提到的 5/15 文旅局对接事宜，我们这边初步整理了一份背景材料 — 想请教您几个问题：
 
@@ -132,7 +132,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 如果您 schedule 允许，希望约一次 30-min 当面汇报 — 时点您来定，我们配合您的时间。
 
-—— {{USER_NAME}} · {{ORG_A}} / {{PROJECT_A}} BD
+—— {{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD
 ```
 
 **禁忌**:
@@ -147,7 +147,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 ### A4 · WeCom 1-on-1 · 内部 + 跨团队 (default work register)
 
-**典型场景**: {{ORG_A}} / {{ORG_D}}内部跨组沟通 ({{USER_NAME}} → 小K / 煎饼 / 一一 / {{PERSON}} / 等) · 大客户 enterprise 对接人 · 长期供应商。
+**典型场景**: 诗悦 / {{ORG_C}}发行内部跨组沟通 ({{USER_NAME}} → 小K / 煎饼 / 一一 / {{PERSON_1}} / 等) · 大客户 enterprise 对接人 · 长期供应商。
 
 **特征**:
 - 长度: 2-5 行 (介于 A1 和 A3 之间)
@@ -173,7 +173,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 具体落档完后 @你 review，预计 5/15 下午回穗后。
 
-另：5/19 SH 钟馨场 B 站 4 线全口径 lineup，KOL 资源置换议题归你这边
+另：5/19 SH {{PERSON_5}}场 B 站 4 线全口径 lineup，KOL 资源置换议题归你这边
 — 我那边带个 talking point 出来，回穗后过你审。
 ```
 
@@ -193,7 +193,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - 长度: 5-15 行 (允许结构化)
 - 称呼: 群 — "各位 / 大家好" · 邮件 — "X 总 / X 老师 / 各位"
 - 抬头: 邮件必有 (主题行 + 收件人 cc)；群通报顶部 1 行 概要
-- 落款: 邮件 — "{{USER_NAME}} · {{ORG_A}} / {{PROJECT_A}} BD"；群 — 无
+- 落款: 邮件 — "{{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD"；群 — 无
 - emoji: 极少 (0-1) — 群里 emoji 看场合
 - 句式: 半正式 — 主语全 / 时态明确 / 礼貌词 occasional
 - bilingual: 中文主，英文术语层
@@ -206,11 +206,11 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 ```
 各位，关于 5/19 SH 出差 B 站 4 线全口径会面安排，简短同步：
 
-时间: 5/19 14:00-18:00 (4 小时连场 — 14:00 钟馨全口径 + 16:00 47 商业化 deep dive)
-对接人: 钟馨 (B 站游戏合作部 · 联运商务负责人) + 47 (营销中心·直客)
+时间: 5/19 14:00-18:00 (4 小时连场 — 14:00 {{PERSON_5}}全口径 + 16:00 47 商业化 deep dive)
+对接人: {{PERSON_5}} (B 站游戏合作部 · 联运商务负责人) + 47 (营销中心·直客)
 我方阵容: {{USER_NAME}} 单人 (小K / 煎饼 不去 SH, 改 5/25-26 厦门)
 
-诸葛: 请您 sign-off 73 分谈判 fallback ladder — 推荐 65 floor + 句式见 [[(C) 沪差0518 内部汇报-诸葛]] § Q2
+{{PERSON}}: 请您 sign-off 73 分谈判 fallback ladder — 推荐 65 floor + 句式见 [[(C) 沪差0518 内部汇报-{{PERSON}}]] § Q2
 小K / 煎饼: 5/25-26 厦门 trip 安排，我 5/15 回穗后跟你们对
 
 —— {{USER_NAME}}
@@ -230,8 +230,8 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 **特征**:
 - 长度: 8-30 行 (邮件 default 长一些)
 - 抬头: "X 主任 / X 总 / 尊敬的 X 老师 您好"
-- 落款: 完整 — "祝好 / 此致 / 顺祝商祺" + "{{USER_NAME}} · {{ORG_A}} / {{PROJECT_A}} BD · 联系方式"
-- 主题行: 等于 概要 ("{{FUND}} 基金 IL Profile 转发 + 后续会面建议")
+- 落款: 完整 — "祝好 / 此致 / 顺祝商祺" + "{{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD · 联系方式"
+- 主题行: 等于 概要 ("{{ORG_D}} 基金 IL Profile 转发 + 后续会面建议")
 - emoji: **零** (邮件 emoji 不专业)
 - 句式: 完整 + 主语 / 时态精确 / 复合句 OK
 - 礼貌词: 高密度 — "敬请 / 烦请 / 谨此 / 兹有 / 请教 / 请您审阅"
@@ -247,7 +247,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 张主任：
 
-您好。我是{{ORG_A}}的 {{USER_NAME}}，上周通过 何宗寰 老师 转介绍后与您加上。
+您好。我是诗悦网络的 {{USER_NAME}}，上周通过 何宗寰 老师 转介绍后与您加上。
 
 关于 5/15 您安排的对接，我们这边初步整理了 3 个主轴议题，
 想请教您几点，便于会面时聚焦：
@@ -268,16 +268,16 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 若您时间紧，提前微信 / 邮件简答几行也行，我做好功课再来当面汇报。
 
 附件:
-- 附件 1: {{ORG_A}}背景 1-pager (CN)
-- 附件 2: {{FUND}} Fund I L.P. Overview (FYI 提交, 非本议题主轴)
+- 附件 1: 诗悦网络背景 1-pager (CN)
+- 附件 2: {{ORG_D}} Fund I L.P. Overview (FYI 提交, 非本议题主轴)
 
 期待您的反馈。
 
 此致
 
 {{USER_NAME}}
-{{ORG_A}} / {{PROJECT_A}} BD
-联系方式: {{PHONE}} / user@example.com
+诗悦网络 / {{PROJECT_A}} BD
+联系方式: {{REDACTED}} / {{REDACTED}}
 ```
 
 **禁忌**:
@@ -327,7 +327,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 山田代表
 
-お世話になっております。{{ORG_B}} の {{USER_NAME}} ({{USER_NAME}}) です。
+お世話になっております。{{ORG_B}} の 高培尧 ({{USER_NAME}}) です。
 
 先日ご紹介いただいた件、{{ORG_B}} が現在組成中のファンドストラクチャーについて、
 資料を整理いたしました。
@@ -346,7 +346,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 引き続きどうぞよろしくお願いいたします。
 
-{{USER_NAME}} ({{USER_NAME}} Gao)
+高培尧 ({{USER_NAME}} Gao)
 {{ORG_B}} · M&A Advisory
 ```
 
@@ -369,7 +369,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - Medium: WeChat (default) / 邮件 / sometimes 电话约
 - 长度: 短 + 模糊 (3-5 行 ideal) — 越长越多 quote 风险
 - 称呼: "X 老师好" (default 尊称) / "X 编辑好" / first name + 老师
-- 抬头: 短身份 + 议题 anchor ("我是{{ORG_A}}的 {{USER_NAME}}，上次 EPIC 峰会聊过")
+- 抬头: 短身份 + 议题 anchor ("我是诗悦的 {{USER_NAME}}，上次 EPIC 峰会聊过")
 - 落款: 无（消息流）或 "{{USER_NAME}} · {{PROJECT_A}} BD" 一行
 - emoji: 极少 (0-1)
 - 句式: 完整 + 主语 + careful — 每句问"this on the record would I say"
@@ -404,7 +404,7 @@ X 老师好，看到你问。
 **禁忌**:
 - ❌ 透露具体数据（DAU / 预约 / 投资额 / commitment）哪怕"小道消息"
 - ❌ 评论竞品 ("X 项目数据其实不如他们说的好" — 永远不要)
-- ❌ 内部决策口径泄露 ("我们诸葛 / 路奇 觉得..." — 高管口径外泄严重)
+- ❌ 内部决策口径泄露 ("我们{{PERSON}} / 路奇 觉得..." — 高管口径外泄严重)
 - ❌ 表态时点 commit ("CBT2 七月一定上" — 实际 push 就 broken promise)
 - ❌ 玩笑 / casual ("哈哈这玩意儿" — 记者上稿后失分)
 - ❌ 邮件 reply 时把 internal email 转手忘删（最常见 leak）
@@ -413,7 +413,7 @@ X 老师好，看到你问。
 
 ### A10 · 投资人 / 董事会 (谦虚冷静 · 数据驱动)
 
-**典型场景**: {{FUND}} GP / 路奇 ({{ORG_A}}董事长) / 何宗寰 ({{ORG_A}}研发) / 黄文斌 ({{ORG_A}}董秘) · {{ORG_B}} 后续 LP / GP · 跨年战略 review 场合。
+**典型场景**: {{ORG_D}} GP / 路奇 (诗悦董事长) / 何宗寰 (诗悦研发) / 黄文斌 (诗悦董秘) · {{ORG_B}} 后续 LP / GP · 跨年战略 review 场合。
 
 **核心张力**: 不夸大 + 不慌乱 + 数据 + 风险透明。投资人最讨厌"过度乐观"（暴露经验不足）和"急躁紧张"（暴露管理失控）。
 
@@ -454,7 +454,7 @@ X 老师好，看到你问。
 您好。简短同步{{PROJECT_A}} Q2 BD 中期进展，主轴 3 点 + 关键风险:
 
 **进展**:
-1. CBT2 节点 channel 沟通: TapTap (李响) / B站 (钟馨 / 47) 5/18-19 全口径会面已锁定;
+1. CBT2 节点 channel 沟通: TapTap ({{PERSON_4}}) / B站 ({{PERSON_5}} / 47) 5/18-19 全口径会面已锁定;
    预估 5/20 后能 lock CBT2 期 A-tier slot 候选。
 2. 5/13 完成 B站 / TapTap 组织架构深度 ingest, 校准 4 个认知错位
    (详 02 Cards/{{PROJECT_A}}/C260513-bilibili-org-chart-...). 直接影响 5/19 议程结构。
@@ -469,7 +469,7 @@ X 老师好，看到你问。
 
 **请您 sign-off**:
 - 73 分 fallback 区间下限 — 65 是否可接受? 还是更激进?
-- 5/19 14:00 钟馨 4 线会面 — 您是否考虑亲临 (重大 commit 在场更顺)
+- 5/19 14:00 {{PERSON_5}} 4 线会面 — 您是否考虑亲临 (重大 commit 在场更顺)
 
 下次正式 update: 5/22 EOD (5/18-20 沪差回穗后)
 
@@ -490,7 +490,7 @@ X 老师好，看到你问。
 
 ### A11 · 法务 / 合规 (严谨清晰 · 无歧义)
 
-**典型场景**: {{ORG_A}}法务 / 外部律所 / 合规审计 / 合同审稿 / 政府备案文件 / 跨境 legal review。
+**典型场景**: 诗悦法务 / 外部律所 / 合规审计 / 合同审稿 / 政府备案文件 / 跨境 legal review。
 
 **核心张力**: 措辞 precision 高于一切 — 每个词都可能影响法律解释。**清晰 ≠ 复杂**, 清晰 = 不歧义。
 
@@ -504,7 +504,7 @@ X 老师好，看到你问。
 - 句式: 完整 + 准确 + 单一解读
 - 词汇 precision:
   - 法律术语用准 (force majeure / 不可抗力 / warranty / 保证 / indemnity / 赔偿)
-  - 主体 specific — 用法人单位全称 ("广州栖梧信息科技有限公司") 而非简称 ("{{ORG_A}}")
+  - 主体 specific — 用法人单位全称 ("广州栖梧信息科技有限公司") 而非简称 ("诗悦")
   - 时点 specific — "2026 年 5 月 31 日 24:00 (北京时间)" 而非 "5月底"
   - 范围 specific — "限于 [国家 / 区域 / 渠道] 范围内" 不留通用兜底
 - 引用 conventions:
@@ -523,7 +523,7 @@ X 老师好，看到你问。
   - 不 commit answer 时直说 "需进一步 review" / "需补充 information"
   - 不模糊 "大概 / 应该"
 
-**Example** ({{ORG_A}}法务 review 小鹏 MOU):
+**Example** (诗悦法务 review 小鹏 MOU):
 ```
 主题: 小鹏 MOU 草案 review 反馈 — 4 个 point 需要进一步明确
 
@@ -549,14 +549,14 @@ X 律师 您好:
 
 4. **争议解决 (中风险)**
    § 10 现"友好协商"为单一机制. 建议补 fallback:
-   - 协商不成 → 广州仲裁委 arbitration ({{ORG_A}}主场)
+   - 协商不成 → 广州仲裁委 arbitration (诗悦主场)
 
 依据《合同法》第 X 条 + 《公司法》§ XX, 上述 4 点完善后可进入下一轮 redline.
 
 如需 redline 草案 我可以 5/16 EOD 前提供.
 
 祝好,
-{{USER_NAME}} · {{ORG_A}} BD
+{{USER_NAME}} · 诗悦网络 BD
 广州栖梧信息科技有限公司
 ```
 
@@ -662,16 +662,16 @@ X 律师 您好:
 ## Examples — register mismatch detection
 
 ❌ **Wrong**: 给政府文旅局副局发 "李哥，听说您...嗯..."
-✅ **Right**: A3 register — "李局好，我是{{ORG_A}}的 {{USER_NAME}}..."
+✅ **Right**: A3 register — "李局好，我是诗悦的 {{USER_NAME}}..."
 
-❌ **Wrong**: 给李响发 "李响先生您好,关于 EPIC 议题特此请教..."
-✅ **Right**: A1 register — "李响哥, 刚才聊到 Tiff 那个口子..."
+❌ **Wrong**: 给{{PERSON_4}}发 "{{PERSON_4}}先生您好,关于 EPIC 议题特此请教..."
+✅ **Right**: A1 register — "{{PERSON_4}}哥, 刚才聊到 Tiff 那个口子..."
 
 ❌ **Wrong**: 内部 WeCom 群发 "各位，本人现就...特此通知..."
 ✅ **Right**: A5 register — "各位，5/19 SH 出差 B 站会面 update..."
 
-❌ **Wrong**: 邮件给 LP 写 "Dear X, just FYI on {{FUND}} 这块儿..."
-✅ **Right**: A6 register — "X 总: 您好。兹将 {{FUND}} 基金信息 update..."
+❌ **Wrong**: 邮件给 LP 写 "Dear X, just FYI on {{ORG_D}} 这块儿..."
+✅ **Right**: A6 register — "X 总: 您好。兹将 {{ORG_D}} 基金信息 update..."
 
 ## Future expansion (后续 {{USER_NAME}} 补)
 

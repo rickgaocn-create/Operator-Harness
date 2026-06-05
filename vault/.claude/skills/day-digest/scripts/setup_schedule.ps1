@@ -1,16 +1,16 @@
-# setup_schedule.ps1 — register `RG-day-digest` as daily 23:00 Windows Task
+# setup_schedule.ps1 — register `{{USER_NAME}}-day-digest` as daily 23:00 Windows Task
 # Idempotent: re-running updates trigger/action.
 #
 # Install:
 #   powershell -ExecutionPolicy Bypass -File ".claude\skills\day-digest\scripts\setup_schedule.ps1"
 #
 # Uninstall:
-#   Unregister-ScheduledTask -TaskName 'RG-day-digest' -Confirm:$false
+#   Unregister-ScheduledTask -TaskName '{{USER_NAME}}-day-digest' -Confirm:$false
 
 $ErrorActionPreference = 'Stop'
 
-$taskName = 'RG-day-digest'
-$script   = '{{VAULT_ROOT}}\.claude\skills\day-digest\scripts\run_digest.ps1'
+$taskName = '{{USER_NAME}}-day-digest'
+$script   = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\skills\day-digest\scripts\run_digest.ps1'
 
 if (-not (Test-Path $script)) { throw "Script not found at $script" }
 
@@ -46,4 +46,4 @@ Register-ScheduledTask `
 Write-Host "Registered scheduled task: $taskName"
 Write-Host "  next run: daily 23:00"
 Write-Host "  wrapper:  $wrapper"
-Write-Host "  log dir:  {{VAULT_ROOT}}\04 Notes\vault-evolve\"
+Write-Host "  log dir:  D:\Administrator\Documents\{{USER_NAME}}\04 Notes\vault-evolve\"

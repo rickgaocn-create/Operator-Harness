@@ -7,12 +7,12 @@
 #
 # Snapshot state: .claude/_state/capability-snapshot.json (prev run, for diffing)
 # Human log:      04 Notes/_system/capability-dev-log.md (append-only)
-# Scheduled via:  RG-capability-dev-scan (daily 23:35, before vault autocommit 23:50)
+# Scheduled via:  {{USER_NAME}}-capability-dev-scan (daily 23:35, before vault autocommit 23:50)
 # Created 2026-05-29 (option 1 of the capability-autolog choice).
 
 $ErrorActionPreference = 'Continue'
-$snapFile = '{{VAULT_ROOT}}\.claude\_state\capability-snapshot.json'
-$log      = '{{VAULT_ROOT}}\04 Notes\_system\capability-dev-log.md'
+$snapFile = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\_state\capability-snapshot.json'
+$log      = 'D:\Administrator\Documents\{{USER_NAME}}\04 Notes\_system\capability-dev-log.md'
 
 function ObjToMap($o) {
   $h = @{}
@@ -38,7 +38,7 @@ function Diff-List($old, $new, $label) {
 # --- snapshot the capability surface ---
 $tasks = @{}
 Get-ScheduledTask -ErrorAction SilentlyContinue |
-  Where-Object { $_.TaskName -match '^(RG-|afk-|feishu-|VaultEvolve)' } |
+  Where-Object { $_.TaskName -match '^({{USER_NAME}}-|afk-|feishu-|VaultEvolve)' } |
   ForEach-Object { $tasks[$_.TaskName] = [string]$_.State }
 
 function Skill-Names($p) {
@@ -46,7 +46,7 @@ function Skill-Names($p) {
   return @()
 }
 $skillsUser  = Skill-Names '{{USER_HOME}}\.claude\skills'
-$skillsVault = Skill-Names '{{VAULT_ROOT}}\.claude\skills'
+$skillsVault = Skill-Names 'D:\Administrator\Documents\{{USER_NAME}}\.claude\skills'
 
 $launchers = @()
 foreach ($d in '{{USER_HOME}}\bin','{{USER_HOME}}\.local\bin') {
@@ -71,7 +71,7 @@ if (Test-Path (Join-Path $ad '.git')) {
 }
 
 $routines = @{}
-$rd = '{{VAULT_ROOT}}\.claude\routines'
+$rd = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\routines'
 if (Test-Path $rd) {
   Get-ChildItem $rd -File -ErrorAction SilentlyContinue |
     Where-Object { $_.Extension -in '.ps1','.py' } |
@@ -134,7 +134,7 @@ if (-not (Test-Path $log)) {
   $out += ''
   $out += '# Capability / Bot Development Log'
   $out += ''
-  $out += 'Append-only, one line per daily run by `RG-capability-dev-scan` (23:35). Tracks the capability surface that lives OUTSIDE the vault: scheduled tasks, skills (user + vault), launchers, plugin versions, `~/Developer/afk-code` git, vault routines, and key daemon files. Indented `+ / - / ~` detail lines list what changed since the prior snapshot. vault-evolve consumes this as a Phase-1 telemetry source.'
+  $out += 'Append-only, one line per daily run by `{{USER_NAME}}-capability-dev-scan` (23:35). Tracks the capability surface that lives OUTSIDE the vault: scheduled tasks, skills (user + vault), launchers, plugin versions, `~/Developer/afk-code` git, vault routines, and key daemon files. Indented `+ / - / ~` detail lines list what changed since the prior snapshot. vault-evolve consumes this as a Phase-1 telemetry source.'
   $out += ''
 }
 if ($firstRun) {

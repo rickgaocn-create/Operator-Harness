@@ -21,7 +21,7 @@ if hasattr(sys.stdout, 'reconfigure'):
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
-VAULT_ROOT = Path(r'{{VAULT_ROOT}}')
+VAULT_ROOT = Path(r'D:\Administrator\Documents\{{USER_NAME}}')
 SKILLS = VAULT_ROOT / '.claude' / 'skills'
 SWEEP_DIR = VAULT_ROOT / '.claude' / '.daily-ingest-queue' / '_sweep'
 STATE_FILE = VAULT_ROOT / '.claude' / '_state' / 'dashboard' / 'sweep-state.json'

@@ -8,7 +8,7 @@ created-by: claude
 
 # Harness Glossary · coined-term index
 
-> The ~20 terms you must hold to read this harness. One line each + where the authoritative definition lives. This is the onboarding dictionary — a teammate reads this + [[04 Notes/_system/(C) harness-map-2026-05-24|the Layer model]] + [[HARNESS-MAP|the generated front-door]] and can navigate without spelunking. **Platform-layer** (the machine's vocabulary, not RG-specific) → it transfers with the engine.
+> The ~20 terms you must hold to read this harness. One line each + where the authoritative definition lives. This is the onboarding dictionary — a teammate reads this + [[04 Notes/_system/(C) harness-map-2026-05-24|the Layer model]] + [[HARNESS-MAP|the generated front-door]] and can navigate without spelunking. **Platform-layer** (the machine's vocabulary, not {{USER_NAME}}-specific) → it transfers with the engine.
 >
 > Rule: a coined term that isn't in here yet is a comprehension debt. New machinery registers its term here (see [[09 Rules/harness-modularity]]).
 

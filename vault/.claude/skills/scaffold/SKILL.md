@@ -144,7 +144,7 @@ Instantiate **`01 Wiki/{{PROJECT_A}}/渠道/{Name} ({Org}).md`** per [[09 Rules/
 
 ### C1 — Interview (plain text, NOT AskUserQuestion)
 
-1. 真名 / 花名 / 公司 (e.g., `钟馨 / Bubble / Bilibili`)
+1. 真名 / 花名 / 公司 (e.g., `{{PERSON_5}} / Bubble / Bilibili`)
 2. 部门 / 角色
 3. Mobile / 微信 / email / QQ / 办公地址 (partial OK)
 4. 直属上级 / 平级 / 下级 — `[[wiki]]` or `待补`

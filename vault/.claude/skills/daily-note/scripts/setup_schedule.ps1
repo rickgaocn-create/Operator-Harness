@@ -5,14 +5,14 @@
 #   powershell -ExecutionPolicy Bypass -File ".claude\skills\daily-note\scripts\setup_schedule.ps1"
 #
 # Uninstall:
-#   Unregister-ScheduledTask -TaskName 'RG-daily-note-create' -Confirm:$false
+#   Unregister-ScheduledTask -TaskName '{{USER_NAME}}-daily-note-create' -Confirm:$false
 
 $ErrorActionPreference = 'Stop'
 
-$taskName  = 'RG-daily-note-create'
-$pythonExe = '{{PYTHON_EXE}}'
-$script    = '{{VAULT_ROOT}}\.claude\skills\daily-note\scripts\create_today.py'
-$logDir    = '{{VAULT_ROOT}}\.claude\.daily-ingest-queue\_logs'
+$taskName  = '{{USER_NAME}}-daily-note-create'
+$pythonExe = '{{USER_HOME}}\AppData\Local\Programs\Python\Python311\python.exe'
+$script    = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\skills\daily-note\scripts\create_today.py'
+$logDir    = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\.daily-ingest-queue\_logs'
 
 New-Item -ItemType Directory -Force -Path $logDir | Out-Null
 

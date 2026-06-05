@@ -29,8 +29,8 @@ Installs to `C:\Program Files (x86)\cloudflared\cloudflared.exe`. PATH refresh n
 ### Step 2 · Scoped serve directory
 
 ```bash
-mkdir -p "{{USER_HOME}}/AppData/Local/Temp/{artifact-name}-preview"
-cp "{{VAULT_ROOT}}/.../source.html" "{{USER_HOME}}/AppData/Local/Temp/{artifact-name}-preview/index.html"
+mkdir -p "/d/Administrator/AppData/Local/Temp/{artifact-name}-preview"
+cp "/d/Administrator/Documents/{{USER_NAME}}/.../source.html" "/d/Administrator/AppData/Local/Temp/{artifact-name}-preview/index.html"
 ```
 
 Use **scoped temp dir** so server doesn't expose other files. Naming the file `index.html` makes URL root serve it directly.
@@ -38,7 +38,7 @@ Use **scoped temp dir** so server doesn't expose other files. Naming the file `i
 ### Step 3 · Start Python HTTP server in background
 
 ```bash
-cd "{{USER_HOME}}/AppData/Local/Temp/{artifact-name}-preview" && \
+cd "/d/Administrator/AppData/Local/Temp/{artifact-name}-preview" && \
   python -m http.server 8765 > /tmp/httpserv.log 2>&1 &
 sleep 1
 curl -s -o /dev/null -w "Local check: %{http_code}\n" http://localhost:8765/
@@ -86,7 +86,7 @@ Use `api.qrserver.com` for QR generation — public free API, no auth, returns P
 When user requests changes to HTML and you edit the vault file, **re-cp** to the serve dir:
 
 ```bash
-cp "{{VAULT_ROOT}}/.../source.html" "{{USER_HOME}}/AppData/Local/Temp/{artifact-name}-preview/index.html"
+cp "/d/Administrator/Documents/{{USER_NAME}}/.../source.html" "/d/Administrator/AppData/Local/Temp/{artifact-name}-preview/index.html"
 ```
 
 Tell user: "refresh phone browser to see changes."
@@ -136,7 +136,7 @@ If user wants to view without internet OR send via WeChat 文件传输助手:
 
 ```bash
 # Using Chrome headless to convert HTML → PDF
-chrome.exe --headless --print-to-pdf="{{USER_HOME}}/.../output.pdf" "file://{{USER_HOME}}/.../source.html"
+chrome.exe --headless --print-to-pdf="/d/Administrator/.../output.pdf" "file:///d/Administrator/.../source.html"
 ```
 
 Or in Edge:

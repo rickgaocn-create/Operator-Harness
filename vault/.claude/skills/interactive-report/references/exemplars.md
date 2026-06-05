@@ -10,7 +10,7 @@ Quality baseline for the skill. When in doubt about "what should v0.x look like"
 
 **Source MD**: **`04 会议纪要/【EPIC Games】Unreal Animation Summit-2026-05-14.md**` + companion `**01 Pitches/(C) EPIC Unreal Summit · 业务评估 2026-05-14.md`**
 
-**Audience**: 诸葛 (郭子川) · 工作室引擎评估组 · 动画团队
+**Audience**: {{PERSON}} ({{USER_NAME}}) · 工作室引擎评估组 · 动画团队
 
 **Stats**:
 - 117 KB · 11 sections · 7 SVG visualizations · 11 hot-linked Wikipedia images
@@ -51,7 +51,7 @@ Quality baseline for the skill. When in doubt about "what should v0.x look like"
 1. **Don't skimp on the hero** — it's the first 1.5s of the read. Stat strip + 概要 callout + logo strip = orienting the reader fast.
 2. **Visualizations are not decoration** — each SVG should answer a specific question the source MD asks. If you can remove a viz and the meaning is preserved, remove it.
 3. **Alternating dark/light gives rhythm** — readers fatigue on monotone backgrounds. Cinematic interludes (dark sections) at sections 3, 6, 9 = visual punctuation.
-4. **Print-friendly is non-negotiable** — Ctrl+P should produce a clean white-bg version that 诸葛 can paper-read.
+4. **Print-friendly is non-negotiable** — Ctrl+P should produce a clean white-bg version that {{PERSON}} can paper-read.
 5. **Hot-linked images are OK** — Wikipedia commons URLs are stable + free + de-risk through alt-text graceful degrade.
 
 ## Gold standard #2 · Pure-Share Mode
@@ -62,7 +62,7 @@ Quality baseline for the skill. When in doubt about "what should v0.x look like"
 
 **Mode**: pure-share (会议纪要分享 · 团队分享 · 无决策请示)
 
-**Source MD**: same as v0.2, but {{USER_NAME}} edited the source MD between v0.3 and v0.4 to remove decision-grade framing (致诸葛 / Q1-Q4 asks / NDA banners) — the HTML render followed.
+**Source MD**: same as v0.2, but {{USER_NAME}} edited the source MD between v0.3 and v0.4 to remove decision-grade framing (致{{PERSON}} / Q1-Q4 asks / NDA banners) — the HTML render followed.
 
 **Audience**: 动画团队 · 会议纪要分享 (no individual decision-maker named)
 
@@ -85,13 +85,13 @@ Quality baseline for the skill. When in doubt about "what should v0.x look like"
 - §时间轴 · Gantt chart with 6 tracks — gone
 - Speaker × dimension heatmap (技术影响 / BD / 战略路线图 / 长期价值) — folded into timetable; the 4 evaluation dimensions removed entirely
 - "建议启动两条独立并行..." 概要 directive language — reframed as "两个值得团队持续关注的方向"
-- "致诸葛 + 工作室引擎评估组" footer — replaced with "动画团队 · 会议纪要分享"
+- "致{{PERSON}} + 工作室引擎评估组" footer — replaced with "动画团队 · 会议纪要分享"
 - 5/29 立项 / 6/15 评估 etc. time-bound milestones — gone (no decision asks → no implicit deadlines)
 - 甲乙丙丁戊己 labels — modernized to A B C D E F throughout
 - ⭐ 下半场 emphasis on Juan 2nd / Miles 2nd timetable rows — removed; all sessions equal weight
 
 **Iteration moves that ratified the pattern**:
-- v0.3 → v0.4: {{USER_NAME}} said `这个报告就是分享性质的` + listed specific drops (决策图 / 致诸葛 / 4 请示 / 时间轴) + the AI 自动分析 标语 add
+- v0.3 → v0.4: {{USER_NAME}} said `这个报告就是分享性质的` + listed specific drops (决策图 / 致{{PERSON}} / 4 请示 / 时间轴) + the AI 自动分析 标语 add
 - v0.4 → v0.5: ribbon visualization (mathematically correct) was visually rejected ("Juan 和 Miles 更偏了"); ultimately replaced with timetable list — taught the rule **"chart integrity > chart cleverness"**
 - v0.5 trims: 4 综合印象 → 2×2 fixed grid · spotlight 下半场 highlighting removed · speaker heatmap removed
 - v0.5 → v0.6 moves:

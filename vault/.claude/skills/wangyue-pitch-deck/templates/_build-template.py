@@ -200,7 +200,7 @@ add_text(s, "[致谢 / 联系方式 / 项目联系人]", Inches(0.7), Inches(2.8
 add_text(s, TG_TEXT, Inches(0.7), Inches(6.4), Inches(12), Inches(0.6),
          font=LATIN, size=18, color=WHITE, bold=True, align=PP_ALIGN.CENTER)
 
-out = r"{{VAULT_ROOT}}\.claude\skills\wangyue-pitch-deck\templates\wangyue-master.pptx"
+out = r"D:\Administrator\Documents\{{USER_NAME}}\.claude\skills\wangyue-pitch-deck\templates\wangyue-master.pptx"
 os.makedirs(os.path.dirname(out), exist_ok=True)
 p.save(out)
 print("Template saved:", out)

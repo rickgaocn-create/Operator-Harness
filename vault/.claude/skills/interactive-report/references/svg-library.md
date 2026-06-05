@@ -131,7 +131,7 @@ For score 10 (r=180): top=`(0,-180)` · TR=`(171,-56)` · BR=`(106,146)` · BL=`
 </svg>
 ```
 
-**Color assignment**: amber (1st/featured), cobalt (2nd), teal (3rd), magenta (4th).
+**Color assignment**: amber (1st/featured), cobalt (2nd), teal ({{ORG_B}}), magenta (4th).
 
 ---
 

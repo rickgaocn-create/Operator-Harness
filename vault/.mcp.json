@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "@yejianye/smart-connections-mcp@1.0.0"],
       "env": {
-        "OBSIDIAN_VAULT": "{{VAULT_ROOT}}"
+        "OBSIDIAN_VAULT": "D:/Administrator/Documents/{{USER_NAME}}"
       }
     },
     "playwright": {

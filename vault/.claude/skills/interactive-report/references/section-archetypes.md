@@ -84,7 +84,7 @@
 - **Quadrant matrix** (per `svg-library.md` § 4) plotting 4-10 implications on (effort × value) axes with bubble sizes for magnitude
 - Card grid below with implications detail (each card matches a quadrant position)
 
-**Recommendation**: this section is usually the most important for 诸葛 — show effort vs value matrix front-and-center.
+**Recommendation**: this section is usually the most important for {{PERSON}} — show effort vs value matrix front-and-center.
 
 ---
 

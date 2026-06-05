@@ -62,7 +62,7 @@ Three invariants do the safety work: **one subsystem per cycle** (blast radius),
 
 | Tier | What | Authority |
 |---|---|---|
-| 🟢 **Autonomous** | Gate-passed fixes that are **reversible** and **net-negative-or-neutral overhead**: dead-trigger repair, index/catalog updates, mirror sync *only when the mirror is endorsed*, advancing `distilled → promoted` on `positive` corrections, comment-out dead wikilinks, frontmatter completion | Apply in-cycle. Log to cycle ledger + `_decisions.md`. |
+| 🟢 **Autonomous** | Gate-passed fixes that are **reversible** and **net-negative-or-neutral overhead**: dead-trigger repair, index/catalog updates, mirror sync *only when the mirror is endorsed*, advancing `new → distilled` (clustering/dedup of raw corrections into drafts — **no `09 Rules`/MEMORY write**, the rule-promotion step `distilled → promoted` on `corrective` items stays 🟡), advancing `distilled → promoted` on `positive` corrections, comment-out dead wikilinks, frontmatter completion | Apply in-cycle. Log to cycle ledger + `_decisions.md`. |
 | 🟡 **Propose** | Anything touching `09 Rules/**`, subagent system prompts, skill body rewrites, auto-chain rules, MEMORY.md, **or any fix whose stage-3 score is "adds surface"** — including questioning whether a redundancy should exist at all | Write to the cycle report; user dispositions via `vault-manager: execute`. Never auto. |
 | 🔴 **Manual** | Deletions (skills, subagents, tasks), edits to user-authored prose / `00 Raw/` / `06 Tasks/` / `.obsidian/`, `chain-anchor` renames, anything irreversible | Surface with explicit warning. No keyword applies. |
 
