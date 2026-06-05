@@ -1,0 +1,79 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.path.startsWith("02 Cards/")
+    - note.adr == true
+properties:
+  note.adr-status:
+    displayName: Status
+  note.adr-date:
+    displayName: Decided
+  note.source-project:
+    displayName: Domain
+  note.tags:
+    displayName: Tags
+  note.links:
+    displayName: Linked
+  file.folder:
+    displayName: Folder
+formulas:
+  age_days:
+    formula: (now() - note.adr-date) / (1000 * 60 * 60 * 24)
+    displayName: Age (days)
+views:
+  - type: table
+    name: All ADRs
+    order:
+      - file.name
+      - note.adr-status
+      - note.adr-date
+      - formula.age_days
+      - note.source-project
+      - note.tags
+    sort:
+      - property: note.adr-date
+        direction: DESC
+  - type: table
+    name: Accepted (in force)
+    filters:
+      and:
+        - note.adr-status == "accepted"
+    order:
+      - file.name
+      - note.adr-date
+      - formula.age_days
+      - note.source-project
+    sort:
+      - property: note.adr-date
+        direction: DESC
+  - type: table
+    name: Proposed (pending)
+    filters:
+      and:
+        - note.adr-status == "proposed"
+    order:
+      - file.name
+      - note.adr-date
+      - note.source-project
+    sort:
+      - property: note.adr-date
+        direction: ASC
+  - type: table
+    name: Deprecated / Superseded
+    filters:
+      or:
+        - note.adr-status == "deprecated"
+        - note.adr-status == "superseded"
+    order:
+      - file.name
+      - note.adr-status
+      - note.adr-date
+      - note.superseded-by
+    sort:
+      - property: note.adr-date
+        direction: DESC
+  - type: cards
+    name: Timeline
+    sort:
+      - property: note.adr-date
+        direction: DESC

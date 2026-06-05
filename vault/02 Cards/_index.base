@@ -1,0 +1,110 @@
+filters:
+  and:
+    - file.ext == "md"
+    - file.path.startsWith("02 Cards/")
+    - file.name != "(C) README"
+    - file.name != "_index"
+properties:
+  note.type:
+    displayName: Type
+  note.status:
+    displayName: Status
+  note.source-project:
+    displayName: Domain
+  note.created:
+    displayName: Created
+  note.tags:
+    displayName: Tags
+  note.source-note:
+    displayName: Source
+  file.folder:
+    displayName: Folder
+formulas:
+  age_days:
+    formula: (now() - note.created) / (1000 * 60 * 60 * 24)
+    displayName: Age (days)
+views:
+  - type: table
+    name: All Cards
+    order:
+      - file.name
+      - note.status
+      - note.source-project
+      - note.created
+      - formula.age_days
+      - note.tags
+    sort:
+      - property: note.created
+        direction: DESC
+  - type: table
+    name: By Domain
+    order:
+      - file.folder
+      - file.name
+      - note.status
+      - note.created
+      - note.tags
+    sort:
+      - property: file.folder
+        direction: ASC
+      - property: note.created
+        direction: DESC
+  - type: table
+    name: Inbox (Unprocessed)
+    filters:
+      and:
+        - file.folder.endsWith("_inbox")
+    order:
+      - file.name
+      - note.created
+      - formula.age_days
+      - note.source-note
+    sort:
+      - property: note.created
+        direction: ASC
+  - type: table
+    name: Live & Reused
+    filters:
+      and:
+        - note.status == "live"
+    order:
+      - file.name
+      - note.source-project
+      - note.created
+      - note.tags
+    sort:
+      - property: note.created
+        direction: DESC
+  - type: table
+    name: Drafts
+    filters:
+      and:
+        - note.status == "draft"
+    order:
+      - file.name
+      - note.source-project
+      - note.created
+      - formula.age_days
+    sort:
+      - property: formula.age_days
+        direction: DESC
+  - type: table
+    name: Archived
+    filters:
+      and:
+        - note.status == "archived"
+    order:
+      - file.name
+      - note.source-project
+      - note.created
+    sort:
+      - property: note.created
+        direction: DESC
+  - type: cards
+    name: Recent (last 30 days)
+    filters:
+      and:
+        - formula.age_days < 30
+    sort:
+      - property: note.created
+        direction: DESC
