@@ -4,7 +4,7 @@ A personal **operator harness** — a Claude-Code-driven operating system for kn
 
 This repository is a **sanitized, portable snapshot** of that system — everything needed to re-bootstrap it on a fresh PC, with all secrets and personal content removed. See [`SECURITY.md`](SECURITY.md) for exactly what was scrubbed.
 
-> **Status:** machinery only. Personal vault *content* (notes, projects, identity, contacts, incident history) is **not** included — only the framework, scripts, skills, rules, hooks, and the scaffolding to run them. Identity files (`me.md`, `MEMORY.md`) ship as fill-in templates.
+> **Status:** machinery only. Personal vault *content* (notes, projects, identity, contacts, incident history) is **not** included — only the framework, scripts, skills, rules, hooks, and the scaffolding to run them. The 3-pillar workspace folders (`00 Raw` … `10 Action`) ship as **empty scaffolding**: a role-README per folder plus self-updating dashboards, so the structure is there to drop your own content into. Identity files (`me.md`, `MEMORY.md`) ship as fill-in templates.
 
 ---
 
@@ -16,10 +16,15 @@ operator-harness/
 │   ├── .claude/           #   control plane: skills, routines, agents, hooks, bootstrap, contexts, profiles
 │   ├── .harness/          #   OS-portability layer (runtime adapter: resolve paths/python/scheduler per machine)
 │   ├── .codex/            #   autonomous-agent definitions + guard hooks
-│   ├── 09 Rules/          #   35 machine-enforceable framework rules (the binding rule layer)
-│   ├── 07 Templates/      #   Obsidian note templates
+│   ├── 00 Raw … 10 Action #   3-pillar workspace — SCAFFOLDING ONLY (role-README per folder + empty dashboards;
+│   │                      #   your content excluded): 00 Raw · 01 Wiki · 02 Cards [Card] · 03 Projects ·
+│   │                      #   04 Notes [Time] · 05 Decisions · 06 Tasks · 10 Action [Action]
+│   ├── 07 Templates/      #   Obsidian note templates (card / decision / person / …)
 │   ├── 08 Agents/         #   subagent catalog
+│   ├── 09 Rules/          #   58 machine-enforceable framework rules (the binding rule layer)
 │   ├── CLAUDE.md          #   operating instructions (the system prompt for the harness)
+│   ├── AGENTS.md          #   Codex adapter to CLAUDE.md
+│   ├── vault-map.md       #   folder routing + rule index + skills navigation
 │   ├── me.md / MEMORY.md  #   identity + incident-rules — TEMPLATES, fill in your own
 │   └── .mcp.json          #   MCP servers (smart-connections, playwright)
 ├── claude-global/         # what lives in ~/.claude on the machine
@@ -40,7 +45,7 @@ operator-harness/
 └── docs/                  # architecture notes
 ```
 
-**By the numbers:** 52 skills · 16 autonomous routines · 8 subagents · 35 rules · 17 hooks · 38 scheduled tasks.
+**By the numbers:** 52 skills · 16 autonomous routines · 12 subagents · 58 rules · 17 hooks · 38 scheduled tasks.
 
 ---
 
