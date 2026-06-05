@@ -112,7 +112,7 @@ if not is_edit:
 # Flagging only KNOWN residue (not "all non-whitelist English") is what makes this gate safe to
 # arm: brands (honor/oppo/steam), person names, tech acronyms (hdmi/udk) are never in this set. ---
 RESIDUE = {
-    "rick",  # 称谓: {{USER_NAME}} -> {{USER_NAME}} (signature/EN-doc exceptions handled by audience:en escape)
+    "rick",  # 称谓: {{USER_NAME}} -> 高培尧 (signature/EN-doc exceptions handled by audience:en escape)
     "bluf", "attendees",
     "commit", "ship", "push", "carry", "anchor", "align", "escalate", "confirm", "ballpark",
     "deadline", "trigger", "baseline", "backfill", "handoff", "review", "spec", "lock", "sell",

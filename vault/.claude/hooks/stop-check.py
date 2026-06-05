@@ -71,6 +71,84 @@ NO_TESTS_PAT = re.compile(
     re.I | re.S,
 )
 
+# --- pp-20260529-006 hard gate: AFK deliverables must carry the artifact (content or path) ---
+# A registered, recurring (x4) prose rule promoted to an enforced Stop gate 2026-06-04. Blocks ONLY
+# when: (a) this is an AFK/channel-bridged session, (b) a deliverable artifact file was produced,
+# and (c) the final assistant message is a bare completion-status that omits the artifact's
+# path/filename AND its content. Tightly scoped to avoid false positives on normal replies.
+AFK_MARKERS = ("AFK session via", "<channel source=", "remote-monitored AFK")
+DELIVERABLE_EXT = {".md", ".html", ".htm", ".docx", ".xlsx", ".pptx", ".pdf",
+                   ".png", ".jpg", ".jpeg", ".csv", ".svg", ".canvas", ".base"}
+COMPLETION_PAT = re.compile(
+    r"\b(done|complete[d]?|finished|created|pushed|uploaded|saved|written|wrote|"
+    r"generated|ready|delivered|sent|posted)\b|✅|完成|已[发写生上]", re.I)
+
+
+def _read_transcript(transcript_path: str, head: bool = False, cap: int = 250_000) -> str:
+    try:
+        p = Path(transcript_path)
+        if not p.exists() or p.stat().st_size > 20_000_000:
+            return ""
+        txt = p.read_text(encoding="utf-8", errors="replace")
+        return txt[:cap] if head else txt
+    except Exception:
+        return ""
+
+
+def _is_afk(transcript_path: str) -> bool:
+    return any(m in _read_transcript(transcript_path, head=True) for m in AFK_MARKERS)
+
+
+def _last_assistant_text(transcript_path: str) -> str:
+    last = ""
+    for ln in _read_transcript(transcript_path).splitlines():
+        ln = ln.strip()
+        if not ln:
+            continue
+        try:
+            ev = json.loads(ln)
+        except Exception:
+            continue
+        msg = ev.get("message") if isinstance(ev, dict) else None
+        role = ev.get("role") or (msg or {}).get("role") or ev.get("type")
+        if role == "assistant" and isinstance(msg, dict):
+            parts = [b.get("text", "") for b in (msg.get("content") or [])
+                     if isinstance(b, dict) and b.get("type") == "text"]
+            txt = "".join(parts).strip()
+            if txt:
+                last = txt
+    return last
+
+
+def afk_deliverable_check(transcript: str, files: list[str]) -> str | None:
+    """Block a bare 'done' message in an AFK session when an artifact was produced
+    but neither its path/filename nor its content is in the channel message."""
+    if not transcript or not _is_afk(transcript):
+        return None
+    deliverables = [f for f in files
+                    if not f.startswith(".claude/")
+                    and ".bak" not in f.lower()
+                    and Path(f).suffix.lower() in DELIVERABLE_EXT]
+    if not deliverables:
+        return None
+    last = _last_assistant_text(transcript)
+    if not last:
+        return None
+    # already surfaced? message references a deliverable's path or filename -> OK
+    for f in deliverables:
+        if Path(f).name in last or f in last:
+            return None
+    # long messages presumably inline the content -> don't second-guess
+    if len(last) > 1500:
+        return None
+    # only fire when the message reads like a completion status
+    if not COMPLETION_PAT.search(last):
+        return None
+    flist = ", ".join(deliverables[:3])
+    return ("AFK deliverable gate (pp-20260529-006): this turn produced " + flist +
+            " but the channel message includes neither the artifact's content nor its path/filename. "
+            "Surface the deliverable — paste its content or give the exact file path — before finishing.")
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -196,6 +274,10 @@ def main() -> int:
     transcript = payload.get("transcript_path") or payload.get("transcriptPath") or ""
     explained_no_tests = has_no_tests_explanation(transcript)
     failures: list[str] = []
+
+    afk_fail = afk_deliverable_check(transcript, files)
+    if afk_fail:
+        failures.append(afk_fail)
 
     foundational_changed = [f for f in files if f in FOUNDATIONAL]
     if foundational_changed:

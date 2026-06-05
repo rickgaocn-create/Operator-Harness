@@ -67,7 +67,7 @@ Phases 1–8 below comprise the hygiene routine. Same pipeline pre-2026-05-14 pr
 ## Phase 1: Scan All Cards
 
 ```bash
-ls "02 Cards/_inbox/" "02 Cards/{{PROJECT_A}}/" "02 Cards/3rd-Inc/" "02 Cards/cross-border/" "02 Cards/ops/" "02 Cards/meta/" 2>/dev/null
+ls "02 Cards/_inbox/" "02 Cards/{{PROJECT_A}}/" "02 Cards/{{ORG_B}}-Inc/" "02 Cards/cross-border/" "02 Cards/ops/" "02 Cards/meta/" 2>/dev/null
 find "02 Cards/" -name "C*.md" | wc -l
 ```
 
@@ -164,7 +164,7 @@ Group by severity then by check:
 ```markdown
 # Card Lint Report — YYYY-MM-DD
 
-**Scanned:** N Cards across {N1 in {{PROJECT_A}}, N2 in 3rd-Inc, ...}
+**Scanned:** N Cards across {N1 in {{PROJECT_A}}, N2 in {{ORG_B}}-Inc, ...}
 **Health summary:** 🔴 R critical · 🟡 Y warnings · 🟢 G suggestions
 
 ---
@@ -282,7 +282,7 @@ Three modes:
 ### Bridge Phase 3 — Sweep 02 Cards/ Across ALL Domains
 
 ```bash
-ls "02 Cards/{{PROJECT_A}}/C*.md" "02 Cards/3rd-Inc/C*.md" "02 Cards/cross-border/C*.md" \
+ls "02 Cards/{{PROJECT_A}}/C*.md" "02 Cards/{{ORG_B}}-Inc/C*.md" "02 Cards/cross-border/C*.md" \
    "02 Cards/ops/C*.md" "02 Cards/meta/C*.md" "02 Cards/_inbox/C*.md" 2>/dev/null
 ls "02 Cards/instincts/I*.md" 2>/dev/null
 ```
@@ -293,7 +293,7 @@ For each non-anchor Card, score similarity:
 |---|---|---|
 | **Shared tag** | ⭐⭐⭐ | both tagged `negotiation` or `vault-design` |
 | **Shared wikilink** in body | ⭐⭐⭐ | both reference `[[C260427-jp-board-reads-memos-backward]]` |
-| **Shared entity** | ⭐⭐ | both mention 钟馨 OR EPIC OR vendor X |
+| **Shared entity** | ⭐⭐ | both mention {{PERSON_5}} OR EPIC OR vendor X |
 | **Headline keyword overlap** | ⭐⭐ | "pushback" / "3-vertical" / "evening surge" 在 anchor + candidate 都出现 |
 | **Mechanism keyword overlap** | ⭐⭐ | core concepts (specific to Card body, not generic words like "因为") |
 | **Failure mode signature** | ⭐⭐⭐ | both Cards discuss similar failure pattern |
@@ -317,7 +317,7 @@ If 0 candidates → "本 Card 没找到 latent bridges. Possibly genuinely stand
 
 Example:
 - Anchor: `[[C260513-bilibili-org-chart-three-verticals-under-EK]]` ({{PROJECT_A}})
-- Candidate: `[[C260427-jp-board-reads-memos-backward]]` (3rd-Inc)
+- Candidate: `[[C260427-jp-board-reads-memos-backward]]` ({{ORG_B}}-Inc)
 - Hypothesis: "两 Card 都关于 'unitary appearance hides multi-vertical reality' — one in JP corp governance, one in CN platform BD. Bridge: org navigation 通用 method."
 
 ### Bridge Phase 6 — Propose Related Link Additions
@@ -327,7 +327,7 @@ Anchor: [[C260513-...]]
 
 Found 3 latent bridges (cross-domain):
 
-1. → [[C260427-...]] (3rd-Inc)
+1. → [[C260427-...]] ({{ORG_B}}-Inc)
    Hypothesis: ...
    Add to anchor's Related? Add to candidate's Related?
 

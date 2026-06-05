@@ -1,11 +1,11 @@
 # run_emit.ps1 — invoke Claude Code in autonomous mode to run /daily-emit
-# Called by Windows Task `RG-daily-emit` daily at 08:00.
+# Called by Windows Task `{{USER_NAME}}-daily-emit` daily at 08:00.
 # Manual run:
 #   powershell -ExecutionPolicy Bypass -File "<vault>\.claude\skills\daily-emit\scripts\run_emit.ps1"
 
 $ErrorActionPreference = 'Stop'
 
-$vaultRoot = '{{VAULT_ROOT}}'
+$vaultRoot = 'D:\Administrator\Documents\{{USER_NAME}}'
 $claudeExe = '{{USER_HOME}}\.local\bin\claude.exe'
 $logDir    = "$vaultRoot\04 Notes\vault-evolve"
 $today     = (Get-Date).ToString('yyyy-MM-dd')

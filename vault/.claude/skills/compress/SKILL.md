@@ -30,7 +30,7 @@ The disk save always runs first because compaction destroys multi-step conversat
 2. Confirm draft with user
 3. Format as structured log
 4. Save to **`04 Notes/Session Logs/`**
-5. Surface any new RG-owned tasks to **`06 Tasks/Inbox.md`**
+5. Surface any new {{USER_NAME}}-owned tasks to **`06 Tasks/Inbox.md`**
 
 ---
 

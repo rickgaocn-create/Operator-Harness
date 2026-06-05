@@ -5,7 +5,7 @@ When the artifact is a **share / FYI document** (not a decision-grade ask), 21 s
 ## When to use Pure-Share Mode
 
 - Source is a 会议纪要分享, 行业观察, 团队 update, 出差汇报 with no decisions in flight
-- Audience is **team / peers / 工作室** — not 诸葛 / 董事会 / external counterparty
+- Audience is **team / peers / 工作室** — not {{PERSON}} / 董事会 / external counterparty
 - The user explicitly says "纯分享 · 无决策请示" / "不需要决策" / "这是分享性质的"
 - The source MD has no `## Decision Asks` / `## 决策请示` / `## 行动项` section
 - The user has dropped `致 X` framing language

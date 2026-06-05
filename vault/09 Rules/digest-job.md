@@ -18,7 +18,7 @@ audit-trace: "[[_prototype-2026-05-13-chew.md]] v2 baseline approved → automat
 
 ## 触发
 
-- **Autonomous**: Windows Task `RG-day-digest` 每日 23:00（含周末）
+- **Autonomous**: Windows Task `{{USER_NAME}}-day-digest` 每日 23:00（含周末）
 - **Manual**: 用户敲 `/day-digest` 或 "咀嚼今天 / 反刍今天 / 看看今天" — interactive 模式
 
 ## 双 deliverable

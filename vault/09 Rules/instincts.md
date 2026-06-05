@@ -71,7 +71,7 @@ I{YYMMDD}-{kebab-case-trigger-action}.md
 ---
 type: instinct
 created: 2026-05-14                              # ISO
-domain: vault | {{PROJECT_A}} | 3rd-Inc | cross-border | ops | meta
+domain: vault | {{PROJECT_A}} | {{ORG_B}}-Inc | cross-border | ops | meta
 trigger: "when {condition}"                       # 完整 phrase
 action: "{do this}"                               # 完整 phrase
 confidence: 0.5                                   # 0.0-1.0, 0.5 = unverified default

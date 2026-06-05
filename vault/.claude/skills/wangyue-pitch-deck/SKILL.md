@@ -17,7 +17,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 
 - 「做一份{{PROJECT_A}} deck / {{PROJECT_A}} PPT」
 - 「把 (C) XXX v0.1.md 做成 PPT」
-- 「生成对外 / partner-facing / 对内 / 致诸葛 等 PPT」
+- 「生成对外 / partner-facing / 对内 / 致{{PERSON}} 等 PPT」
 - 显式 `/wangyue-pitch-deck` 或 `/{{PROJECT_A}} pitch`
 
 **不触发**：HTML 演示 / 网页 slides / 通用非{{PROJECT_A}} PPT —— 那些走 Anthropic 原生 `/pptx`。
@@ -25,7 +25,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ## 何时**不**用
 
 - 学术 / 论文 / 数据分析 deck（用 `/pptx` 原生）
-- 跨项目 / 个人 / {{ORG_B}} 项目的 PPT（建另一个 skill `/3rd-inc-pitch-deck`）
+- 跨项目 / 个人 / {{ORG_B}} 项目的 PPT（建另一个 skill `/{{ORG_B}}-inc-pitch-deck`）
 - 单页 onepager（用 `/design`）
 - 海报 / KV 视觉物料（用 `/design`）
 
@@ -45,7 +45,7 @@ allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 ### Phase 2: 询问参数（≤ 4 个 ask）
 
 ```
-1. 受众场景: (a) 对外 partner-facing / (b) 内部 cc 诸葛 / (c) 投资人 / (d) 高规格 vendor
+1. 受众场景: (a) 对外 partner-facing / (b) 内部 cc {{PERSON}} / (c) 投资人 / (d) 高规格 vendor
 2. 张数目标: 12-15 (lean) / 16-21 (standard) / 22-30 (深度 deck)
 3. 语言: 中文 / 中英 / 英文 (后两个对应英文 spec — 字号微调)
 4. 重点章节 (可多选): 数据进展 / 产品 / 美术 / 玩法 / BD 商务 / 发行节点 / 价值评估
@@ -175,7 +175,7 @@ TAGLINE_POS = (Inches(8.6), Inches(0.30), Inches(4.5), Inches(0.3))  # right-ali
 | 受众 | 输出路径 |
 |---|---|
 | 对外 partner-facing | **`03 Projects/{{PROJECT_A}}/Pitches/(C) [pitch-name] · {{PROJECT_A}}版 v[X].pptx`** |
-| 内部 cc 诸葛 | **`03 Projects/{{PROJECT_A}}/09 Reports/(C) [report-name] v[X].pptx`** |
+| 内部 cc {{PERSON}} | **`03 Projects/{{PROJECT_A}}/09 Reports/(C) [report-name] v[X].pptx`** |
 | 投资人 | **`03 Projects/{{PROJECT_A}}/Pitches/(C) [investor-name] 介绍 v[X].pptx`** |
 
 生成完后：
@@ -210,7 +210,7 @@ TAGLINE_POS = (Inches(8.6), Inches(0.30), Inches(4.5), Inches(0.3))  # right-ali
 - ❌ 数据用文本写（如「累计预约 600 万」用 16pt body 字号）—— 应用 hero_display 72pt 或 section_title 44pt
 - ❌ AI 生成图占位 — {{PROJECT_A}}品牌不接受
 - ❌ Slogan 在英文场合译为「One Unity Risk」—— 保留原文不译
-- ❌ 输出 v1 就 cc 诸葛 —— 永远 v0.1 内部 review 后再 v1.0 外发
+- ❌ 输出 v1 就 cc {{PERSON}} —— 永远 v0.1 内部 review 后再 v1.0 外发
 
 ---
 
@@ -228,6 +228,6 @@ TAGLINE_POS = (Inches(8.6), Inches(0.30), Inches(4.5), Inches(0.3))  # right-ali
 
 - 样式分析全文：[[.claude/skills/wangyue-pitch-deck/references/style-analysis-2026-05-15]]
 - 品牌 tokens：[[.claude/skills/wangyue-pitch-deck/brand-tokens.json]]
-- 原始样本：[[99 Attachments/Files/产品介绍示意(2).pptx]]（21 张新版{{PROJECT_A}}介绍书 · 2026-05-15）
+- 原始样本：[[99 Attachments/Files/产品介绍示意(2).pptx]]（21 张新版《{{PROJECT_A}}》介绍书 · 2026-05-15）
 - 底座 skill：Anthropic 官方 `pptx`（user-global · `~/.claude/skills/pptx/`）
 - 关联：[[(C) 12 - 动画管线深度 · 实时与离线工作流]] § 二游 stylized 章节

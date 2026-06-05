@@ -12,7 +12,7 @@ memory itself — it prepares the input. Exit 0.
   python reflect.py [--window 14] [--top 8] [--json] [--drain]
 """
 from __future__ import annotations
-import argparse, io, json, math, os, re, sys
+import argparse, glob, io, json, math, os, re, sys
 from collections import Counter
 from datetime import date
 
@@ -25,6 +25,7 @@ CORRECTIONS = os.path.join(STATE, "corrections.jsonl")
 SUCCESS = os.path.join(STATE, "success-traces.jsonl")
 ERRPATTERNS = os.path.join(STATE, "error-patterns.jsonl")   # feeder #4 (machine-detected failures)
 GRADER = os.path.join(STATE, "grader-verdicts.jsonl")       # the enforce-layer (was an orphan stream)
+DECISIONS = os.path.join(VAULT, "05 Decisions")             # decision records feed reflection (rationale = judgment signal)
 OUT = os.path.join(STATE, "reflections.jsonl")
 
 # Shared spine (tokens / salience). Fail-safe: keep local fallbacks if the import ever fails (this
@@ -66,6 +67,29 @@ def _days_ago(ts: str, today: date) -> int | None:
         return None
 
 
+def _parse_md(path):
+    """(frontmatter dict of str values, body) — tiny, dependency-free YAML-lite."""
+    try:
+        txt = open(path, encoding="utf-8", errors="replace").read()
+    except OSError:
+        return {}, ""
+    m = re.match(r"^---\n(.*?)\n---\n?(.*)$", txt, re.DOTALL)
+    if not m:
+        return {}, txt
+    fm = {}
+    for line in m.group(1).splitlines():
+        mm = re.match(r"\s*([A-Za-z_][\w-]*)\s*:\s*(.*?)\s*$", line)
+        if mm:
+            fm[mm.group(1).strip()] = mm.group(2).strip()
+    return fm, m.group(2)
+
+
+def _section(body, name):
+    """Text under a '## name' heading, up to the next '## ' (or EOF)."""
+    m = re.search(r"^##\s+" + re.escape(name) + r"\s*\n(.*?)(?=^##\s|\Z)", body, re.DOTALL | re.MULTILINE)
+    return m.group(1).strip() if m else ""
+
+
 def _toks(text: str):
     if H is not None:
         return list(H.tokens(text))   # shared tokenizer + stopwords (was a private list that drifted)
@@ -103,6 +127,26 @@ def gather(window: int, today: date):
         items.append({"src": "grader", "days_ago": _days_ago(g.get("ts", ""), today) or 0, "salience": 0.85,
                       "text": str(g.get("artifact", "")) + " " + hf + " " + str(g.get("notes", "")),
                       "summary": f"grader {v} [{g.get('grader','')}]: {hf or g.get('score','')}"[:140]})
+    # Decision records (05 Decisions/) — a decision's rationale + what-to-watch is a first-class
+    # judgment signal, on par with corrections. One-way (irreversible) calls weigh higher.
+    for path in sorted(glob.glob(os.path.join(DECISIONS, "*.md"))):
+        if os.path.basename(path).startswith("_"):
+            continue  # dashboards / index notes
+        fm, body = _parse_md(path)
+        if fm.get("type") != "decision":
+            continue
+        da = _days_ago(fm.get("date", ""), today)
+        if da is None or da > window:
+            continue
+        rev = fm.get("reversibility", "")
+        decision = _section(body, "Decision")
+        title = os.path.splitext(os.path.basename(path))[0]
+        text = " ".join((title, decision, _section(body, "Rationale"),
+                         _section(body, "Consequences / watch for"), _section(body, "Updates")))
+        items.append({"src": "decision", "days_ago": da,
+                      "salience": 0.85 if rev == "one-way" else 0.7,  # irreversible calls carry more learning weight
+                      "text": text,
+                      "summary": f"decision [{fm.get('status','')}/{rev}]: {decision or title}"[:140]})
     return items
 
 

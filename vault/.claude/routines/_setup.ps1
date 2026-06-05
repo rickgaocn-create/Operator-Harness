@@ -20,31 +20,31 @@ if (-not $python) {
 
 $tasks = @(
     @{
-        name = "RG-tier7-inbox-drift"
+        name = "{{USER_NAME}}-tier7-inbox-drift"
         script = "$vault\.claude\routines\inbox-drift.py"
         trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 1) -RepetitionDuration (New-TimeSpan -Days 365)
         desc = "Hourly: alert if 06 Tasks/Inbox.md exceeds 20 open items"
     },
     @{
-        name = "RG-tier7-pre-trip"
+        name = "{{USER_NAME}}-tier7-pre-trip"
         script = "$vault\.claude\routines\pre-trip.py"
         trigger = New-ScheduledTaskTrigger -Daily -At "18:00"
         desc = "Daily 18:00: alert if any trip bundle has trip-date matching tomorrow"
     },
     @{
-        name = "RG-tier7-eod-snapshot"
+        name = "{{USER_NAME}}-tier7-eod-snapshot"
         script = "$vault\.claude\routines\eod-snapshot.py"
         trigger = New-ScheduledTaskTrigger -Daily -At "23:30"
         desc = "Daily 23:30: freeze Operon embed results into snapshot HTML comments (DRY_RUN default)"
     },
     @{
-        name = "RG-tier7-harness-pulse"
+        name = "{{USER_NAME}}-tier7-harness-pulse"
         script = "$vault\.claude\routines\harness-pulse.py"
         trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 3) -RepetitionDuration (New-TimeSpan -Days 365)
         desc = "Every 3h: consolidated harness liveness verdict (channels/scheduler/cortex/queues); edge-triggered alert on worsening"
     },
     @{
-        name = "RG-tier7-relation-gaps"
+        name = "{{USER_NAME}}-tier7-relation-gaps"
         script = "$vault\.claude\routines\relation-gaps.py"
         trigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Sunday -At "22:00"
         desc = "Weekly Sun 22:00: detect under-connected 01 Wiki entries + missing relation links (DRY default); run /relation-map to wire"
@@ -74,4 +74,4 @@ foreach ($t in $tasks) {
 Write-Host "`nAll 5 routines registered. Check Windows Task Scheduler GUI to verify."
 Write-Host "Audit log: $vault\.claude\_state\autonomous-log.jsonl"
 Write-Host "`nTo promote eod-snapshot to write mode (after 7-day dry-run period):"
-Write-Host "  Edit task RG-tier7-eod-snapshot -> Add 'DRY_RUN=0' env var to the action"
+Write-Host "  Edit task {{USER_NAME}}-tier7-eod-snapshot -> Add 'DRY_RUN=0' env var to the action"

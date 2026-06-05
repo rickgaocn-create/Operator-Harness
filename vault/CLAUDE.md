@@ -102,7 +102,7 @@ Executing the ask correctly is the FLOOR, not the deliverable — the value {{US
 - **Rule layer is binding.** `09 Rules/*.md` declare machine-enforceable conventions. Read the matching rule file before any op on framework-typed files. Rules override prose conventions in this file when in conflict.
 - **`(C)` prefix on AI-generated files.** Provenance obvious. Exception: framework-typed Cards / Actions use date-prefixes (`C260427-...`, `T260427-...`); foundational system files ([[me.md]], [[vault-map.md]], [[CLAUDE.md]], [[MEMORY.md]], [[GOALS.md]], `09 Rules/*`) carry provenance in frontmatter (`created-by:`).
 - **Ask before editing non-`(C)` files.** User's notes, contracts, decks are not Claude's to rewrite without explicit permission. Patch, don't paraphrase.
-- **Bilingual routing.** Internal {{PROJECT_A}} / 3rd execution → CN. JP board / Tokyo stakeholder → JP. Cross-border sourcing → EN. Don't mix in one doc without reason.
+- **Bilingual routing.** Internal {{PROJECT_A}} / {{ORG_B}} execution → CN. JP board / Tokyo stakeholder → JP. Cross-border sourcing → EN. Don't mix in one doc without reason.
 - **Project hubs are pointers, not overrides.** Each `03 Projects/<name>/CLAUDE.md` is a durable on-demand hub (directive · key people · pointers to live state) — it does not auto-load or override harness defaults. The harness is the operating frame in every session.
 - **Task surfaces are typed.** Project Kanbans (`03 Projects/<name>/Tasks.md`) for project-tagged tasks; `06 Tasks/{Inbox,Tasks,Personal}.md` for capture / today board / personal. Don't proliferate task files outside [[09 Rules/tasks.md]] routing.
 - **Subagents live in one home:** canonical def + operator notes at `.claude/agents/<name>.md`. The per-agent `08 Agents/<name>.md` mirror is **deprecated** (was dual-maintained → drift, e.g. the 2026-05-23 ticktick refs that went stale in both). `08 Agents/README` stays as the catalog index. See [[08 Agents/README]].
@@ -162,7 +162,7 @@ Bulk task capture, chain decomposition, batch ceiling, routing → [[09 Rules/ta
 - Do NOT fabricate `✅ YYYY-MM-DD` completion stamps. Task Collector owns those.
 - Do NOT toggle `- [ ]` → `- [x]` unless user explicitly asks to close.
 - **Batch ceiling: ≤3 new tasks per single Write.** Larger → `/task-capture`.
-- **Route by tag.** `#{{PROJECT_A}}*` → `03 Projects/{{PROJECT_A}}/Tasks.md`; `#3rd` / `#aix` → `03 Projects/{{ORG_B}}/Tasks.md`; `#nonsense` → `06 Tasks/Personal.md`; no tag / cross-project → `06 Tasks/Inbox.md`.
+- **Route by tag.** `#{{PROJECT_A}}*` → `03 Projects/{{PROJECT_A}}/Tasks.md`; `#{{ORG_B}}` / `#aix` → `03 Projects/{{ORG_B}}/Tasks.md`; `#nonsense` → `06 Tasks/Personal.md`; no tag / cross-project → `06 Tasks/Inbox.md`.
 - Confirm in reply what was written + to which file.
 
 ---
@@ -172,7 +172,7 @@ Bulk task capture, chain decomposition, batch ceiling, routing → [[09 Rules/ta
 - **Identity / strengths / stress patterns:** [[me.md]] · [[personality]]
 - **Goals & current Q OKRs:** [[GOALS.md]] · [[04 Notes/12-week/2026-Q2.md]]
 - **Vault structure & skills index:** [[vault-map.md]]
-- **Rule layer:** [[09 Rules/cards.md]] · [[09 Rules/action.md]] · [[09 Rules/time.md]] · [[09 Rules/file-types.md]] · [[09 Rules/tasks.md]] · [[09 Rules/raw-immutable.md]]
+- **Rule layer:** [[09 Rules/cards.md]] · [[09 Rules/action.md]] · [[09 Rules/time.md]] · [[09 Rules/file-types.md]] · [[09 Rules/tasks.md]] · [[09 Rules/decisions.md]] · [[09 Rules/crm.md]] · [[09 Rules/raw-immutable.md]]
 - **Skills catalog:** [[vault-map.md]] § Skills · [[Skills I Use Daily]]
 - **Subagents catalog:** [[08 Agents/README]]
 - **Hard rules (incident-driven):** [[MEMORY.md]]

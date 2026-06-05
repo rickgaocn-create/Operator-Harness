@@ -99,7 +99,7 @@ day-mode:                        # exec | learning | hybrid | rest (set at EOD; 
 tags:
   - daily-note
   - 2026/Q2/W18                  # nested tag — Year/Quarter/Week one shot
-projects-touched: []             # ["{{PROJECT_A}}", "3rd-inc", "aix"] — Tracks worked
+projects-touched: []             # ["{{PROJECT_A}}", "{{ORG_B}}-inc", "aix"] — Tracks worked
 people-touched: []               # wiki refs preferred; plain strings OK if no card yet
 cards-spawned: []                # ["[[Cyymmdd-...]]", ...] — synced from EOD review
 actions-touched: []              # ["[[Tyymmdd-...]]", ...] — workstream files
@@ -116,7 +116,7 @@ actions-touched: []              # ["[[Tyymmdd-...]]", ...] — workstream files
 **Hybrid array convention (people / cards / actions / projects-touched):**
 - Entries are either `"[[wiki-ref]]"` (preferred) or plain string (placeholder until card is created)
 - Dangling wiki refs OK — Obsidian graph surfaces them as "orphan candidate" → signals "should card this entity"
-- `projects-touched` uses short string slugs (`{{PROJECT_A}}`, `3rd-inc`, `aix`) not wiki refs, since they're Track tags not files
+- `projects-touched` uses short string slugs (`{{PROJECT_A}}`, `{{ORG_B}}-inc`, `aix`) not wiki refs, since they're Track tags not files
 
 ## File Anatomies
 
@@ -131,7 +131,7 @@ actions-touched: []              # ["[[Tyymmdd-...]]", ...] — workstream files
 {One paragraph: what success looks like at end of cycle. Pulled from GOALS.md.}
 
 ## Tracks & OKRs
-### Track 1: {{PROJECT_A}}
+### Track 1: 《{{PROJECT_A}}》
 - O: {objective}
 - KR1: {measurable}
 - KR2: {measurable}
@@ -229,7 +229,7 @@ actions-touched: []              # ["[[Tyymmdd-...]]", ...] — workstream files
 
 ## Active Tracks
 
-### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+### 《{{PROJECT_A}}》— `03 Projects/{{PROJECT_A}}/`
 - **Today:**
 
 ### {{ORG_B}} — `03 Projects/{{ORG_B}}/`

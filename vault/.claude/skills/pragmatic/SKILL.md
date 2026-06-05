@@ -13,10 +13,10 @@ companion-memory:
 created: 2026-05-19
 last-restructure: 2026-05-21
 created-by: claude
-audit-trace: "2026-05-19 {{USER_NAME}} request — 从诸葛 TapTap 编辑评价示例提炼出"对话式记录"子风格。2026-05-21 split: 13 条规则的完整内容移到 [[09 Rules/auto-chain-style.md]] § Pragmatic，SKILL.md 留 dispatch + workflow（Phase 3.2.c restructure）"
+audit-trace: "2026-05-19 高培尧 request — 从{{PERSON}} TapTap 编辑评价示例提炼出"对话式记录"子风格。2026-05-21 split: 13 条规则的完整内容移到 [[09 Rules/auto-chain-style.md]] § Pragmatic，SKILL.md 留 dispatch + workflow（Phase 3.2.c restructure）"
 ---
 
-# Skill: 对话式记录风格（pragmatic / 诸葛风格）
+# Skill: 对话式记录风格（pragmatic / {{PERSON}}风格）
 
 > **Genre Dispatch（2026-05-20 加入）**：本 skill 是跨 genre 共享的「风格层」。具体的会议纪要结构 spec 由 genre-specific memory 控制：
 > - product-feedback genre → [[feedback-meeting-spec-product-feedback]]
@@ -30,7 +30,7 @@ audit-trace: "2026-05-19 {{USER_NAME}} request — 从诸葛 TapTap 编辑评价
 
 把报告式总结转成对话式记录 — 让已知项目背景的同事一眼看到 takeaway，不要 editorial 解读层，不要装饰物。
 
-> **质量基线**：诸葛或同级别项目内 senior 读到时，感觉像同事直接说给他听的简报，不是 AI 帮你润色过的报告。
+> **质量基线**：{{PERSON}}或同级别项目内 senior 读到时，感觉像同事直接说给他听的简报，不是 AI 帮你润色过的报告。
 
 > **规则数据：** 13 条核心规则 + 风格对照表完整内容在 [[09 Rules/auto-chain-style.md]] § Pragmatic。本 SKILL.md 只放 dispatch + workflow。
 
@@ -49,7 +49,7 @@ audit-trace: "2026-05-19 {{USER_NAME}} request — 从诸葛 TapTap 编辑评价
 
 **手动触发：**
 - `/pragmatic <path>`
-- 「诸葛风格」/ 「对话式记录」/ 「pragmatic 一下」/ 「去 editorial 层」/ 「去装饰」
+- 「{{PERSON}}风格」/ 「对话式记录」/ 「pragmatic 一下」/ 「去 editorial 层」/ 「去装饰」
 
 **不适用（skip auto-chain）：**
 - 面向外部 senior / 投资人 / 董事会 / 跨部门 stranger 的报告（用 Register B 报告式）
@@ -145,7 +145,7 @@ vault 内 filename 保留原格式（`YYYY-MM-DD-counterparty.md`），shareable
 
 ---
 
-## 经典示例（诸葛 TapTap 编辑评价原文 · 2026-05-19 BD trip）
+## 经典示例（{{PERSON}} TapTap 编辑评价原文 · 2026-05-19 BD trip）
 
 ```
 正向的：
@@ -166,6 +166,6 @@ vault 内 filename 保留原格式（`YYYY-MM-DD-counterparty.md`），shareable
 
 ## 链入
 
-源样本：诸葛 (郭子川) 2026-05-19 TapTap 编辑评价摘录
+源样本：{{PERSON}} ({{USER_NAME}}) 2026-05-19 TapTap 编辑评价摘录
 canonical rules: [[09 Rules/auto-chain-style.md]] § Pragmatic
 companion memory: [[register-b-business-document-headers]]（报告式参考）· [[register-c-executive-summary-voice]]（执行摘要口吻）

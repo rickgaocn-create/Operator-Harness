@@ -18,11 +18,11 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F2"
 
 > 渠道 / 政企 / 异业合作 **个人对接人**的 wiki 模板。机器协议在 frontmatter + 固定 section anchor，body 留给人自由写。
 >
-> **This file = the schema (platform).** The actual contact instances it governs **are your relation graph** in `01 Wiki/{{PROJECT_A}}/{渠道,政企,异业合作}/` — that *is* the instance layer for this rule (no separate `_instance/` file; the wikis are the data). Example names below (李响 / 钟馨 / 47) are illustrative; a teammate keeps this schema and builds their own relation graph.
+> **This file = the schema (platform).** The actual contact instances it governs **are your relation graph** in `01 Wiki/{{PROJECT_A}}/{渠道,政企,异业合作}/` — that *is* the instance layer for this rule (no separate `_instance/` file; the wikis are the data). Example names below ({{PERSON_4}} / {{PERSON_5}} / 47) are illustrative; a teammate keeps this schema and builds their own relation graph.
 
 ## 适用范围
 
-适用于所有"和某个 person 对接的"档案文件：渠道 BD (TapTap 李响 / B 站 钟馨等) / 政企 (王鹤等) / 异业合作个人 (诗琳 / 林总等)。**不适用于**：渠道平台档案 (TapTap.md / Bilibili.md 等) — 那是组织档案，另设。
+适用于所有"和某个 person 对接的"档案文件：渠道 BD (TapTap {{PERSON_4}} / B 站 {{PERSON_5}}等) / 政企 (王鹤等) / 异业合作个人 (诗琳 / 林总等)。**不适用于**：渠道平台档案 (TapTap.md / Bilibili.md 等) — 那是组织档案，另设。
 
 ## 命名
 
@@ -34,8 +34,8 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F2"
 - **Org** — 公司 / 渠道 (英文优先 if 国际化平台，中文 if 国内品牌)
 
 **Examples:**
-- `钟馨 (Bilibili).md` ✅
-- `李响 (TapTap).md` ✅
+- `{{PERSON_5}} (Bilibili).md` ✅
+- `{{PERSON_4}} (TapTap).md` ✅
 - `47 (Bilibili).md` ❌ — 47 是花名，应用真名 张思琪 + alias 含 "47"
 
 ## Frontmatter Contract
@@ -48,7 +48,7 @@ aliases:                                   # 必填，所有可能的称呼
   - {真名}
   - "{Org} {Name}"                         # 含 Org 的搜索关键词
 tags:
-  - {Project}                              # {{PROJECT_A}} / 3rd / 异业 etc.
+  - {Project}                              # {{PROJECT_A}} / {{ORG_B}} / 异业 etc.
   - 渠道                                   # 或 政企 / 异业合作
   - {Org}                                  # 平台 tag
   - {Department}                           # 联运商务 / 营销中心 / 品牌方 etc.

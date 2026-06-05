@@ -113,7 +113,7 @@ surface.
 - 2026-05-21 — gate created during Tier 7 Phase 1 build. Initial 7 skills covered. 123 checks total, baseline green.
 - 2026-05-23 — auto-chain quartet (`biz`, `humanize`, `localize-cn`, `pragmatic`) added under high-blast-radius criterion. Driver: M.10 6-event misfire streak showed chain skills are high-leverage with no eval coverage. Adds 53 checks → 176 total. Baseline green.
 - 2026-05-23 — foundational-files linter added (sibling gate above) after a review found dead pointers (`ticktick.md`, `§ Writing Principles`, `writing-style.md`), MEMORY over its 200 cap, and heavy cross-file redundancy in the always-loaded set.
-- 2026-05-27 — `best-of-n` added (high-blast-radius: front-of-funnel gate on all major forwardable outputs). Driver: judgment-loop eval + {{USER_NAME}} human correction (full pipeline 7/10 vs stripped priors+best-of-N 3/10). Config: `.claude/_eval-fixtures/eval-config/best-of-n.yaml`.
+- 2026-05-27 — `best-of-n` added (high-blast-radius: front-of-funnel gate on all major forwardable outputs). Driver: judgment-loop eval + 高培尧 human correction (full pipeline 7/10 vs stripped priors+best-of-N 3/10). Config: `.claude/_eval-fixtures/eval-config/best-of-n.yaml`.
 - Future skills (e.g. `/route` from Phase 5) join the gate as they prove daily-driver status.
 
 ## Companion skill

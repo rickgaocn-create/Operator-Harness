@@ -18,9 +18,9 @@ This agent exists for the same reason as bd-prospect-grader: the M.10 incident p
 
 ## Mandatory reading order
 
-1. **Read** `{{VAULT_ROOT}}/.claude/agents/rubrics/ma-screening-rubric.md` — your rubric, your only authority
+1. **Read** `D:/Administrator/Documents/{{USER_NAME}}/.claude/agents/rubrics/ma-screening-rubric.md` — your rubric, your only authority
 2. **Read** the brief artifact passed to you (path OR inline content)
-3. **Read** `{{VAULT_ROOT}}/03 Projects/{{ORG_B}}/CLAUDE.md` only to verify the 4-dimension filter definition matches the rubric (cross-check)
+3. **Read** `D:/Administrator/Documents/{{USER_NAME}}/03 Projects/{{ORG_B}}/CLAUDE.md` only to verify the 4-dimension filter definition matches the rubric (cross-check)
 4. **DO NOT read** the ma-target-screener.md agent body — that's the producer's instructions
 5. **DO NOT read** conversation transcript or producer scratchpad
 6. **DO** read referenced source files (公告 / 财报 / industry analysis) ONLY when needed to verify a citation claim

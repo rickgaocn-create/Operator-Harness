@@ -27,7 +27,7 @@ companion-rules: "[[09 Rules/autonomous-routines.md]]"
 
 ```powershell
 # As Administrator
-powershell -ExecutionPolicy Bypass -File "{{VAULT_ROOT}}\.claude\routines\_setup.ps1"
+powershell -ExecutionPolicy Bypass -File "D:\Administrator\Documents\{{USER_NAME}}\.claude\routines\_setup.ps1"
 ```
 
 Idempotent: unregisters existing entries, re-registers. Run after editing routine schedules.
@@ -59,7 +59,7 @@ grep "$(date -u -d 'yesterday' +%Y-%m-%dT)" .claude/_state/autonomous-log.jsonl 
 `eod-snapshot` ships in DRY_RUN mode by default. To promote:
 
 1. Let it run 7 days. Inspect **`.claude/_state/autonomous-log.jsonl`** for `[DRY] would write` entries. Verify the proposed snapshots look right (byte diff +/- sensible).
-2. Open Windows Task Scheduler → `RG-tier7-eod-snapshot` → Actions → Edit → add environment variable `DRY_RUN=0` to the python invocation.
+2. Open Windows Task Scheduler → `{{USER_NAME}}-tier7-eod-snapshot` → Actions → Edit → add environment variable `DRY_RUN=0` to the python invocation.
 3. Watch for 3 days. Snapshot HTML comments should appear at the bottom of each daily note. If they look wrong, revert by removing the env var.
 
 `inbox-drift` and `pre-trip` are notification-only by design and don't need promotion — they never write to vault content.

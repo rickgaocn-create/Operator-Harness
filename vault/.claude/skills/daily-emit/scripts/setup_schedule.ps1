@@ -1,16 +1,16 @@
-# setup_schedule.ps1 — register `RG-daily-emit` as daily 08:00 Windows Task
+# setup_schedule.ps1 — register `{{USER_NAME}}-daily-emit` as daily 08:00 Windows Task
 # Idempotent.
 #
 # Install:
 #   powershell -ExecutionPolicy Bypass -File ".claude\skills\daily-emit\scripts\setup_schedule.ps1"
 #
 # Uninstall:
-#   Unregister-ScheduledTask -TaskName 'RG-daily-emit' -Confirm:$false
+#   Unregister-ScheduledTask -TaskName '{{USER_NAME}}-daily-emit' -Confirm:$false
 
 $ErrorActionPreference = 'Stop'
 
-$taskName = 'RG-daily-emit'
-$script   = '{{VAULT_ROOT}}\.claude\skills\daily-emit\scripts\run_emit.ps1'
+$taskName = '{{USER_NAME}}-daily-emit'
+$script   = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\skills\daily-emit\scripts\run_emit.ps1'
 
 if (-not (Test-Path $script)) { throw "Script not found at $script" }
 
@@ -45,7 +45,7 @@ Register-ScheduledTask `
 Write-Host "Registered scheduled task: $taskName"
 Write-Host "  next run: daily 08:00"
 Write-Host "  wrapper:  $wrapper"
-Write-Host "  log dir:  {{VAULT_ROOT}}\04 Notes\vault-evolve\"
+Write-Host "  log dir:  D:\Administrator\Documents\{{USER_NAME}}\04 Notes\vault-evolve\"
 Write-Host ""
-Write-Host "NOTE: existing 'RG-daily-note-create' (09:00 scaffold) remains as fallback."
+Write-Host "NOTE: existing '{{USER_NAME}}-daily-note-create' (09:00 scaffold) remains as fallback."
 Write-Host "      08:00 emit creates daily note; 09:00 scaffold is idempotent (skip if exists)."

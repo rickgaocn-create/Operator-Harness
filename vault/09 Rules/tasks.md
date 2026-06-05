@@ -36,7 +36,7 @@ Older history: 2026-05-13 migration from TickTickSync → Tasks plugin emoji, se
 | File | Purpose | Source of truth for |
 |---|---|---|
 | **`03 Projects/{{PROJECT_A}}/Tasks.md`** | {{PROJECT_A}} project surface | `#{{PROJECT_A}}发行` / `#{{PROJECT_A}}情报` / `#{{PROJECT_A}}ai` atomic tasks |
-| **`03 Projects/{{ORG_B}}/Tasks.md`** | {{ORG_B}} project surface | `#3rd` / `#aix` atomic tasks |
+| **`03 Projects/{{ORG_B}}/Tasks.md`** | {{ORG_B}} project surface | `#{{ORG_B}}` / `#aix` atomic tasks |
 | **`06 Tasks/Personal.md`** | Personal surface | `#nonsense` + life-admin tasks |
 | **`06 Tasks/Today.md`** | 🌅 Today board | Hand-curated daily, pulled from project surfaces (renamed from `Tasks.md` 2026-05-21 to disambiguate from per-project **`<Project>/Tasks.md`**) |
 | **`06 Tasks/Inbox.md`** | Raw capture pool | Unsorted intake (`/daily-wechat-ingest`, mid-conversation drops). Triaged daily into project surfaces. |
@@ -99,7 +99,7 @@ User can override (e.g. a Soon-status task that's actually urgent → priority `
 ### Operon parser gotchas (2026-05-21 discovered)
 
 1. **List fields use `; ` separator, not `,`.** Source: `main.js` L17 — `"list" && n ? n.split("; ").map(a => a.trim())`. A comma-separated value is stored as a single text string, breaking Kanban/Finder filters that expect list semantics.
-2. **Inline hashtags are ASCII-only.** Operon's tag regex is `/#([a-zA-Z0-9_\-/]+)/g` (main.js L11). Chinese tags like `#{{PROJECT_A}}发行` `#{{PROJECT_A}}情报` `#{{PROJECT_A}}ai` do NOT match → never indexed. Only ASCII tags (`#3rd`, `#aix`, `#nonsense`) work as filterable.
+2. **Inline hashtags are ASCII-only.** Operon's tag regex is `/#([a-zA-Z0-9_\-/]+)/g` (main.js L11). Chinese tags like `#{{PROJECT_A}}发行` `#{{PROJECT_A}}情报` `#{{PROJECT_A}}ai` do NOT match → never indexed. Only ASCII tags (`#{{ORG_B}}`, `#aix`, `#nonsense`) work as filterable.
 3. **Workaround for CN-tag concepts**: mirror them into `{{contexts:: {{PROJECT_A}}发行; 厦差0525; @trip-XM; ...}}` where they ARE filterable. Inline `#{{PROJECT_A}}发行` in body is decorative-only post-Operon.
 4. **Tags field via inline `{{tags:: ...}}`** untested — Operon may support explicit YAML-frontmatter-style tags, but the safe path is contexts mirroring.
 
@@ -131,7 +131,7 @@ Indent additional context under the task line. Operon renders the indent block a
 | `#{{PROJECT_A}}发行` | {{PROJECT_A}} BD, partnerships, delivery | **`03 Projects/{{PROJECT_A}}/Tasks.md`** |
 | `#{{PROJECT_A}}情报` | Competitive intel, GR, channel scans | **`03 Projects/{{PROJECT_A}}/Tasks.md`** |
 | `#{{PROJECT_A}}ai` | AI vendors / PoC inside {{PROJECT_A}} | **`03 Projects/{{PROJECT_A}}/Tasks.md`** |
-| `#3rd` | {{ORG_B}} M&A track | **`03 Projects/{{ORG_B}}/Tasks.md`** |
+| `#{{ORG_B}}` | {{ORG_B}} M&A track | **`03 Projects/{{ORG_B}}/Tasks.md`** |
 | `#aix` | {{ORG_B}} AIX vendor / solution | **`03 Projects/{{ORG_B}}/Tasks.md`** |
 | `#nonsense` | Low-stakes admin / comms replies | **`06 Tasks/Personal.md`** |
 
@@ -284,7 +284,7 @@ Production filterSets (provisioned 2026-05-21 PM for daily-note overhaul):
 |---|---|---|
 | `/task-capture` | Canonical workflow — decomposition, chain naming, routing, Operon syntax | Reference for ALL task writes |
 | `/inbox-process` | Triage Inbox.md → project surfaces; reschedule overdue | Honors closure / reschedule rules |
-| `/meeting-note` · `/meeting-note-deep` | Surface RG-owned action items as tasks | Delegate to `/task-capture` |
+| `/meeting-note` · `/meeting-note-deep` | Surface {{USER_NAME}}-owned action items as tasks | Delegate to `/task-capture` |
 | `/new-project` | Seed initial project surface | Includes Operon-aware Tasks.md scaffold |
 | `/okr` | Surface check-in commitments as tasks | Delegate to `/task-capture` |
 | `/source-ingest` | Atomic todos discovered during ingest | Delegate to `/task-capture` |

@@ -19,7 +19,7 @@ This agent exists because of the M.10 incident (2026-05-20 沪差0519): four BD 
 
 ## Mandatory reading order
 
-1. **Read** `{{VAULT_ROOT}}/.claude/agents/rubrics/bd-prospect-rubric.md` — this is your rubric, your only authority for what passes
+1. **Read** `D:/Administrator/Documents/{{USER_NAME}}/.claude/agents/rubrics/bd-prospect-rubric.md` — this is your rubric, your only authority for what passes
 2. **Read** the brief artifact passed to you (path OR inline content)
 3. **DO NOT read** the bd-prospect-researcher.md agent body — that's the producer's instructions, not your concern
 4. **DO NOT read** any conversation transcript or producer scratchpad

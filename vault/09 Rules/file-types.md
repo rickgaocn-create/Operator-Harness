@@ -19,7 +19,7 @@ scope: cross-cutting
 | `2026-Q{n}` | Time (04) | 12-week anchor | `2026-Q2.md` |
 | `2026-W{nn}` | Time (04) | Weekly cascade | `2026-W17.md` |
 | `2026-MM-DD` | Time (04) | Daily log | `2026-04-27.md` |
-| `(C) ` | Any | AI-generated (Claude provenance overlay) | `(C) {{FUND}} 基金投资建议书.md` |
+| `(C) ` | Any | AI-generated (Claude provenance overlay) | `(C) {{ORG_D}} 基金投资建议书.md` |
 
 The framework prefixes (`C-`, `T-`) declare *file type*. The `(C) ` prefix declares *authorship*. They can coexist when needed (rare — most framework-typed files {{USER_NAME}} drives himself).
 
@@ -69,7 +69,7 @@ Tags ≠ Links. Tags categorize; links create the graph. Default to links; use t
 |---|---|---|
 | **`00 Raw/`** | (governed by `raw-immutable.md`; out of scope for this rule) | — |
 | **`01 Wiki/`** | `index.md` (master index) | requires entity folder · always propose, never auto-route |
-| **`02 Cards/`** | `_index.base`, `_adr.base`, `(C) README.md`, `_card-lint-log.md` | `_inbox/` (no domain frontmatter) · domain folder (`{{PROJECT_A}}` / `3rd-Inc` / `cross-border` / `ops` / `meta` / `instincts`) by frontmatter |
+| **`02 Cards/`** | `_index.base`, `_adr.base`, `(C) README.md`, `_card-lint-log.md` | `_inbox/` (no domain frontmatter) · domain folder (`{{PROJECT_A}}` / `{{ORG_B}}-Inc` / `cross-border` / `ops` / `meta` / `instincts`) by frontmatter |
 | **`03 Projects/`** | (none — content under project subfolder) | requires project assignment · always propose, never auto-route |
 | **`04 Notes/`** | (none — content lives in subfolders) | by prefix: `2026-Q*` → `12-week/` · `2026-W*` → `weekly/` · `YYYY-MM-DD` → `daily notes/` · generated system/infra/architecture/log → `_system/` · external intel / research → `Research/` · meeting transcripts → `Session Logs/` · auto-generated reports → `auto-reports/` |
 | **`06 Tasks/`** | `Today.md`, `Personal.md`, `Inbox.md` (closed fixed-surface set) | no strays expected — any other file is anomaly, propose for triage |
@@ -115,7 +115,7 @@ GOALS.md ──→ 04 Notes/12-week/2026-Q2.md
 
 - **ISO dates only.** `YYYY-MM-DD` in frontmatter, `YYMMDD` in file prefixes. Never `MM/DD/YYYY`.
 - **Lowercase kebab-case for slugs.** `jp-board-reads-memos-backward`, not `JP_Board_Reads_Memos_Backward`.
-- **Bilingual where natural.** CN for {{PROJECT_A}} / 3rd execution context, JP for Tokyo board outputs, EN for cross-border / framework / meta. Don't mix in one file without reason.
+- **Bilingual where natural.** CN for {{PROJECT_A}} / {{ORG_B}} execution context, JP for Tokyo board outputs, EN for cross-border / framework / meta. Don't mix in one file without reason.
 - **Provenance is sacred.** Task Collector owns completion stamps (`✅ YYYY-MM-DD`) — Claude doesn't fabricate them. Legacy TickTickSync metadata (`%%[ticktick_id::]%%`, `[link](...)`) in old task lines is inert post-Operon-migration; leave it (stripping risks the line's `{{operonId}}` / structure) — never hand-edit task-line internals.
 
 ## Version Log Convention (F4 codify · 2026-05-13)
@@ -139,7 +139,7 @@ GOALS.md ──→ 04 Notes/12-week/2026-Q2.md
 | v1 | 2026-05-13 | 初版（行程 5/19-21） |
 | v2 | 2026-05-13 | 行程调整 5/18-20 |
 | v3 | 2026-05-13 | TapTap 5/18 15:00 锁定 + 47 锁 |
-| v4 | 2026-05-14 | 钟馨 14:00 全口径锁 |
+| v4 | 2026-05-14 | {{PERSON_5}} 14:00 全口径锁 |
 ```
 
 ### Hard Rules

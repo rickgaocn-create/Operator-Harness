@@ -6,7 +6,7 @@
 # --append launch keeps hooks + CLAUDE.md (only --bare skips those).
 #
 # Activate: add this line to your PowerShell $PROFILE, then open a new shell —
-#   . "{{VAULT_ROOT}}\.claude\contexts\modes.ps1"
+#   . "D:\Administrator\Documents\{{USER_NAME}}\.claude\contexts\modes.ps1"
 #
 # Usage:  claude-bd            # interactive Claude, BD lens appended
 #         claude-research

@@ -64,7 +64,7 @@ horizon: active                # 12week | active | maybe | archive
 okr-link: "[[2026-Q2#KR2]]"    # required if horizon = 12week
 status: open                   # open | blocked | done
 owner: {{USER_NAME}}                      # {{USER_NAME}} / external counterparty
-next-action: "Send brief to 诸葛 EOD"
+next-action: "Send brief to {{PERSON}} EOD"
 ---
 ```
 
@@ -82,19 +82,21 @@ Background. Why this exists. What sparked it.
 <!-- Danmaku / rolling capture. Newest at top. Date-stamped. -->
 
 ### 2026-04-27
-- Brief drafted, sent to 诸葛
+- Brief drafted, sent to {{PERSON}}
 - Pre-eval meeting locked for 4-28 14:00
 
 ### 2026-04-26
-- 王鑫 confirmed second round of interest, wants commercials by 4-30
+- {{PERSON_3}} confirmed second round of interest, wants commercials by 4-30
 
 ## Decisions
+<!-- Workstream-internal, tactical decisions only. Strategic / forwardable / cross-workstream / irreversible calls
+     get a standalone file in 05 Decisions/ (see [[09 Rules/decisions.md]] § Boundary) — link to it here, don't copy. -->
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-04-25 | Skip 鸿蒙 channel first | Honor + Huawei separation reduces overlap |
 
 ## Blockers / Open Questions
-- [ ] What's 诸葛's authority ceiling on rev share?
+- [ ] What's {{PERSON}}'s authority ceiling on rev share?
 
 ## Linked Cards
 - [[C260424-honor-channel-fills-android-gap-not-harmonyos]]
@@ -143,7 +145,7 @@ Pick a stable, compact label (2–6 chars CN, or kebab-case EN). Once declared, 
 Per [[09 Rules/tasks.md]] task line format:
 ```
 - [ ] 荣耀二轮 | 分成议价底线 内部 alignment #{{PROJECT_A}}发行 🔼 📅 2026-04-28
-- [ ] 荣耀二轮 | commercial frame draft 给王鑫 #{{PROJECT_A}}发行 ⏫ 📅 2026-04-30
+- [ ] 荣耀二轮 | commercial frame draft 给{{PERSON_3}} #{{PROJECT_A}}发行 ⏫ 📅 2026-04-30
 ```
 
 The `荣耀二轮` prefix = `chain-anchor` from the Action file. This is the binding contract.

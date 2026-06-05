@@ -17,7 +17,7 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F3"
 
 > 给上级 / 决策者请示的**1-page** 汇报文档。决策点 + 阵容 + 风险 + 自承诺。
 >
-> **Mechanism = platform** (this file). **Audience roster = instance** — who you brief upward + their reporting preferences live in [[09 Rules/_instance/internal-briefing]]. Names below (诸葛 / 何宗寰 / 路奇) are illustrative; the authoritative roster is the instance config.
+> **Mechanism = platform** (this file). **Audience roster = instance** — who you brief upward + their reporting preferences live in [[09 Rules/_instance/internal-briefing]]. Names below ({{PERSON}} / 何宗寰 / 路奇) are illustrative; the authoritative roster is the instance config.
 
 ## 适用范围
 
@@ -39,11 +39,11 @@ audit-trace: "[[(C) 格式 audit-2026-05-13-EOD.md]] § F3"
 ```
 
 - `{chain-anchor}` = 关联的 workstream anchor（如 `沪差0518` / `蜜雪联动`）
-- `{对象}` = 主送人称呼（如 `诸葛` / `何宗寰` / `路奇`）
+- `{对象}` = 主送人称呼（如 `{{PERSON}}` / `何宗寰` / `路奇`）
 
 **Examples:**
-- `(C) 沪差0518 内部汇报-诸葛.md` ✅
-- `(C) 蜜雪联动 内部汇报-诸葛.md` ✅
+- `(C) 沪差0518 内部汇报-{{PERSON}}.md` ✅
+- `(C) 蜜雪联动 内部汇报-{{PERSON}}.md` ✅
 - `(C) 出差汇报.md` ❌ — 模糊，不知道哪个 trip / 谁
 
 ## Frontmatter Contract

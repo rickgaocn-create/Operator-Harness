@@ -60,7 +60,8 @@ Build a routing table: `thread → existing workstream (append) | no home (candi
 **Phase 6 — Propose execution plan → REVIEW GATE.** Enumerate exactly what will be written/appended (which Streams, which new files, which tasks, which cards). Await go-ahead; accept per-item vetoes.
 
 **Phase 7 — Execute.**
-- **Action Streams** — append date-stamped, newest-at-top, per `[[09 Rules/action.md]]`; update Decisions/Blockers where the dump changes them.
+- **Action Streams** — append date-stamped, newest-at-top, per `[[09 Rules/action.md]]`; update Decisions/Blockers where the dump changes them. Keep these *tactical* (workstream-internal).
+- **Decisions** — if the dump surfaces a *strategic / standalone / cross-workstream* {{USER_NAME}}-owned call, route a file to `05 Decisions/` per `[[09 Rules/decisions.md]]` (≤3 per surface, confirm first); link it from the Action `## Decisions` table rather than copying. Tactical workstream calls stay in the Action table.
 - **New Action files** — propose then write (never auto-create); `11 12-Week/` if OKR-tied (else `12 Active/`); declare an immutable `chain-anchor`.
 - **Tasks** — hand to `/task-capture` (≤3 per surface, bound to the workstream's `chain-anchor`).
 - **Cards** — draft to `02 Cards/_inbox/` per `[[09 Rules/cards.md]]`, `status: draft`, `source-note: "[[<dump>]]"`. **Dedup** against harvest-candidates already parked in the matched Action files — cross-link, don't double-write.

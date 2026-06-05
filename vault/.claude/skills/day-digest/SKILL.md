@@ -26,7 +26,7 @@ EOD 反刍 job. 读 today's daily note + 14 data sources → 输出 4 段 AI-Che
 - 用 {{USER_NAME}} 已认证的 Max account，不消耗 API credit
 - 用户在线 → quality 可以现场调 (Phase 7 confirm 看 highlights)
 
-**Autonomous path (DEFERRED)**: Windows Task `RG-day-digest` 23:00 daily
+**Autonomous path (DEFERRED)**: Windows Task `{{USER_NAME}}-day-digest` 23:00 daily
 - 已建 setup_schedule.ps1 但 unregistered（API credit 不足）
 - 未来 if API budget OR Claude Code Max auth 可用于 unattended subprocess → revive
 - Setup scripts 保留在 **`.claude/skills/day-digest/scripts/`** 作 future reference
@@ -35,7 +35,7 @@ EOD 反刍 job. 读 today's daily note + 14 data sources → 输出 4 段 AI-Che
 
 - `/day-digest` / `/day-digest --autonomous` 显式触发
 - "咀嚼今天" / "反刍今天" / "看看今天" / "做今日 digest"
-- Windows Task `RG-day-digest` 23:00 daily 自动触发（autonomous mode）
+- Windows Task `{{USER_NAME}}-day-digest` 23:00 daily 自动触发（autonomous mode）
 
 **Don't use for:**
 - New daily note 创建 → `/daily-note`（interactive）or `/daily-emit`（autonomous 08:00）
@@ -81,6 +81,8 @@ per [[09 Rules/digest-job.md]] § Data Sources：
 12. Today modified wikis: find **`01 Wiki/**/*.md`** newer than yesterday
 13. Active trip bundle: grep **`03 Projects/*/03 行程计划/*.md`** for `trip-date` 含 today
 14. `_decisions.md` recent entries + today's WeChat ingest digest (if exists)
+15. Decisions due for review: **`05 Decisions/*.md`** with frontmatter `review_on` ≤ today (per [[09 Rules/decisions.md]]) → feeds tomorrow-seed § 🤖 Pending Decisions
+16. CRM follow-ups: **`01 Wiki/People/`** notes with `crm: true` where `next_followup` ≤ today OR `(today − last_contact) > cadence` (per [[09 Rules/crm.md]]) → feeds tomorrow-seed § 🤖 Pending Decisions
 
 Build internal map: `{source → relevant signals}`. Use as scaffolding for chew sections.
 
@@ -123,6 +125,8 @@ For each hit, classify by `{{priority:: <0|1|2|3|4|5|/>}}` and `{{status:: Proje
 - 3-5 candidates，按 promote value 排序
 - 每个含: trigger + action + confidence + propose-path（Card / Rule / Skill / SOP）
 - **✅ Work SOP 候选优先**（"evening surge squeezes outreach"），**❌ NOT vault rules**
+
+> 到期决策（`05 Decisions/` `review_on` ≤ today）+ CRM follow-ups due / 逾期 cadence → **不进 chew 4 段**，写入 tomorrow-seed § 🤖 Pending Decisions / Open Threads（见 Phase 4 + [[09 Rules/tomorrow-seed.md]]）。chew 段维持 4 段 contract（[[09 Rules/digest-job.md]]）。
 
 ### Phase 3 — Write Deliverable A (4 段到 today's daily note)
 

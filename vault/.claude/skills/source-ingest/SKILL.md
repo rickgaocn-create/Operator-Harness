@@ -93,7 +93,7 @@ Before claim extraction, warm the related-card cache so Phase 3 (Search related 
 
 **What to load:**
 
-1. Infer domain from source path or content cues (`{{PROJECT_A}}` / `3rd-Inc` / `cross-border` / `ops` / `meta`)
+1. Infer domain from source path or content cues (`{{PROJECT_A}}` / `{{ORG_B}}-Inc` / `cross-border` / `ops` / `meta`)
 2. Glob **`02 Cards/{domain}/**/*.md`** — most-recent 10 by mtime
 3. Read **frontmatter + first headline only** (skip body) — keeps context budget tight
 4. Note tags + status + linked-card array per card — these drive Phase 3 + Phase 5
@@ -126,7 +126,7 @@ Output candidates as a numbered list:
 
 > Found N candidate Cards from `[source]`:
 >
-> 1. **{slug-headline}** — {one-line claim}. Domain: {{{PROJECT_A}} | 3rd-Inc | cross-border | ops | meta}.
+> 1. **{slug-headline}** — {one-line claim}. Domain: {{{PROJECT_A}} | {{ORG_B}}-Inc | cross-border | ops | meta}.
 > 2. **{slug-headline}** — {one-line claim}. Domain: {…}.
 >
 > Plus M items that look like external facts → propose **`01 Wiki/`** instead (see Phase 2.5 dedup before naming targets).
@@ -139,7 +139,7 @@ Wait for user signal before drafting.
 
 ## Phase 2.5: Vault Sanity Sweep (Wiki Dedup)
 
-> **Why this phase exists:** 2026-05-13 incident — 4 entity entries ({{ORG_A}} / TapTap / 4399 / Bilibili) were written to **`01 Wiki/<name>.md**` at flat root while canonical entries already existed at `**01 Wiki/{{PROJECT_A}}/<category>/<name>.md`**. Caused graph duplication, ambiguous wikilink resolution, manual reconciliation. This phase prevents recurrence.
+> **Why this phase exists:** 2026-05-13 incident — 4 entity entries (诗悦 / TapTap / 4399 / Bilibili) were written to **`01 Wiki/<name>.md**` at flat root while canonical entries already existed at `**01 Wiki/{{PROJECT_A}}/<category>/<name>.md`**. Caused graph duplication, ambiguous wikilink resolution, manual reconciliation. This phase prevents recurrence.
 
 Run **only for the wiki-bound items** identified in Phase 2 (Cards have date-prefix naming so don't collide). Do NOT skip — silent duplicates are worse than friction at write time.
 
@@ -452,7 +452,7 @@ Drop a micro-pattern observation (trigger + action) to **`02 Cards/instincts/I{d
 从用户语句或对话上下文抽取：
 - **trigger**: "when {condition}" — 1 行
 - **action**: "{do this}" — 1 行
-- **domain**: vault | {{PROJECT_A}} | 3rd-Inc | cross-border | ops | meta（推断；不确定时 ask 1 行 "属于哪个 domain？"）
+- **domain**: vault | {{PROJECT_A}} | {{ORG_B}}-Inc | cross-border | ops | meta（推断；不确定时 ask 1 行 "属于哪个 domain？"）
 
 ⚠️ **NEVER use AskUserQuestion** — plain text 单行 ask, 等回复。
 

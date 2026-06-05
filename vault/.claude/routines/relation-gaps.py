@@ -23,7 +23,7 @@ project doc points at it, while a fresh cluster nothing-outside references stays
 
 NEVER edits vault content (writes only its report + autonomous log) — per
 09 Rules/autonomous-routines.md, routines are detectors, not actors. Cross-lane
-candidates ({{PROJECT_A}} ↔ 3rd/米飞/{{FUND}}) are dropped by construction.
+candidates ({{PROJECT_A}} ↔ {{ORG_B}}/{{ORG_A}}/{{ORG_D}}) are dropped by construction.
 
 Schedule: weekly (Sun) via Windows Task Scheduler + after a source-ingest bulk import.
 DRY_RUN default = notify-only (Feishu, edge-triggered on rising under-connected count).
@@ -52,7 +52,7 @@ KB_SOURCE_DIRS = ("02 Cards", "03 Projects")  # count inbound from these too (du
 
 EXCLUDE_DIR_PARTS = {"_原始转录", "9-Templates", "_archive", "_templates", ".obsidian", "attachments"}
 EXCLUDE_NAMES = {"index.md"}
-PROJECT_LANES = {"wangyue", "3rd", "mifei", "denmu"}  # cross-lane links hard-blocked
+PROJECT_LANES = {"wangyue", "{{ORG_B}}", "mifei", "denmu"}  # cross-lane links hard-blocked
 
 WIKILINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
 _RANK = {"high": 3, "med": 2, "low": 1}
@@ -64,11 +64,11 @@ def _conf_rank(c: str) -> int:
 
 def lane_of(rel: str) -> str:
     p = rel.replace("\\", "/")
-    if re.search(r"(^|/)3rd", p) or "{{ORG_B}}" in p or "{{ORG_B}}" in p:
-        return "3rd"
-    if "米飞" in p:
+    if re.search(r"(^|/){{ORG_B}}", p) or "{{ORG_B}}" in p or "{{ORG_B}}, Inc" in p:
+        return "{{ORG_B}}"
+    if "{{ORG_A}}" in p:
         return "mifei"
-    if "{{FUND}}" in p:
+    if "{{ORG_D}}" in p:
         return "denmu"
     if "/{{PROJECT_A}}/" in p or p.startswith("{{PROJECT_A}}/"):
         return "wangyue"
@@ -125,7 +125,7 @@ def parse_frontmatter(text: str) -> dict:
 
 
 def core_person_name(basename: str):
-    """'李响 (TapTap)' → '李响' so a body mention of just the name still matches."""
+    """'{{PERSON_4}} (TapTap)' → '{{PERSON_4}}' so a body mention of just the name still matches."""
     m = re.match(r"^(.+?)\s*[（(]", basename)
     if m:
         c = m.group(1).strip()

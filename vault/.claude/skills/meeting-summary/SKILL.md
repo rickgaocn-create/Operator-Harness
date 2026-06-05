@@ -22,7 +22,7 @@ Turn 2+ source meeting notes into a structured forwardable summary. **This skill
 ## When to Use
 
 - ≥2 source meeting notes covering the same topic / counterparty class / trip / week
-- Output is meant to be forwarded to 诸葛 / 主创 / 上级 (decision-grade)
+- Output is meant to be forwarded to {{PERSON}} / 主创 / 上级 (decision-grade)
 - User says "汇总这几场" / "拼一下" / "把 N 篇拼成一篇" / "整理本周供应商对接" / "做个反馈与待办汇总"
 
 **Do NOT use** for single meetings — those go to `/meeting-note` (with or without `--deep`).
@@ -47,7 +47,7 @@ From user's request + the source files:
 - **Source meeting notes**: list of files (Glob if user says "本周供应商对接" rather than naming them)
 - **Date range**: from source frontmatter
 - **Counterparties involved**: from each source's `counterparty:` field
-- **Audience**: internal sync / 诸葛 / 主创 / 董事 / 跨组织
+- **Audience**: internal sync / {{PERSON}} / 主创 / 董事 / 跨组织
 - **Output filename**: `YYYY-MM-DD-<chain-anchor>-反馈与待办汇总.md`
 
 Save to **`03 Projects/{{PROJECT_A}}/04 会议纪要/`** (or appropriate project track per [[09 Rules/file-types.md]]).
@@ -172,7 +172,7 @@ covers:
   - "[[<源 1>]]"
   - "[[<源 2>]]"
 status: completed
-audience: <internal | 诸葛 | 主创 | 上级 | 跨组织>
+audience: <internal | {{PERSON}} | 主创 | 上级 | 跨组织>
 shareable-title: <标题>
 
 source_anchors:
@@ -213,7 +213,7 @@ last-updated: YYYY-MM-DD
 
 ### Phase F: High-Stakes 标注（[[09 Rules/attribution-discipline.md]] § 7）
 
-若 `audience` 含 `上级 / 诸葛 / 主创 / 董事 / 跨组织`：
+若 `audience` 含 `上级 / {{PERSON}} / 主创 / 董事 / 跨组织`：
 
 在文档开头（标题下方）加：
 

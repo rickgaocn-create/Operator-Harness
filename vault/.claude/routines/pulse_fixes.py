@@ -35,8 +35,8 @@ AUTOFIX_LOG = STATE / "pulse-autofix-log.jsonl"
 
 # Windows scheduled task names (verified via `schtasks /Query` 2026-05-28).
 TASK_FEISHU_CONSUMER = "feishu-event-consumer-daemon"
-TASK_TIER7_DRIVER = "RG-tier7-inbox-drift"
-TASK_VAULT_EVOLVE_SIGNAL = "RG-signal-vault-evolve"
+TASK_TIER7_DRIVER = "{{USER_NAME}}-tier7-inbox-drift"
+TASK_VAULT_EVOLVE_SIGNAL = "{{USER_NAME}}-signal-vault-evolve"
 
 # How long the auto path waits before re-queuing a judgment-extraction signal for a
 # debt that's still standing (see fix_learning_loop_debt).

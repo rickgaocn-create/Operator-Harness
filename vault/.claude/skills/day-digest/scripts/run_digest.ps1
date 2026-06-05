@@ -1,11 +1,11 @@
 # run_digest.ps1 — invoke Claude Code in autonomous mode to run /day-digest
-# Called by Windows Task `RG-day-digest` daily at 23:00.
+# Called by Windows Task `{{USER_NAME}}-day-digest` daily at 23:00.
 # Manual run:
 #   powershell -ExecutionPolicy Bypass -File "<vault>\.claude\skills\day-digest\scripts\run_digest.ps1"
 
 $ErrorActionPreference = 'Stop'
 
-$vaultRoot = '{{VAULT_ROOT}}'
+$vaultRoot = 'D:\Administrator\Documents\{{USER_NAME}}'
 $claudeExe = '{{USER_HOME}}\.local\bin\claude.exe'
 $logDir    = "$vaultRoot\04 Notes\vault-evolve"
 $today     = (Get-Date).ToString('yyyy-MM-dd')

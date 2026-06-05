@@ -189,7 +189,7 @@ If no: skip. Don't push.
 
 Generate a structured biweekly progress report by mining the past 14 days of Daily memos, cross-referencing the current OKR Tracker, diffing against the previous biweekly report, and surfacing gaps + suggestions before writing.
 
-Default scope: **{{PROJECT_A}}商务条线**. Other tracks ({{ORG_B}}, AIX) follow the same flow with the project-scoped OKR file swapped in.
+Default scope: **《{{PROJECT_A}}》商务条线**. Other tracks ({{ORG_B}}, AIX) follow the same flow with the project-scoped OKR file swapped in.
 
 ### When to Use (biweekly)
 
@@ -297,11 +297,11 @@ tags: [{{PROJECT_A}}, BD, 双周报, YYYY-Q#]
 project: {{PROJECT_A}}
 period: YYYY-W##-W##
 date_range: YYYY-MM-DD → YYYY-MM-DD
-owner: {{USER_NAME}}
+owner: 高培尧
 created: YYYY-MM-DD
 ---
 
-# {{PROJECT_A}}商务条线 · 双周报 · YYYY-W##
+# 《{{PROJECT_A}}》商务条线 · 双周报 · YYYY-W##
 
 > **周期：** YYYY-MM-DD → YYYY-MM-DD · **节点：** [距下个硬节点 ≈X 周]
 

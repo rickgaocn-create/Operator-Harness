@@ -31,7 +31,7 @@ When these disagree, prefer live task/status state for action, daily note for da
 
 ## Reasoning Budget
 
-Use heavier reasoning on planning and verification, then keep execution simple once the plan is locked. If implementation starts looping, pause, test, or step back before another edit.
+Reason as hard as the task needs at every stage — planning, execution, and verification alike; don't downshift judgment just because you've moved from planning to doing. The discipline isn't "think less while executing," it's "don't *thrash*": if implementation starts looping, pause, test, or step back before another edit.
 
 ## Lifecycle Buckets
 
@@ -57,7 +57,7 @@ Use heavier reasoning on planning and verification, then keep execution simple o
 - Do not force {{USER_NAME}} back into the daily note unless he is editing or closing the ledger.
 - Prefer dashboard summaries over daily-note internals; the daily note may carry long structured ingest logs.
 
-**Confidential lanes:** confidential personal tracks may be surfaced to {{USER_NAME}} privately, but never mixed into audience-facing {{PROJECT_A}} / 3rd outputs.
+**Confidential lanes:** confidential personal tracks may be surfaced to {{USER_NAME}} privately, but never mixed into audience-facing {{PROJECT_A}} / {{ORG_B}} outputs.
 
 ### 2. Process this
 
@@ -76,7 +76,7 @@ Use heavier reasoning on planning and verification, then keep execution simple o
 - Preserve source text and attribution boundaries.
 - Dashboard captures marked ready should be consumed by `/capture-process`; `/operate` may summarize the queue but should not duplicate the consumer.
 
-**Confidential lanes:** detect if the content touches {{FUND}} Lane B or other isolated tracks before routing into shared project surfaces.
+**Confidential lanes:** detect if the content touches {{ORG_D}} Lane B or other isolated tracks before routing into shared project surfaces.
 
 ### 3. Make this forwardable
 

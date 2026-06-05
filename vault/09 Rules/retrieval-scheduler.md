@@ -27,7 +27,7 @@ Stay on **T0+T1** for conversational, opinion, or anything answerable from core 
 
 1. the query names an **entity not in T0/T1** → grep/semantic-search first (the existing **grep-before-guess** rule, [[02 Cards/meta/C260508-vault-first-before-guessing-entity]])
 2. it asks for **specifics / numbers / literal quotes** (grounding required — no paraphrase from memory)
-3. it's an **own-work factual** question ({{PROJECT_A}} / {{ORG_A}} / 3rd) → **vault-first** (consult `00 Raw` + Cards/Wiki before answering or web)
+3. it's an **own-work factual** question ({{PROJECT_A}} / 诗悦 / {{ORG_B}}) → **vault-first** (consult `00 Raw` + Cards/Wiki before answering or web)
 4. it spans **>1 domain**, or the T1 answer would be **a guess**
 
 ## Hard rules

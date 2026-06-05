@@ -9,7 +9,7 @@ status: v0.1 (从单一参考样本反推 · 后续可叠加更多样本精修)
 
 # {{PROJECT_A}} PPT 品牌样式分析 v0.1
 
-> **来源**：2026-05-15 新版{{PROJECT_A}}介绍书（[[99 Attachments/Files/产品介绍示意(2).pptx]]，21 张，企业微信 cache 抓取）
+> **来源**：2026-05-15 新版《{{PROJECT_A}}》介绍书（[[99 Attachments/Files/产品介绍示意(2).pptx]]，21 张，企业微信 cache 抓取）
 >
 > **目的**：作为 `/wangyue-pitch-deck` skill 的样式 ground truth，反推 BD 提案 PPT 应有的品牌调性 + 结构 + 元素库。
 

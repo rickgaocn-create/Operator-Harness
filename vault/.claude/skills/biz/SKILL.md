@@ -92,7 +92,7 @@ Examples:
 - 量化 with 据 / 据 X 称 / 经 X 验证 prefix when referencing claims
 - Section headers in noun-phrase form: "前置风险" not "几条真实风险"
 
-**File-name byline ("By: {{USER_NAME}}") is the ONLY first-person reference allowed** in the document body. Everything below that is third-person objective.
+**File-name byline ("By: 高培尧") is the ONLY first-person reference allowed** in the document body. Everything below that is third-person objective.
 
 ### Register C — 总体判断 / 执行摘要 voice (项目组成员综合印象，2026-04-30 加入)
 
@@ -371,7 +371,7 @@ created-by: claude
 
 # 业务评估：[Artifact Name]
 
-**By:** {{USER_NAME}} · **Date:** YYYY-MM-DD
+**By:** 高培尧 · **Date:** YYYY-MM-DD
 **Source:** [[path/to/source.md]]
 **Lens:** Head of [X] · Head of [Y]
 **OKR Anchor:** [[(C) Q[n] OKR Tracker]] § O[#]

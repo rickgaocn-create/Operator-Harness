@@ -1,16 +1,16 @@
-# setup_schedule.ps1 — register `RG-card-lint` as weekly Sunday 23:30 Windows Task
+# setup_schedule.ps1 — register `{{USER_NAME}}-card-lint` as weekly Sunday 23:30 Windows Task
 # Idempotent: re-running updates trigger/action.
 #
 # Install:
 #   powershell -ExecutionPolicy Bypass -File ".claude\skills\card-lint\scripts\setup_schedule.ps1"
 #
 # Uninstall:
-#   Unregister-ScheduledTask -TaskName 'RG-card-lint' -Confirm:$false
+#   Unregister-ScheduledTask -TaskName '{{USER_NAME}}-card-lint' -Confirm:$false
 
 $ErrorActionPreference = 'Stop'
 
-$taskName = 'RG-card-lint'
-$script   = '{{VAULT_ROOT}}\.claude\skills\card-lint\scripts\run_card_lint.ps1'
+$taskName = '{{USER_NAME}}-card-lint'
+$script   = 'D:\Administrator\Documents\{{USER_NAME}}\.claude\skills\card-lint\scripts\run_card_lint.ps1'
 
 if (-not (Test-Path $script)) { throw "Script not found at $script" }
 
@@ -46,4 +46,4 @@ Register-ScheduledTask `
 Write-Host "Registered scheduled task: $taskName"
 Write-Host "  next run: weekly Sunday 23:30"
 Write-Host "  wrapper:  $wrapper"
-Write-Host "  log dir:  {{VAULT_ROOT}}\04 Notes\vault-evolve\"
+Write-Host "  log dir:  D:\Administrator\Documents\{{USER_NAME}}\04 Notes\vault-evolve\"

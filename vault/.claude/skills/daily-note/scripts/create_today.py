@@ -3,7 +3,7 @@
 Creates 04 Notes/daily notes/{YYYY-MM-DD}.md from the daily-note skill's canonical
 template if missing. Safe to run multiple times per day — never overwrites.
 
-Intended use: Windows Task Scheduler weekday 09:00 trigger (RG-daily-note-create).
+Intended use: Windows Task Scheduler weekday 09:00 trigger ({{USER_NAME}}-daily-note-create).
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-VAULT = Path(r"{{VAULT_ROOT}}")
+VAULT = Path(r"D:\Administrator\Documents\{{USER_NAME}}")
 DAILY_DIR = VAULT / "04 Notes" / "daily notes"
 WEEKLY_DIR = VAULT / "04 Notes" / "weekly"
 
@@ -90,7 +90,7 @@ actions-touched: []
 
 ## Active Tracks
 
-### {{PROJECT_A}}— `03 Projects/{{PROJECT_A}}/`
+### 《{{PROJECT_A}}》— `03 Projects/{{PROJECT_A}}/`
 - **Today:**
 
 ### {{ORG_B}} — `03 Projects/{{ORG_B}}/`

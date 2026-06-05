@@ -66,7 +66,7 @@ Present clusters:
 - **Never toggle `- [ ]` → `- [x]` without explicit user instruction.** Closure is a decision.
 - **Reschedule = edit the existing `{{dateDue:: YYYY-MM-DD}}` field in place + refresh `{{datetimeModified}}`.** Don't duplicate the task with a new date.
 - **Add a tag = edit the existing line in place.** Same reason.
-- **Triage = move to project Kanban** per [[09 Rules/tasks.md]] routing. Tagged tasks (`#{{PROJECT_A}}*` / `#3rd` / `#aix` / `#nonsense`) should leave `Inbox.md` and land in the appropriate Kanban file within the same triage pass. **Move preserves `{{operonId}}`** — never regenerate when relocating a task.
+- **Triage = move to project Kanban** per [[09 Rules/tasks.md]] routing. Tagged tasks (`#{{PROJECT_A}}*` / `#{{ORG_B}}` / `#aix` / `#nonsense`) should leave `Inbox.md` and land in the appropriate Kanban file within the same triage pass. **Move preserves `{{operonId}}`** — never regenerate when relocating a task.
 - **On move: update `{{status:: Project.<lane>}}`** to match the destination section + refresh `{{datetimeModified}}`.
 - **Don't fabricate** `{{dateCompleted:: YYYY-MM-DD}}` stamps. Operon/Task Collector owns those on `[x]` cycle.
 

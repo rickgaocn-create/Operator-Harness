@@ -2,7 +2,7 @@
 """
 Harness pulse — consolidated liveness heartbeat for the operator harness.
 
-Runs every ~3h (RG-tier7-harness-pulse). The reflex the harness was missing: it
+Runs every ~3h ({{USER_NAME}}-tier7-harness-pulse). The reflex the harness was missing: it
 consolidates signals that already exist but were scattered + pull-only —
 
   - channel liveness   (Discord daemon, Feishu consumer)  [mirror of check-channel-state.ps1]
@@ -48,6 +48,11 @@ JUDGMENT_QUEUE = STATE / "judgment-queue"
 CORRECTIONS = STATE / "corrections.jsonl"
 PROMOTION_PREDICTIONS = STATE / "promotion-predictions.jsonl"
 GRADER_VERDICTS = STATE / "grader-verdicts.jsonl"
+ADJUDICATOR_VERDICTS = STATE / "adjudicator-verdicts.json"   # cross-family jury verdict cache (read-only here)
+ADJUDICATOR_PY = VAULT / ".claude" / "_eval-fixtures" / "adjudicator.py"
+ADJ_REFRESH_THROTTLE_H = 20      # the billed cross-family jury runs at most ~once/day
+ADJ_REFRESH_MARKER = STATE / ".adjudicator-refresh.marker"
+ADJ_REFRESH_MARKER_TTL_MIN = 15  # don't re-dispatch while a refresh is plausibly still in flight
 LEARNING_DEBT_YELLOW_QUEUE = 5
 # RED is driven by candidate VOLUME or AGE — not raw queue-file count. A handful of
 # thin session files (the normal carry) is a yellow "worth a pass", not an emergency.
@@ -375,6 +380,7 @@ try:
     import harness_common as _H
     _TOKEN_STOP = set(_H.STOPWORDS)
 except Exception:
+    _H = None  # degraded mode: spine unavailable -> fall back to the local ≥2-token heuristic below
     _TOKEN_STOP = {"the", "a", "an", "to", "of", "and", "or", "as", "is", "it", "in",
                    "on", "for", "with", "that", "this", "be", "by", "our", "we", "not",
                    "but", "than", "then", "more", "less", "into", "from", "are", "was"}
@@ -409,8 +415,11 @@ def check_promotion_efficacy(findings: list) -> None:
       (b) open predictions whose trigger appears to have recurred in a NEW corrective
           entry since promotion → likely-ineffective → escalation candidate (the only
           honest trigger to move a soft rule toward a grader/gate).
-    Conservative match (≥2 shared significant tokens, correction dated after promotion)
-    so it under-flags rather than nags."""
+    Recurrence attribution is the SHARED spine matcher (H.recurrence_hits): class_key join PRIMARY,
+    Jaccard fallback only for untagged records — the SAME rule the adjudicator's L1 gold applies, so
+    a 'promotion-ineffective' flag here and an adjudicator 'recurred' verdict can never disagree. The
+    old ≥2-shared-token heuristic over-flagged on generic vocab ('only'/'without'/'artifact') and is
+    kept ONLY as a degraded-mode fallback for when the spine import fails (this is a live cron)."""
     preds = [p for p in _read_jsonl(PROMOTION_PREDICTIONS)
              if isinstance(p, dict) and p.get("verdict") is None and p.get("id")]
     if not preds:
@@ -427,20 +436,23 @@ def check_promotion_efficacy(findings: list) -> None:
                 due.append(pid)
         except Exception:
             pass
-        trig = p.get("trigger_signature") or {}
-        sig = _norm_tokens(f"{trig.get('value', '')} {p.get('forbidden_behavior', '')}")
-        if not sig:
-            continue
-        hits = 0
-        for c in corrections:
-            if c.get("polarity") == "positive":  # endorsements are not recurrences
+        if _H is not None:  # canonical path: the SAME class-key matcher the adjudicator uses
+            hits = len(_H.recurrence_hits(p, corrections).get("hits", []))
+        else:  # degraded mode (spine import failed): local ≥2-token heuristic, known to over-flag
+            trig = p.get("trigger_signature") or {}
+            sig = _norm_tokens(f"{trig.get('value', '')} {p.get('forbidden_behavior', '')}")
+            if not sig:
                 continue
-            cts = str(c.get("ts", ""))
-            if created and cts and cts <= created:  # recurrence must post-date the promotion
-                continue
-            ctext = f"{c.get('skill', '')} {c.get('artifact', '')} {c.get('why', '')} {c.get('candidate_rule', '')} {c.get('correction', '')}"
-            if len(sig & _norm_tokens(ctext)) >= 2:
-                hits += 1
+            hits = 0
+            for c in corrections:
+                if c.get("polarity") == "positive":  # endorsements are not recurrences
+                    continue
+                cts = str(c.get("ts", ""))
+                if created and cts and cts <= created:  # recurrence must post-date the promotion
+                    continue
+                ctext = f"{c.get('skill', '')} {c.get('artifact', '')} {c.get('why', '')} {c.get('candidate_rule', '')} {c.get('correction', '')}"
+                if len(sig & _norm_tokens(ctext)) >= 2:
+                    hits += 1
         if hits:
             ineffective.append((pid, hits))
     if due:
@@ -454,6 +466,71 @@ def check_promotion_efficacy(findings: list) -> None:
                          "msg": (f"{len(ineffective)} promoted rule(s) may be INEFFECTIVE — the forbidden behavior "
                                  f"recurred in new corrections since promotion ({tail}). Escalation candidate "
                                  "(soft→grader→gate); confirm the verdict in /vault-evolve.")})
+
+
+def _dispatch_adjudicator_refresh() -> None:
+    """Fire-and-forget a DETACHED `adjudicator --refresh-cache` so the billed, high-latency
+    cross-family jury never runs inside this synchronous reflex. A marker throttles re-dispatch so a
+    status-pull during an in-flight refresh can't trigger a second billed run. Best-effort: any
+    failure is logged, never raised (the per-check try/except in main() is the last backstop)."""
+    if not ADJUDICATOR_PY.exists():
+        return
+    try:
+        if ADJ_REFRESH_MARKER.exists():
+            mtime = datetime.fromtimestamp(ADJ_REFRESH_MARKER.stat().st_mtime, timezone.utc)
+            if (_now() - mtime).total_seconds() / 60.0 < ADJ_REFRESH_MARKER_TTL_MIN:
+                return  # a refresh was dispatched very recently — don't double-bill the jury
+        import subprocess
+        ADJ_REFRESH_MARKER.write_text(_now().isoformat(timespec="seconds"), encoding="utf-8")
+        subprocess.Popen([sys.executable, str(ADJUDICATOR_PY), "--refresh-cache"],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                         cwd=str(VAULT), close_fds=True)
+    except Exception as e:
+        log_event(ROUTINE, "info", f"adjudicator refresh dispatch skipped: {e}")
+
+
+def check_adjudicator_verdicts(findings: list) -> None:
+    """Fold the cross-family jury's verdict CANDIDATES into the brief WITHOUT making this every-3h
+    reflex pay for a billed, high-latency jury call. Reads the adjudicator's verdict cache (cheap);
+    when it's stale (> ~1 day) and predictions are open, fire-and-forget dispatches a DETACHED refresh
+    so the jury runs at most ~once/day and the NEXT pulse shows fresh verdicts. Never blocks on the
+    network; never writes a verdict (those stay human in /vault-evolve). A real RECURRED candidate is
+    the only thing here that raises severity; the verdict summary rides along as a green info line."""
+    open_preds = [p for p in _read_jsonl(PROMOTION_PREDICTIONS)
+                  if isinstance(p, dict) and p.get("verdict") is None and p.get("id")]
+    if not open_preds:
+        return
+    cache, age_h = {}, None
+    try:
+        if ADJUDICATOR_VERDICTS.exists():
+            cache = json.loads(ADJUDICATOR_VERDICTS.read_text(encoding="utf-8"))
+            t = _parse_ts(cache.get("ts"))
+            if t is not None:
+                age_h = (_now() - t).total_seconds() / 3600.0
+    except Exception:
+        cache, age_h = {}, None
+    if age_h is None or age_h > ADJ_REFRESH_THROTTLE_H:
+        _dispatch_adjudicator_refresh()
+    # Only verdicts for STILL-open predictions are actionable (a human-scored one drops out next refresh).
+    open_ids = {p["id"] for p in open_preds}
+    verdicts = [v for v in (cache.get("verdicts") or []) if v.get("id") in open_ids]
+    if not verdicts:
+        findings.append({"level": "green", "code": "adjudicator-cold",
+                         "msg": (f"{len(open_preds)} open promotion prediction(s); jury verdicts refreshing — "
+                                 "candidates will surface in the brief next pulse.")})
+        return
+    failed = [v for v in verdicts if v.get("bucket") == "failed"]
+    passed = [v for v in verdicts if v.get("bucket") == "passed"]
+    abst = [v for v in verdicts if v.get("bucket") == "abstain"]
+    asof = str(cache.get("ts", ""))[:10]
+    if failed:
+        ids = ", ".join(v["id"] for v in failed[:4])
+        findings.append({"level": "yellow", "code": "adjudicator-recurred",
+                         "msg": (f"cross-family jury flags {len(failed)} promotion(s) as RECURRED ({ids}) "
+                                 f"as of {asof} — confirm + escalate (soft→grader→gate) in /vault-evolve.")})
+    findings.append({"level": "green", "code": "adjudicator-verdicts",
+                     "msg": (f"jury verdict candidates (as of {asof}): {len(passed)} upheld / "
+                             f"{len(failed)} recurred / {len(abst)} abstain — score them in /vault-evolve.")})
 
 
 def check_obsidian_sensor(findings: list) -> None:
@@ -503,6 +580,7 @@ def main() -> int:
         lambda: check_bootstrap_drift(findings),
         lambda: check_learning_debt(findings),
         lambda: check_promotion_efficacy(findings),
+        lambda: check_adjudicator_verdicts(findings),
         lambda: check_error_rate(findings),
         lambda: check_obsidian_sensor(findings),
     )
@@ -559,7 +637,7 @@ def main() -> int:
     # SAFE-BY-DEFAULT: pulse_fixes side effects (task restarts, signal writes) are
     # gated on DRY_RUN — run_all_red() acts only when DRY_RUN=0. The default posture
     # (DRY_RUN unset) is detect+alert; recipes log "[DRY] would ...". Set DRY_RUN=0 on
-    # the RG-tier7-harness-pulse task to opt into unattended auto-fix.
+    # the {{USER_NAME}}-tier7-harness-pulse task to opt into unattended auto-fix.
     autofix_results: list = []
     if sev == "red" and not silent and os.environ.get("PULSE_AUTOFIX_OFF") != "1":
         try:
