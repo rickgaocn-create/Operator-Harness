@@ -147,6 +147,15 @@ def resolve_class_key(pred: dict):
     return ck
 
 
+def _safe_int(x):
+    """Coerce to int or None — a non-numeric class_key must not crash --assess-all (which would
+    silently blind the recurrence sensor the adjudicator + pulse depend on)."""
+    try:
+        return int(x)
+    except (TypeError, ValueError):
+        return None
+
+
 def recurrence_hits(pred: dict, corrections: list, match_thresh: float = 0.18) -> dict:
     """Corrections logged AFTER `pred` that are attributable to its behavior CLASS — i.e. evidence the
     forbidden behavior RECURRED. This is the ONE recurrence-attribution shared by the adjudicator
@@ -173,7 +182,8 @@ def recurrence_hits(pred: dict, corrections: list, match_thresh: float = 0.18) -
             c_ck, _ = classify_text_to_class(
                 str(c.get("correction", "")) + " " + str(c.get("why", "")) + " " + str(c.get("ai_output", "")))
         matched, how, ov = False, "", 0.0
-        if pred_ck is not None and c_ck is not None and int(pred_ck) == int(c_ck):
+        _pi, _cci = _safe_int(pred_ck), _safe_int(c_ck)
+        if _pi is not None and _pi == _cci:
             matched, how = True, f"class-key #{pred_ck}"
         else:
             ctoks = tokens(c.get("correction", "")) | tokens(c.get("why", "")) | tokens(c.get("ai_output", ""))

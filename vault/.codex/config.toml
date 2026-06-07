@@ -10,4 +10,4 @@ args = [
 ]
 
 [mcp_servers.smart-connections.env]
-OBSIDIAN_VAULT = "{{VAULT_ROOT}}"
+OBSIDIAN_VAULT = "D:/Administrator/Documents/{{USER_NAME}}"

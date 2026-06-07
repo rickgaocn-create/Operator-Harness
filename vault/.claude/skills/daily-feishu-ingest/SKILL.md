@@ -45,7 +45,7 @@ Appends to the templated `## Ingests` section:
 - 何宗寰（工作室）
 - 张茂威 / 罗逸 / 顾诗尧
 - {{PROJECT_A}} 项目群
-- 4 楼 美林 群
+- 4 楼 {{ORG_G}} 群
 - {{ORG_D}} / {{ORG_B}} 相关 chats
 
 ## Setup (already run during install)

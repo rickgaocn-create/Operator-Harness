@@ -429,11 +429,11 @@ User-optimized output, ratified W19. **Match this structure** when KRs hold mult
 
 **KR1 AI 切入点识别**
 1. 国内外头部 AI 游戏技术公司初筛完成
-2. 入选首选：超参数科技（原腾讯 AI 团队主体）
+2. 入选首选：{{ORG_F}}科技（原腾讯 AI 团队主体）
 3. 海外/同业候选 Pass — 资源置换路径不通 / 不可商务化
 
 **KR2 AI 合作方建联**
-1. 超参数科技 · 已建联 · 进入技术对齐
+1. {{ORG_F}}科技 · 已建联 · 进入技术对齐
    - 接受「深度共创案例 → 资源置换」模式
 ```
 

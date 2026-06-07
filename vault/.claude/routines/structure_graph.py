@@ -49,7 +49,7 @@ ORPHAN_IGNORE = {
 }
 NUM_PREFIX = re.compile(r"^(\d+)\s")
 # folder tokens inside a CLAUDE.md, e.g. `00 Prospects/` or "00 Prospects/"
-DOC_FOLDER = re.compile(r"`?(\d{2} [^\n`/|]+?)/")
+DOC_FOLDER = re.compile(r"`?(\d{2,} [^\n`/|]+?)/")
 STALE_MAP = re.compile(r"(?im)^#+\s*Folder Structure\b")
 
 

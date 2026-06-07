@@ -13,6 +13,7 @@ settings.local.json
 runtime.local.json
 config.json
 configs/rg-*.toml
+windows/wechat/config.ps1
 auth-qr.png
 auth.json
 

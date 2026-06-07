@@ -1,6 +1,6 @@
 ---
 type: rubric
-applies-to: BD prospect briefs for {{PROJECT_A}}
+applies-to: BD prospect briefs for 《{{PROJECT_A}}》
 grader: bd-prospect-grader
 producer: bd-prospect-researcher
 max-iterations: 3
@@ -19,7 +19,7 @@ max-iterations: 3
 | H3 | **资源底牌 mapping is bidirectional** | Names ≥2 of the 6 资源 types they NEED from {{PROJECT_A}}, AND the Conversion 目的 names what {{PROJECT_A}} NEEDS FROM THEM (concrete, not "合作") | Conversion 目的 = "我们能给品牌曝光" or any sentence describing what {{PROJECT_A}} OFFERS (giver/taker confusion) |
 | H4 | **建议邀请人 named** | Specific role + person at {{PROJECT_A}} side who should make the outreach, with reason for picking them | Missing 建议邀请人 OR generic (`{{PROJECT_A}} BD 团队`) |
 | H5 | **Citations on every factual claim** | Each fact (entity name, financial figure, recent PR, decision-maker) has a source URL or vault wikilink | Unsourced claims, especially decision-maker names |
-| H6 | **Cross-project isolation** | No {{ORG_B}} context, no JP M&A framing, no 跨境 references unless brand is explicitly cross-border (e.g., 小鹏 expanding to JP) | {{ORG_B}} / {{FUND}} mentioned in {{PROJECT_A}} BD brief |
+| H6 | **Cross-project isolation** | No {{ORG_B}} context, no JP M&A framing, no 跨境 references unless brand is explicitly cross-border (e.g., 小鹏 expanding to JP) | {{ORG_B}} / {{ORG_D}} mentioned in {{PROJECT_A}} BD brief |
 | H7 | **No fabricated entities** | If vault sweep + internal-archive + web all return nothing, the brief states this explicitly and recommends a research path | Inventing financials, made-up subsidiaries, or vague "industry data" without source |
 
 ## Soft checks (FAIL = nit; ≥3 nits OR any hard fail → NEEDS REVISION)

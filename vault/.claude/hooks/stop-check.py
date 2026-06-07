@@ -150,6 +150,36 @@ def afk_deliverable_check(transcript: str, files: list[str]) -> str | None:
             "Surface the deliverable — paste its content or give the exact file path — before finishing.")
 
 
+FORWARDABLE_MARKERS = ("会议纪要", "双周报", "biweekly")
+
+
+def biz_eval_check(files: list[str]) -> str | None:
+    """Block a saved forwardable artifact (deep meeting minute / biweekly) lacking a
+    business-eval marker — makes the /biz auto-chain a real gate, not prose (M.10).
+    Fail-safe: only this session's edits, only clearly-forwardable paths, never blocks
+    if frontmatter is unreadable or already marked completed/skip."""
+    pending = []
+    for rel in files:
+        if not rel.endswith(".md") or not any(m in rel for m in FORWARDABLE_MARKERS):
+            continue
+        try:
+            txt = (VAULT_ROOT / rel).read_text(encoding="utf-8", errors="replace")
+        except OSError:
+            continue
+        if not txt.startswith("---"):
+            continue
+        end = txt.find("\n---", 3)
+        fm = txt[:end] if end != -1 else txt[:2000]
+        if re.search(r"(?m)^\s*biz-eval:\s*(completed|skip)\b", fm):
+            continue
+        pending.append(rel)
+    if not pending:
+        return None
+    return ("biz-eval gate: forwardable artifact(s) saved without a business-eval — "
+            + ", ".join(pending[:3])
+            + ". Run /biz (the auto-chain) or add `biz-eval: skip` to the frontmatter to opt out, then finish.")
+
+
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
@@ -278,6 +308,10 @@ def main() -> int:
     afk_fail = afk_deliverable_check(transcript, files)
     if afk_fail:
         failures.append(afk_fail)
+
+    biz_fail = biz_eval_check(files)
+    if biz_fail:
+        failures.append(biz_fail)
 
     foundational_changed = [f for f in files if f in FOUNDATIONAL]
     if foundational_changed:

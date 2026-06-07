@@ -42,6 +42,7 @@ If a strategic `05 Decisions/` call is relevant to an active workstream, **link*
   | `owner` | person/role | |
   | `review_on` | `YYYY-MM-DD` or blank | surfaces in the dashboard + daily digest when due |
   | `supersedes` | `[[link]]` or blank | set the prior decision's `status: superseded` |
+  | `method` | `m-<slug>` or blank | the decision-method ([[09 Rules/methods.md]]) that produced this call, if any; closes the review→Memory loop |
 
 - Body uses the template's headings verbatim — **do not rename** `## Decision`, `## Rationale`, `## Consequences / watch for`. `reflect.py:gather()` parses those exact headings to feed the reflections feeder.
 
@@ -83,6 +84,10 @@ The judgment loop **reads** decisions (via `reflect.py`) and **surfaces** intera
 ## Loop integration
 
 Files here feed the judgment loop automatically: `reflect.py` harvests each decision's rationale + consequences as a reflection signal (salience 0.7, or 0.85 for one-way). No extra step — just keep the heading names intact. Decisions due for review (`review_on <= today`) surface in `05 Decisions/_Decisions.md` and the daily digest.
+
+### Method feedback loop (decision-methods)
+
+When a **decision-method** ([[09 Rules/methods.md]], e.g. `09 Rules/_methods/m-bd-partnership-call`) produces a call, its `record_and_wire` step stamps `method: m-<slug>` on this file. That closes a loop the flat learn-loop can't: when the decision hits its `review_on` and the outcome is judged, the learning folds back into the **producing method's `## Memory`** — *the method gets sharper as its decisions are reviewed.* `.claude/_eval-fixtures/method_review_feed.py` surfaces method-linked decisions grouped by method and flags the review-due ones; the Memory write itself is **human-gated**, like every learn-loop write (this loop surfaces, it does not silently rewrite).
 
 ## Language
 

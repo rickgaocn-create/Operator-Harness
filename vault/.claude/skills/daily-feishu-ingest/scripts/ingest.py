@@ -1,6 +1,6 @@
 """daily-feishu-ingest — pull recent 飞书 activity from user's chats, organize, surface into daily note.
 
-Runs every 6 hours via Windows Task Scheduler. Uses lark-cli (--profile morty) to fetch messages.
+Runs every 6 hours via Windows Task Scheduler. Uses lark-cli (--profile business-morty) to fetch messages.
 """
 from __future__ import annotations
 import argparse, json, os, sys, subprocess

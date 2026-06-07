@@ -126,9 +126,7 @@ Canonical reference: [[Skills I Use Daily]] (vault root). Skills migrated 2026-0
 
 | Skill | Purpose |
 |---|---|
-| `/resume` | Load context from CLAUDE.md + session logs at session start |
 | `/compress` | Save session as structured log before close |
-| `/preserve` | Write permanent learnings back into CLAUDE.md (auto-archive past 280 lines) |
 
 ### Operations
 

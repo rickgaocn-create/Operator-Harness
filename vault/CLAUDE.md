@@ -172,7 +172,7 @@ Bulk task capture, chain decomposition, batch ceiling, routing → [[09 Rules/ta
 - **Identity / strengths / stress patterns:** [[me.md]] · [[personality]]
 - **Goals & current Q OKRs:** [[GOALS.md]] · [[04 Notes/12-week/2026-Q2.md]]
 - **Vault structure & skills index:** [[vault-map.md]]
-- **Rule layer:** [[09 Rules/cards.md]] · [[09 Rules/action.md]] · [[09 Rules/time.md]] · [[09 Rules/file-types.md]] · [[09 Rules/tasks.md]] · [[09 Rules/decisions.md]] · [[09 Rules/crm.md]] · [[09 Rules/raw-immutable.md]]
+- **Rule layer:** [[09 Rules/cards.md]] · [[09 Rules/action.md]] · [[09 Rules/time.md]] · [[09 Rules/file-types.md]] · [[09 Rules/tasks.md]] · [[09 Rules/decisions.md]] · [[09 Rules/crm.md]] · [[09 Rules/methods.md]] · [[09 Rules/isa.md]] · [[09 Rules/raw-immutable.md]]
 - **Skills catalog:** [[vault-map.md]] § Skills · [[Skills I Use Daily]]
 - **Subagents catalog:** [[08 Agents/README]]
 - **Hard rules (incident-driven):** [[MEMORY.md]]

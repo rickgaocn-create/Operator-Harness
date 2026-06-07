@@ -41,5 +41,5 @@ machine-specific execution details.
 - Do not move `.claude` components into `.harness` in v1.
 - Do not put secrets in tracked files.
 - New runtime-facing scripts should import or call `resolve_runtime.py` instead
-  of hardcoding `D:\...`, `C:\Users\...\python.exe`, or raw `python .claude/...`.
+  of hardcoding `D:\...`, `{{USER_HOME}}\python.exe`, or raw `python .claude/...`.
 

@@ -1,6 +1,6 @@
 ---
 name: bd-prospect-researcher
-description: Research a candidate BD partner for 《{{PROJECT_A}}》 (诗悦网络). Combines vault sweep + web research (firecrawl/defuddle). Returns 法人单位 (legal entity, not parent group) / 核心决策人 (specific role + name) / 当前业务 / 与{{PROJECT_A}}资源底牌的契合点 / 建议邀请人 / 建议 Conversion 目的 (what we want from them, NOT what we give). Read-only on vault; web access for external intel. Invoke when user asks "what do we know about [company]?" for BD context, or before adding a new partner to the BD priority stack.
+description: Research a candidate BD partner for 《{{PROJECT_A}}》 ({{ORG_E}}). Combines vault sweep + web research (firecrawl/defuddle). Returns 法人单位 (legal entity, not parent group) / 核心决策人 (specific role + name) / 当前业务 / 与{{PROJECT_A}}资源底牌的契合点 / 建议邀请人 / 建议 Conversion 目的 (what we want from them, NOT what we give). Read-only on vault; web access for external intel. Invoke when user asks "what do we know about [company]?" for BD context, or before adding a new partner to the BD priority stack.
 tools: Read, Glob, Grep, WebFetch, WebSearch, mcp__claude_ai_Gmail__search_threads, mcp__claude_ai_Google_Drive__search_files, mcp__claude_ai_Google_Calendar__list_events
 skills: firecrawl-search, firecrawl-scrape, defuddle, enterprise-search
 model: inherit
@@ -53,7 +53,7 @@ If meaningful intel exists, surface it. The user may have already done partial r
 Before going to the web, check whether {{USER_NAME}} has touched this prospect via connected tools — old email threads, shared decks, calendar invites can preempt firecrawl entirely.
 
 - Invoke `enterprise-search` skill (or directly hit `claude_ai_Gmail`, `claude_ai_Google_Drive`, `claude_ai_Google_Calendar`) with the prospect name + parent entity. Brand 中英文 + 法人单位 keyword variants.
-- **Skip Feishu / WeCom** — those are CLI-only (`lark-cli` / `wecom-cli`), not exposed to enterprise-search yet. For CN-counterparty intel that lives in Feishu, fall back to manual prompt: "Has 诗悦 internal Feishu had this prospect?" — {{USER_NAME}} decides whether to pull a transcript.
+- **Skip Feishu / WeCom** — those are CLI-only (`lark-cli` / `wecom-cli`), not exposed to enterprise-search yet. For CN-counterparty intel that lives in Feishu, fall back to manual prompt: "Has {{ORG_E}} internal Feishu had this prospect?" — {{USER_NAME}} decides whether to pull a transcript.
 - Surface hits as `~~email:` / `~~cloud storage:` / `~~office suite:` per CONNECTORS.md convention.
 - If hits exist, read the 2–3 most recent + the most-decision-bearing (a deck draft beats a scheduling email).
 
@@ -149,7 +149,7 @@ Process the grader's YAML return:
 
 ## Edge cases
 
-- **Private companies with no public intel:** report what's discoverable, flag gaps, recommend the next research step (e.g., "introduce via 何宗寰" or "ask 诗悦市场部 if they have a contact").
+- **Private companies with no public intel:** report what's discoverable, flag gaps, recommend the next research step (e.g., "introduce via 何宗寰" or "ask {{ORG_E}}市场部 if they have a contact").
 - **Government bodies / state entities:** legal entity may not apply — substitute 主管部门 + 具体处室 + 负责领导.
 - **KOL / individual:** 法人单位 may be their personal studio / MCN affiliation. Surface both.
 - **Already in priority stack:** flag "already in {{PROJECT_A}} BD priority stack as 🟡 / 🔴" — don't redo work.

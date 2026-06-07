@@ -110,6 +110,27 @@ def _feishu_target() -> "str | None":
     return None
 
 
+def _resolve_lark_cli() -> str:
+    """Absolute path to the lark-cli launcher. A scheduled-task PATH frequently lacks the
+    npm global bin dir, so a bare 'lark-cli' raises FileNotFoundError and the alert is lost
+    (the 2026-06-06 undelivered-CRITICAL incident: the harness could not reach the operator
+    precisely when it went red). Resolve like _resolve_system_bin: env override -> PATH
+    (shutil.which, applies PATHEXT) -> known npm global (.cmd preferred) -> bare name."""
+    import shutil
+    override = os.environ.get("HARNESS_LARK_CLI")
+    if override and os.path.isfile(override):
+        return override
+    found = shutil.which("lark-cli")
+    if found:
+        return found
+    appdata = os.environ.get("APPDATA") or os.path.join(os.path.expanduser("~"), "AppData", "Roaming")
+    for cand in (os.path.join(appdata, "npm", "lark-cli.cmd"),
+                 os.path.join(appdata, "npm", "lark-cli")):
+        if os.path.isfile(cand):
+            return cand
+    return "lark-cli"
+
+
 def _send_feishu(message: str) -> "tuple[bool, str]":
     """Raw Feishu DM via lark-cli (morty bot -> operator open_id). No gate, no
     logging — caller logs. Outbound send works even when the *inbound* consumer
@@ -122,8 +143,9 @@ def _send_feishu(message: str) -> "tuple[bool, str]":
         return False, "no feishu target (access.json allowFrom empty / HARNESS_PULSE_FEISHU_USER unset)"
     try:
         import subprocess
+        profile = os.environ.get("LARK_PROFILE", "business-morty")
         result = subprocess.run(
-            ["lark-cli", "--profile", "morty", "im", "+messages-send",
+            [_resolve_lark_cli(), "--profile", profile, "im", "+messages-send",
              "--as", "bot", "--user-id", target, "--text", message[:1500]],
             capture_output=True, timeout=15, encoding="utf-8", errors="replace",
         )

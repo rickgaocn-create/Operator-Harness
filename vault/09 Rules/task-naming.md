@@ -70,7 +70,7 @@ Verbs joined by `+`, `→`, `、` in `action_phrase`:
 ### R6 · duplicated channel
 Same company/channel name appears in `action_phrase` twice OR appears in title AND in `{{contexts}}` field AND `chain-anchor` already implies it:
 - drop the redundant mention
-- **Example:** `沪差0519 \| B站 6/20 端午美林邀请函发 B 站核心人员` → R2 strips 6/20 + R6 drops leading "B站" → `沪差0519 \| 美林邀请函发 B 站核心人员`
+- **Example:** `沪差0519 \| B站 6/20 端午{{ORG_G}}邀请函发 B 站核心人员` → R2 strips 6/20 + R6 drops leading "B站" → `沪差0519 \| {{ORG_G}}邀请函发 B 站核心人员`
 - **Counter-example:** `沪差0519 \| B站 反馈预约预期数据` — only one B站 mention, chain-anchor doesn't imply B站 (could be TapTap). Keep.
 
 ### R7 · vague verb start

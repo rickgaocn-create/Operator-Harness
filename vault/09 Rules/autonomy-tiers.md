@@ -28,6 +28,10 @@ companion-rules:
 - **Tier A still leaves a trail.** Acting without confirm ≠ acting silently — log to the relevant surface (autofix log, proposal file, or a one-line mention) so the operator can audit and revert.
 - **Batch B/C decisions** rather than dripping them per session (see the weekly review cadence; the SessionStart brief surfaces the count, not each item).
 
+## Verified-autonomous promotion (governed exception — [[09 Rules/promotion-loop.md]])
+
+The blanket "promotions are Tier B" rule has **one governed exception**: a `distilled → promoted` step that passes the **dual-verifier gate** (recurrence-clean ∧ jury-pass) may auto-confirm as **Tier A** — two independent verifiers stand in for the human's per-item confirm. The intermediate `distilled → provisional` (a *soft, advisory, reversible* rule on probation) is Tier A; `provisional → promoted` is Tier A **only through the gate**, else Tier B. Auto-**revert** of a failed provisional is always Tier A (fail-safe). Hard-rule / `MEMORY.md` / gate escalation stays B/C. The human audits promotions in a **weekly batch**, not per-item. Mechanism + safety: [[09 Rules/promotion-loop.md]].
+
 ## What this is NOT
 
 - Not a license to auto-mutate content (that stays B).

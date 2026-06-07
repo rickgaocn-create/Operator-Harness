@@ -74,3 +74,12 @@ TABLE date, owner
 FROM "05 Decisions"
 WHERE type = "decision" AND length(file.outlinks) = 0
 ```
+
+## By method (review → Memory feedback loop)
+> Decisions produced by a decision-method ([[09 Rules/methods]], `09 Rules/_methods`). When one hits `review_on`, fold the judged outcome into the producing method's `## Memory`. Headless equivalent: `method_review_feed.py`.
+```dataview
+TABLE method, status, reversibility, review_on
+FROM "05 Decisions"
+WHERE type = "decision" AND method
+SORT method ASC, review_on ASC
+```

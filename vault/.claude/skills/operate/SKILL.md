@@ -23,7 +23,7 @@ Direct slash skills still work. `/operate` is a wrapper, not a replacement.
 
 ## Core Rule
 
-Classify the request into exactly one of the five operator intents in [[09 Rules/operator-intents.md]], then follow that contract. When an intent is ambiguous, surface the top two plausible intents and ask before writing or dispatching a high-risk workflow.
+Classify the request into exactly one of the six operator intents in [[09 Rules/operator-intents.md]], then follow that contract. When an intent is ambiguous, surface the top two plausible intents and ask before writing or dispatching a high-risk workflow.
 
 Do not hide important routing decisions. The wrapper should make the harness quieter for {{USER_NAME}}, not more opaque.
 
@@ -36,6 +36,9 @@ Do not hide important routing decisions. The wrapper should make the harness qui
 | Make this forwardable | "sendable", "forwardable", "proposal", "report", "to leadership", "to partner" | `/forwardable-quality` |
 | Think with me | "options", "pre-mortem", "sanity check this plan", "what are the moves" | `strategist`, `vault-researcher`, `/biz` when artifact-shaped |
 | Check the machine | "harness health", "what is broken", "status", "drift", "eval" | `/machine-health` |
+| What's the move? (generative planning) | "what's the move", "highest-leverage thing", "what should I work on next", "where should I focus", "plan from goals" | `.claude/routines/plan_brief.py` → lens (`f-2080`/`f-strategic-systems`) |
+
+Disambiguation: *"What matters today?"* surfaces what's already queued (reactive); *"What's the move?"* reads GOALS and proposes the marginal highest-leverage action, including moves not yet queued (generative). *"Think with me"* weighs options on a decision {{USER_NAME}} already has in mind.
 
 ## Package Routing
 
@@ -58,6 +61,7 @@ Direct slash skills remain expert escape hatches and implementation details. Use
 4. Pull only the context needed for that intent. For daily-priority questions, treat Dashboard Today/Actionable state, live tasks, and the daily note as one cockpit state.
 5. Use underlays as grounding aids when available; do not treat them as authority above live vault files or hard rules.
 6. Use existing skills as implementation details; do not rewrite their procedures inline unless the user needs an explanation.
+6a. For "Process this", "Make this forwardable", and "Think with me", consult the method layer first (see Method Use) — if a method matches the task-kind, reuse its DAG as the skeleton and regenerate content within it.
 7. Apply the intent's hard gates before producing a final answer or writing any artifact.
 8. If the workflow suggests a skill is now mostly procedural scaffolding, note it as a future Distill candidate; do not prune in the same run.
 
@@ -72,6 +76,22 @@ Generated underlays live at `.claude/_state/underlays/` and are governed by [[09
 | Check the machine | Read `underlay-report.md` and report freshness, counts, fixture checks, and skipped correction lines alongside normal status/map/eval health. |
 
 If underlays are stale or missing, fall back to current vault reads and say so. Stale means missing, older than the newest scoped source file, or older than 24 hours for active harness work.
+
+## Method Use
+
+The method layer ([[09 Rules/methods]], `09 Rules/_methods/`) holds reusable composition skeletons for recurring task-kinds — the DAG of how skills string together, between skills (the moves) and judgment (the gate). Before non-trivial "Process this" / "Make this forwardable" / "Think with me" work, assemble context in one call:
+
+```bash
+PY="$(python .harness/resolve_runtime.py python)"
+"$PY" .claude/routines/context_assemble.py "<the task>"        # method + judgment + hybrid-semantic notes + grounding
+# or just the method match:  "$PY" .claude/_eval-fixtures/method_retrieve.py "<the task>"
+```
+
+- **Match found** → read the method file; use its `### <slug>` steps as the skeleton, regenerate content for this instance, read its `## Memory`. The DAG is *soft* — shape, not control flow; deviate per judgment.
+- **Match is `draft`** → a hypothesis; reuse it, flag it to validate/promote.
+- **No match** + non-trivial recurring work → after finishing, `/precipitate` it.
+
+A method never overrides a live vault file, a hard rule, or the critic. Methods scaffold the path; judgment gates the output.
 
 ## Write Discipline
 

@@ -183,6 +183,8 @@ This phase is what makes the system "self-evolving" rather than just a daily aud
 
 A `failed` verdict re-enters the correction/distill loop as `kind: rule-failed-retest`; the next proposal must sharpen the rule, tighten the trigger, move the rule to a better layer, or retire it. Three failures touching the same area become a 🟡 structural review item.
 
+**Promotion-loop batch (autonomous-but-verified, 2026-06-06):** run `python .claude/routines/promotion_engine.py --eval --apply` — it **auto-reverts** provisional promotions whose dual-verifier gate failed (recurrence recurred OR jury bucket=failed) and marks their predictions failed, and **proposes** confirmations for those that passed (auto-confirm stays off until `PROMO_AUTOCONFIRM=1`). Then `python .claude/routines/promotion_engine.py --audit` and surface the batch — *auto-confirmed · in-probation · auto-reverted · proposed-confirm* — in the report's **Learning loop status** section. This is the operator's weekly **batch-audit surface** for promotions (the human reviews the batch, not each item). See [[09 Rules/promotion-loop.md]].
+
 ### Pattern compression
 
 For each **proposal type** (e.g., "vault-manager audit confidence-tier separation"), count:

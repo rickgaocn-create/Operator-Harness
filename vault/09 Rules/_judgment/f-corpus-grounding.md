@@ -19,4 +19,4 @@ source: mined from corpus 2026-05-26 — C260508-vault-first-before-guessing-ent
 
 **Why it embodies these values:** grounding in your accumulated record over a comfortable guess is truth-over-comfort applied to *inputs* (`v-truth-over-comfort`); and claiming/adopting only what's actually in the record — not generic LLM priors — keeps the frontier grounded in real data (`v-frontier-grounded`).
 
-**Operationalized by:** vault-first-before-guessing-entity (MEMORY hard rule); grep-before-grilling (/grill-me Phase 1); grep-trip-date-before-daily-note; day-digest-grep-Kanban-before-sign-off
+**Operationalized by:** vault-first-before-guessing-entity (MEMORY hard rule); grep-before-grilling (/grill-me Phase 1); grep-trip-date-before-daily-note; day-digest-grep-Kanban-before-sign-off; **own-work vault-first + exact-referent** (company/project/{{PROJECT_A}} questions consult 00 Raw + Cards/Wiki before web, and verify any web claim about our own IP against the KB; treat user-named sources as exact referents — ground in the specific one named, don't substitute a plausible neighbor)

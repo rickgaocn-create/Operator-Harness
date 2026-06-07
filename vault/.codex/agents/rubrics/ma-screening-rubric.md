@@ -20,7 +20,7 @@ max-iterations: 3
 | H4 | **Red flags sourced** | Each red flag references a source (filing / news / industry analysis) OR is labeled as inferred from category benchmark | "Regulatory risk" stated without naming the regulation or jurisdiction |
 | H5 | **JP-perspective competitive scan** | Competitive landscape includes JP local incumbents in the target's category | Competition analyzed only from CN-domestic perspective; "no major competitors" without naming what was checked in JP |
 | H6 | **No invented financials** | Public financials cited with source; private companies use category benchmarks with explicit range + reasoning | A revenue figure or margin number without source for a private company |
-| H7 | **Cross-project isolation** | No {{PROJECT_A}} BD context, no {{ORG_A}} references, no {{FUND}} framing | {{PROJECT_A}} / {{ORG_A}} / {{FUND}} mentioned in {{ORG_B}} screening brief |
+| H7 | **Cross-project isolation** | No {{PROJECT_A}} BD context, no {{ORG_E}} references, no {{ORG_D}} framing | {{PROJECT_A}} / {{ORG_E}} / {{ORG_D}} mentioned in {{ORG_B}} screening brief |
 
 ## Soft checks (FAIL = nit; ≥3 nits OR any hard fail → NEEDS REVISION)
 

@@ -121,6 +121,24 @@ Reason as hard as the task needs at every stage — planning, execution, and ver
 
 **Confidential lanes:** health reports can mention lane labels but should not expose sensitive content unless {{USER_NAME}} asks.
 
+### 6. What's the move? (generative planning)
+
+The generative twin of intent #1. *"What matters today?"* surfaces what's already **queued** (reactive). *"What's the move?"* reads GOALS and proposes the marginal highest-leverage action — **including moves not yet queued** (generative). This is the planner-over-the-loop, done without planner machinery: a strong model decomposes goals natively, so the harness only *feeds* it the right inputs and *constrains* the output.
+
+**Allowed skills/scripts:** `.claude/routines/plan_brief.py` first (scripted, 0-token assembly of GOALS tracks/OKRs + live cycle file + open Action workstreams + due reviews); then apply the lens (`f-2080` leverage · `f-strategic-systems` · `f-value-mechanism`); land an approved move via `/task-capture` or the Action pillar.
+
+**Output shape:** the **ONE** marginal highest-leverage next action — *not* a tree, *not* a laundry list. It must (a) tie to a specific track/OKR, (b) pass the grounding gate (a named party + a number/date + a concrete first action), and (c) carry a one-line *why-this-over-the-alternatives*. One runner-up is allowed; more is a failure of selection.
+
+**Hard gates:**
+- Run `plan_brief.py` first — never plan from memory; the gap was that nothing read GOALS.
+- If the proposed move can't reduce to a concrete first action, it isn't ready — diverge again, don't ship abstraction.
+- **Never auto-create** the Action/Task — propose and wait (Action Auto-Creation Policy, [[09 Rules/action.md]]).
+- Generative ≠ today: surface moves the reactive loop wouldn't (an OKR with no live workstream is a planning gap, not noise).
+
+**Confidential lanes:** `plan_brief.py` segregates `sensitivity: confidential` / Lane B workstreams into a private section. Surface those moves to {{USER_NAME}} **directly and privately** — never co-located with {{ORG_E}} / {{ORG_B}} in a shared brief or a daily note (the lane-isolation contract).
+
+**Cadence:** on demand, and proactively as a **weekly cycle-planning beat** (start of week / mid-cycle review window) so the loop generates, not just reacts.
+
 ## Model-Upgrade Ratchet
 
 When a stronger model becomes available, run shadow comparisons for major workflows:

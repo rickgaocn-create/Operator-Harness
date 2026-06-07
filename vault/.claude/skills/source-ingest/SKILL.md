@@ -139,7 +139,7 @@ Wait for user signal before drafting.
 
 ## Phase 2.5: Vault Sanity Sweep (Wiki Dedup)
 
-> **Why this phase exists:** 2026-05-13 incident — 4 entity entries (诗悦 / TapTap / 4399 / Bilibili) were written to **`01 Wiki/<name>.md**` at flat root while canonical entries already existed at `**01 Wiki/{{PROJECT_A}}/<category>/<name>.md`**. Caused graph duplication, ambiguous wikilink resolution, manual reconciliation. This phase prevents recurrence.
+> **Why this phase exists:** 2026-05-13 incident — 4 entity entries ({{ORG_E}} / TapTap / 4399 / Bilibili) were written to **`01 Wiki/<name>.md**` at flat root while canonical entries already existed at `**01 Wiki/{{PROJECT_A}}/<category>/<name>.md`**. Caused graph duplication, ambiguous wikilink resolution, manual reconciliation. This phase prevents recurrence.
 
 Run **only for the wiki-bound items** identified in Phase 2 (Cards have date-prefix naming so don't collide). Do NOT skip — silent duplicates are worse than friction at write time.
 

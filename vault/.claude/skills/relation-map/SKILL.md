@@ -35,21 +35,21 @@ It is the `01 Wiki/` analog of `card-lint --mode=bridge` (which is hard-scoped t
 5. **🔴 Isolation is absolute.** NEVER propose a cross-lane link ({{PROJECT_A}} ↔ {{ORG_B}} / {{ORG_A}} / {{ORG_D}}). The detector drops these by construction; you re-check every candidate before writing. A cross-lane link is an isolation leak (`[[02 Cards/{{PROJECT_A}}/C260508-cross-project-references-leak-attention-signal]]`).
 6. **Patch, don't rewrite.** Add to the `## 关联文档` section via Edit; if the section is missing, insert it at file end. Never touch body content, 概要, or claims.
 
-## Granularity standard — the 美林版本 bar
+## Granularity standard — the {{ORG_G}}版本 bar
 
-A relation node is **not** "two notes share a string." It is a **named, directional, purposeful** connection whose gloss carries the *reasoning* — including how the two entities stay **distinct**. Canonical exemplar (already in the vault, {{USER_NAME}}-confirmed 2026-05-29, in `游戏系统/(C) {{PROJECT_A}}游戏系统-研发与项目管理.md` § 美林版本范围):
+A relation node is **not** "two notes share a string." It is a **named, directional, purposeful** connection whose gloss carries the *reasoning* — including how the two entities stay **distinct**. Canonical exemplar (already in the vault, {{USER_NAME}}-confirmed 2026-05-29, in `游戏系统/(C) {{PROJECT_A}}游戏系统-研发与项目管理.md` § {{ORG_G}}版本范围):
 
-> **美林版本** (a dev/build milestone), **美林M·LIVE天地** (a venue), and **2026端午试玩会** (an event) are THREE distinct nodes with distinct timing + purpose — yet coupled: *美林版本 = the build prepared **for** the 试玩会 **held at** 美林M·LIVE天地, and named after that venue.* Evidence in the gloss: 进包 5.29 = 招募开启同日; demo 6.12 = 试玩会前一周; build carries a dedicated 「线下试玩模式」.
+> **{{ORG_G}}版本** (a dev/build milestone), **{{ORG_G}}** (a venue), and **2026端午试玩会** (an event) are THREE distinct nodes with distinct timing + purpose — yet coupled: *{{ORG_G}}版本 = the build prepared **for** the 试玩会 **held at** {{ORG_G}}, and named after that venue.* Evidence in the gloss: 进包 5.29 = 招募开启同日; demo 6.12 = 试玩会前一周; build carries a dedicated 「线下试玩模式」.
 
 Every link this skill writes must clear that bar:
 
-1. **Distinguish-but-connect.** Same-named / topically-overlapping entities stay separate nodes; the link explains the relationship, never conflates them (美林版本 ≠ 美林天地 — a build is not a venue).
+1. **Distinguish-but-connect.** Same-named / topically-overlapping entities stay separate nodes; the link explains the relationship, never conflates them ({{ORG_G}}版本 ≠ {{ORG_G}} — a build is not a venue).
 2. **Purposeful, not lexical.** The gloss states *how* they relate — built-for / held-at / benchmark-against / source-of / 承接面 — never "both mention X".
 3. **Multi-hop where real.** If A relates to C *through* B (build → event → venue), surface the chain, not just the nearest hop.
 4. **Carry provenance + the timing/purpose distinction** when that's the crux (mirror the `耦合关系（已确认）` line, with a confirmation date).
 5. **A bare string match that can't be articulated this way is dropped**, not dressed up.
 
-This governs Phase 2 (judge) and Phase 4 (gloss). When in doubt, open the 美林版本 block and match its register.
+This governs Phase 2 (judge) and Phase 4 (gloss). When in doubt, open the {{ORG_G}}版本 block and match its register.
 
 ## How It Works
 

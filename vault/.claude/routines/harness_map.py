@@ -43,6 +43,9 @@ BEGIN, END = "<!-- BEGIN AUTO-MAP -->", "<!-- END AUTO-MAP -->"
 # Daily-driver index whose skill coverage we cross-check (drift if a skill is missing).
 DAILY_INDEX = VAULT / "Skills I Use Daily.md"
 
+# Method/composition layer (09 Rules/methods.md) — reusable task-kind templates.
+METHODS_DIR = VAULT / "09 Rules" / "_methods"
+
 
 def _read(p: Path) -> str:
     try:
@@ -131,6 +134,24 @@ def scan_judgment() -> list:
     return out
 
 
+def scan_methods() -> list:
+    """The composition layer: 09 Rules/_methods/m-*.md — reusable task-kind DAG templates."""
+    out = []
+    if not METHODS_DIR.is_dir():
+        return out
+    for m in sorted(METHODS_DIR.glob("m-*.md")):
+        text = _read(m)
+        fm = _frontmatter(text)
+        out.append({
+            "id": fm.get("id", m.stem),
+            "name": fm.get("name", m.stem),
+            "task_kind": fm.get("task-kind", "—"),
+            "status": fm.get("status", "?"),
+            "steps": len(re.findall(r"(?m)^###\s+\S", text)),  # ### <slug> step sections
+        })
+    return out
+
+
 def scan_state_drift(manifest: dict) -> dict:
     """Declared (registry) vs present (disk). Returns {declared, present, undeclared}."""
     declared_globs = [e["id"] for e in manifest.get("state", [])]
@@ -143,7 +164,10 @@ def scan_state_drift(manifest: dict) -> dict:
 
     def is_declared(name: str) -> bool:
         for g in declared_globs:
-            for token in re.split(r"[ /]+", g):
+            # Split only on the alternation separators ' / ' and ' + ' (space-padded), NOT on path
+            # '/' — else a glob like 'underlays/*' or 'judgment-queue/*.json' leaks a bare '*'/'*.json'
+            # token that matches EVERY state file, silently disabling the undeclared check.
+            for token in re.split(r"\s+/\s+|\s+\+\s+", g):
                 token = token.strip()
                 if not token:
                     continue
@@ -170,6 +194,7 @@ def build() -> dict:
     skills = scan_skills()
     agents = scan_agents()
     judgment = scan_judgment()
+    methods = scan_methods()
     state = scan_state_drift(manifest)
     docs_missing = scan_doc_drift(manifest)
 
@@ -192,15 +217,17 @@ def build() -> dict:
         "docs_missing": docs_missing,
         "skills_unindexed": skills_unindexed if idx else [],
     }
-    backlog = {"judgment_draft": drafts}
+    backlog = {"judgment_draft": drafts,
+               "method_draft": [m["id"] for m in methods if m["status"] == "draft"]}
     return {
         "manifest": manifest, "skills": skills, "agents": agents,
-        "judgment": judgment, "state": state, "drift": drift, "backlog": backlog,
+        "judgment": judgment, "methods": methods, "state": state, "drift": drift, "backlog": backlog,
         "counts": {
             "skills": len(skills),
             "agents": len([a for a in agents if a["kind"] == "agent"]),
             "graders": len([a for a in agents if a["kind"] == "grader"]),
             "judgment": len(judgment),
+            "methods": len(methods),
             "organs": len(manifest.get("organs", [])),
             "state_files": len(state["present"]),
         },
@@ -220,7 +247,7 @@ def render(snap: dict) -> str:
         f"> **Generated** {now} by `harness_map.py` — do not hand-edit between the AUTO markers; "
         f"rerun the script. Liveness (what's *firing*) lives in `/status`, not here.",
         "",
-        f"**Inventory:** {c['skills']} skills · {c['agents']} agents + {c['graders']} graders · "
+        f"**Inventory:** {c['skills']} skills · {c['methods']} methods · {c['agents']} agents + {c['graders']} graders · "
         f"{c['judgment']} judgment nodes · {c['organs']} organs · {c['state_files']} state files.",
         "",
         "## Skills (work surface)",
@@ -228,6 +255,14 @@ def render(snap: dict) -> str:
     sk = sorted(snap["skills"], key=lambda s: (s["category"], s["name"]))
     L += _table([[s["name"], s["category"], s["model"], s["one_line"]] for s in sk],
                 ["skill", "category", "model", "one-line"])
+
+    L += ["", "## Methods (composition layer — how skills string together for a task-kind)"]
+    mr = sorted(snap.get("methods", []), key=lambda m: m["id"])
+    if mr:
+        L += _table([[m["id"], m["status"], m["steps"], m["task_kind"], m["name"]] for m in mr],
+                    ["method", "status", "steps", "task-kind", "name"])
+    else:
+        L += ["", "_(none yet — precipitate one from a completed run / a class of records; see [[09 Rules/methods]])_"]
 
     L += ["", "## Agents + graders (critic surface)"]
     L += _table([[a["name"], a["kind"], a["one_line"]] for a in snap["agents"]],
@@ -267,6 +302,10 @@ def render(snap: dict) -> str:
     if drafts:
         L += ["", f"_Backlog (not drift — human-gated promotion): {len(drafts)} judgment node(s) at "
               f"`status: draft`, promote once validated — `{'`, `'.join(drafts)}`._"]
+    mdrafts = snap.get("backlog", {}).get("method_draft", [])
+    if mdrafts:
+        L += ["", f"_Backlog: {len(mdrafts)} method(s) at `status: draft` (validate via a run, then promote) — "
+              f"`{'`, `'.join(mdrafts)}`._"]
     return "\n".join(L)
 
 
@@ -311,7 +350,7 @@ def main() -> int:
         return 1 if nd else 0
     write_map(snap)
     c = snap["counts"]
-    print(f"✅ wrote {_rel(OUT)} — {c['skills']} skills · {c['agents']}+{c['graders']} agents/graders · "
+    print(f"✅ wrote {_rel(OUT)} — {c['skills']} skills · {c['methods']} methods · {c['agents']}+{c['graders']} agents/graders · "
           f"{c['judgment']} judgment nodes · {c['organs']} organs · {c['state_files']} state files · "
           f"{'no actionable drift' if nd == 0 else f'{nd} drift item(s)'} · {nb} backlog")
     return 0

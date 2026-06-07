@@ -20,8 +20,18 @@ scope: cross-cutting
 | `2026-W{nn}` | Time (04) | Weekly cascade | `2026-W17.md` |
 | `2026-MM-DD` | Time (04) | Daily log | `2026-04-27.md` |
 | `(C) ` | Any | AI-generated (Claude provenance overlay) | `(C) {{ORG_D}} 基金投资建议书.md` |
+| `v-`/`f-`/`s-`/`m-` + `slug` | Judgment (`09 Rules/_judgment`) · Methods (`09 Rules/_methods`) | **Atemporal concept** — value / framework / strategy / method. Semantic slug, **no date** (identity is the concept, not a creation event; the node evolves) | `v-truth-over-comfort` · `f-rigor-verification` · `m-bd-partnership-call` |
 
 The framework prefixes (`C-`, `T-`) declare *file type*. The `(C) ` prefix declares *authorship*. They can coexist when needed (rare — most framework-typed files {{USER_NAME}} drives himself).
+
+### Naming choice criterion (two families, by artifact nature)
+
+There are **two** schemes, chosen by what the artifact *is* — not collapsed into one:
+
+- **Time-stamped artifact** (an insight, instinct, work-track, decision, daily/weekly/12-week note — a dated *event*) → **date-code**: `C/I/T{YYMMDD}-slug` or a pure date. Chronology + collision-avoidance matter.
+- **Atemporal concept** (a value, framework, strategy, method — referenced by *meaning*, evolves over time) → **semantic slug**: `v-/f-/s-/m-slug`, no date.
+
+**Invariant (both families): every filename is self-describing.** A meaningful kebab slug is always present; the prefix encodes type (+ date, for events). **No opaque sequential counters** (`M000001`) — they force a registry lookup to know what a file is, which neither humans nor AI should have to do. (Standardize the *rule*, not the files: don't re-code artifacts that already conform.)
 
 ## Frontmatter Standards (All Files)
 
@@ -74,7 +84,7 @@ Tags ≠ Links. Tags categorize; links create the graph. Default to links; use t
 | **`04 Notes/`** | (none — content lives in subfolders) | by prefix: `2026-Q*` → `12-week/` · `2026-W*` → `weekly/` · `YYYY-MM-DD` → `daily notes/` · generated system/infra/architecture/log → `_system/` · external intel / research → `Research/` · meeting transcripts → `Session Logs/` · auto-generated reports → `auto-reports/` |
 | **`06 Tasks/`** | `Today.md`, `Personal.md`, `Inbox.md` (closed fixed-surface set) | no strays expected — any other file is anomaly, propose for triage |
 | **`08 Agents/`** | `README.md` + `<agent-name>.md` (flat by design) | flat — allow-list is "any `.md` file at root" |
-| **`09 Rules/`** | `<rule-name>.md` (flat by design) + `_archive/` · `_instance/` · `_judgment/` subfolders | flat — allow-list is "any `.md` file at root" |
+| **`09 Rules/`** | `<rule-name>.md` (flat by design) + `_archive/` · `_instance/` · `_judgment/` · `_methods/` subfolders | flat — allow-list is "any `.md` file at root" |
 | **`10 Action/`** | `README.md` | Action files declare horizon → `11 12-Week/` · `12 Active/` · `13 Maybe/` · `_archive/` |
 
 ### How strays are resolved

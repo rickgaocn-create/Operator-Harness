@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone, timedelta
@@ -140,7 +141,7 @@ def surface_diet() -> dict:
         if "\ncategory:" not in text and not text.startswith("category:"):
             uncategorized += 1
     coverage = (len(packaged) / len(skills)) if skills else 0.0
-    yellow = len(skills) > 50 and coverage < 0.20 or uncategorized > 0
+    yellow = (len(skills) > 50 and coverage < 0.20) or uncategorized > 0
     return {
         "active_skills": len(skills),
         "packaged_skills": len(packaged),
@@ -161,9 +162,9 @@ def _last_from_log(match_routine: str) -> "datetime | None":
 def _last_from_graderlog(match: str) -> "datetime | None":
     latest = None
     for r in _read_jsonl(STATE / "grader-verdicts.jsonl"):
-        blob = json.dumps(r, ensure_ascii=False).lower()
-        if r.get("template") or "example" in blob and "verdict" not in blob:
+        if r.get("template") or r.get("grader") == "_template" or not r.get("verdict"):
             continue
+        blob = json.dumps(r, ensure_ascii=False).lower()
         if match.lower() in blob:
             t = _parse_ts(r.get("ts") or r.get("timestamp"))
             if t and (latest is None or t > latest):
@@ -176,6 +177,35 @@ def _mtime(path: Path) -> "datetime | None":
         return datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
     except Exception:
         return None
+
+
+_TASKINFO = None
+
+
+def _all_task_info() -> dict:
+    """{taskname: {last, next}} (ISO strings) from Windows Task Scheduler — ONE best-effort,
+    cached call. Lets status distinguish a NEWLY-REGISTERED task (never ran but a future run is
+    scheduled = pending, not dead) from a genuinely dead one. Fails safe to {} (non-Windows / no
+    powershell) so it never manufactures a false 'dead' verdict."""
+    global _TASKINFO
+    if _TASKINFO is not None:
+        return _TASKINFO
+    _TASKINFO = {}
+    try:
+        cmd = ("Get-ScheduledTask -TaskName '{{USER_NAME}}-*' -ErrorAction SilentlyContinue | ForEach-Object { "
+               "$i=$_|Get-ScheduledTaskInfo; "
+               "$l= if($i.LastRunTime){$i.LastRunTime.ToString('yyyy-MM-ddTHH:mm:ss')}else{''}; "
+               "$n= if($i.NextRunTime){$i.NextRunTime.ToString('yyyy-MM-ddTHH:mm:ss')}else{''}; "
+               "'{0}|{1}|{2}' -f $_.TaskName,$l,$n }")
+        out = subprocess.run(["powershell.exe", "-NoProfile", "-Command", cmd],
+                             capture_output=True, text=True, timeout=20)
+        for line in (out.stdout or "").splitlines():
+            parts = line.strip().split("|")
+            if len(parts) == 3 and parts[0]:
+                _TASKINFO[parts[0]] = {"last": parts[1], "next": parts[2]}
+    except Exception:
+        pass
+    return _TASKINFO
 
 
 def resolve(organ: dict, live_channels: dict) -> dict:
@@ -192,6 +222,48 @@ def resolve(organ: dict, live_channels: dict) -> dict:
         out["glyph"] = "🟢" if alive else "🔴"
         out["detail"] = "live" if alive else "DOWN"
         out["down"] = not alive
+        return out
+
+    if src == "adjudicator-verdicts":
+        # cross-family jury liveness: configured? (model name only — NEVER the key) + verdict count + recency
+        model, configured = None, False
+        try:
+            jc = (json.load(open(VAULT / ".harness" / "runtime.local.json", encoding="utf-8")).get("jury") or {})
+            model, configured = jc.get("model"), bool(jc.get("api_key") and jc.get("base_url") and jc.get("model"))
+        except Exception:
+            pass
+        n, vlast = 0, None
+        try:
+            dv = json.load(open(STATE / "adjudicator-verdicts.json", encoding="utf-8"))
+            n, vlast = len(dv.get("verdicts", [])), _parse_ts(dv.get("ts"))
+        except Exception:
+            pass
+        if not configured:
+            out["glyph"], out["detail"], out["optional"] = "⚪", "jury not configured", True
+        elif n == 0:
+            out["glyph"], out["detail"] = "🟡", f"{model} · 0 verdicts"
+        else:
+            out["glyph"], out["detail"] = "🟢", f"{model} · {n} verdicts" + (f" · {_ago(vlast)}" if vlast else "")
+        return out
+
+    if src == "scheduled-task":
+        # next-run-aware: a never-ran task with a FUTURE next run is pending (newly registered),
+        # NOT dead — this is the fix for the recurring "last=1999 read as dead" false-alarm class.
+        ti = _all_task_info()
+        if not ti:
+            out["glyph"], out["detail"] = "⚪", "scheduled (scheduler status unavailable)"
+            return out
+        info = ti.get(organ.get("task", organ["id"]))
+        if info is None:
+            out["glyph"], out["detail"], out["down"] = "🔴", "task NOT registered", not out["optional"]
+            return out
+        last_s, next_s = info.get("last") or "", info.get("next") or ""
+        if last_s and not last_s.startswith(("1999", "0001")):
+            out["glyph"], out["detail"] = "🟢", "ran " + last_s.replace("T", " ")[:16]
+        elif next_s:
+            out["glyph"], out["detail"] = "🟡", "first run pending (" + next_s.replace("T", " ")[:16] + ")"
+        else:
+            out["glyph"], out["detail"], out["down"] = "⚪", "never ran · no next run", not out["optional"]
         return out
 
     if src == "autonomous-log":
@@ -246,7 +318,7 @@ def _today_top3() -> list:
             grabbing = "Top 3" in s or "Top3" in s
             continue
         if grabbing and s.startswith("- "):
-            txt = s.lstrip("-[ ]x").strip()
+            txt = re.sub(r"^[-*]\s*(\[[ xX]\]\s*)?", "", s).strip()
             if txt:
                 out.append(txt)
         if len(out) >= 3:
@@ -311,6 +383,10 @@ def render(snap: dict) -> str:
         lines.append("**Hooks:** " + row(by["hook"]))
     if by.get("grader"):
         lines.append("**Graders:** " + row(by["grader"]))
+    if by.get("verifier"):
+        lines.append("**Verification:** " + row(by["verifier"]))
+    if by.get("feeder"):
+        lines.append("**Feeders:** " + row(by["feeder"]))
     if snap.get("top3"):
         lines.append("**Today's Top 3:** " + " | ".join(snap["top3"]))
     diet = snap.get("surface_diet") or {}

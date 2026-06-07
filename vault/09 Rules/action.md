@@ -195,7 +195,7 @@ Trigger phrases that should prompt the proposal:
 
 ## Hard Rules
 
-- **One workstream per file.** Don't bundle "honor + 超参数 + helen" into one Action file. Three workstreams → three files.
+- **One workstream per file.** Don't bundle "honor + {{ORG_F}} + helen" into one Action file. Three workstreams → three files.
 - **Stream is append-newest-at-top.** Reverse-chrono. So you read latest state first.
 - **Atomic todos go to the project Kanban (or **`06 Tasks/Inbox.md`** if cross-project), not buried in Action stream.** Action stream is for context; Kanban is for the doing. Bind via `chain-anchor`.
 - **Don't create new files in **`03 Projects/`** from Action.** Promote artifacts when they stabilize, not while the workstream is hot.

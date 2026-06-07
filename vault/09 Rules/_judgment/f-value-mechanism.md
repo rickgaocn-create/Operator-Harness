@@ -27,4 +27,4 @@ source: "[[.claude/skills/biz/SKILL.md]] (value-evaluation framework section)"
 
 **Why it embodies these values:** it's the lens for evaluating *exchange* structures on how value recirculates, not one-time payoff (`v-resource-exchange`), and it grounds ambition in quantified, sensitivity-tested terms (`v-pragmatic-ambition`).
 
-**Operationalized by:** /biz; token-cost-per-value gate for harness/judgment components (heavy cognition batched off-path; runtime pays only for a small core + retrieval + scripted gates)
+**Operationalized by:** /biz; token-cost-per-value gate for harness/judgment components (heavy cognition batched off-path; runtime pays only for a small core + retrieval + scripted gates); **defensible value = distilled private judgment** (invest in distilled logic/values + automating the user's existing work — not lens/frame application the base model already subsumes, nor capture UIs the user already has; auto-diagnose over manual cards = anti-gold-plating)

@@ -21,7 +21,7 @@ operator-harness/
 │   │                      #   04 Notes [Time] · 05 Decisions · 06 Tasks · 10 Action [Action]
 │   ├── 07 Templates/      #   Obsidian note templates (card / decision / person / …)
 │   ├── 08 Agents/         #   subagent catalog
-│   ├── 09 Rules/          #   58 machine-enforceable framework rules (the binding rule layer)
+│   ├── 09 Rules/          #   40 machine-enforceable framework rules (the binding rule layer)
 │   ├── CLAUDE.md          #   operating instructions (the system prompt for the harness)
 │   ├── AGENTS.md          #   Codex adapter to CLAUDE.md
 │   ├── vault-map.md       #   folder routing + rule index + skills navigation
@@ -39,13 +39,14 @@ operator-harness/
 │   ├── harness-dashboard/ #   Obsidian dashboard UI (compiled)
 │   ├── afk-code/          #   AFK bridge SOURCE (fork of clharman/afk-code + custom Feishu module)
 │   ├── daemons/           #   24/7 daemon launchers + healthchecks (Discord / Feishu)
-│   └── scheduled-tasks/   #   38 Windows Task Scheduler definitions (.xml) — the automation backbone
+│   └── scheduled-tasks/   #   39 Windows Task Scheduler definitions (.xml) — the automation backbone
 ├── install/               # bootstrap.ps1 (Windows) + bootstrap.sh (macOS) + launchd generator
-├── macos/                 # macOS port: python hook ports, daemon launchers, mac-only extras
+├── macos/                 # macOS port: python hook ports, daemon launchers, native WeChat reader
+├── windows/               # Windows-only extras: native WeChat reader bridge (SQLCipher-4, replaces WeFlow)
 └── docs/                  # architecture notes
 ```
 
-**By the numbers:** 52 skills · 16 autonomous routines · 12 subagents · 58 rules · 17 hooks · 38 scheduled tasks.
+**By the numbers:** 48 skills · 16 autonomous routines · 8 subagents · 40 rules · 17 hooks · 39 scheduled tasks.
 
 ---
 
@@ -59,7 +60,7 @@ Claude Code runs with a set of **lifecycle hooks** (`SessionStart` / `UserPrompt
 
 > **Prerequisites:** [Claude Code](https://claude.com/claude-code), Python 3.12+, Node 18+, Obsidian.
 > **Windows:** PowerShell 5.1+ + Task Scheduler (use `install/bootstrap.ps1`).
-> **macOS:** launchd + `python3` (use `install/bootstrap.sh`; see [`macos/README.md`](macos/README.md) for the port — full parity minus WeChat ingest).
+> **macOS:** launchd + `python3` (use `install/bootstrap.sh`; see [`macos/README.md`](macos/README.md) for the port). WeChat ingest now has a **native reader on both platforms** — a stdlib-light SQLCipher-4 bridge that replaces the WeFlow Electron app (`windows/wechat/`, `macos/wechat/`).
 
 ```powershell
 git clone https://github.com/<you>/operator-harness.git

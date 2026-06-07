@@ -7,6 +7,7 @@ owner:
 review_on:
 supersedes:
 superseded_by:
+method:
 tags: [decision]
 ---
 
@@ -50,5 +51,6 @@ FIELD NOTES
   review_on     YYYY-MM-DD to resurface this in the dashboard; leave blank if no review needed
   supersedes    [[link]] to a prior decision THIS one replaces (and set that one's status: superseded + superseded_by: [[this]])
   superseded_by [[link]] to the newer decision that replaced this one (set when this becomes status: superseded)
+  method        m-<slug> if a decision-method (09 Rules/_methods) produced this call — closes the review→Memory loop (09 Rules/methods.md); blank for hand-made calls
   Updates       evolution log — append, don't rewrite. 关联文档 — outbound entity/project links.
 -->

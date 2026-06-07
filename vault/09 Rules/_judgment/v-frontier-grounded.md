@@ -20,5 +20,5 @@ source: observed (session usage)
 **Tells when it's being violated:** adopting because it's impressive, not because it works; or dismissing the frontier to stay comfortable.
 
 **Frameworks that embody it:** [[f-rigor-verification]], [[f-corpus-grounding]]
-**Rules that serve it:** (J2 — ablation-before-belief, measure-don't-assume)
-**Born-from incidents:** (J2)
+**Rules that serve it:** ablation-before-belief (measure the new method against the old before adopting); measure-don't-assume (adopt the day it's proven real, not the day it's loud).
+**Born-from incidents:** (none yet — grounded by L1 corpus evidence, not incident-born; will accrue as frontier-adoption corrections land). _(edges filled from distill proposal dp-20260606-007, 2026-06-06)_

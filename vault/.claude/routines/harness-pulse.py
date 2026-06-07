@@ -558,6 +558,54 @@ def check_obsidian_sensor(findings: list) -> None:
                          "msg": f"Obsidian runtime sensor snapshot is {mins} min old (>15); Obsidian API observability may be stale."})
 
 
+def check_brain_gates(findings: list) -> None:
+    """Fail loud if the ISA done-gate or the skill/method dependency closure breaks
+    (previously on-demand only). Runs the two eval-fixture gates and surfaces errors."""
+    import subprocess, sys
+    from pathlib import Path as _P
+    fx = _P(__file__).resolve().parents[1] / "_eval-fixtures"
+    for name, script in (("isa", "isa_lint.py"), ("skill-closure", "skill_closure.py")):
+        p = fx / script
+        if not p.exists():
+            continue
+        try:
+            r = subprocess.run([sys.executable, str(p)], capture_output=True, text=True, timeout=60)
+        except Exception as e:
+            findings.append({"level": "yellow", "code": f"{name}-gate-error", "msg": f"{script} failed to run: {e}"})
+            continue
+        if r.returncode != 0:
+            tail = (r.stdout or r.stderr or "").strip().splitlines()
+            findings.append({"level": "yellow", "code": f"{name}-gate",
+                             "msg": f"{script}: {tail[-1] if tail else 'non-zero exit'}"})
+
+
+def check_skill_mirror(findings: list) -> None:
+    """Fail loud on skill-mirror drift (.claude/skills canonical vs .agents/skills neutral
+    re-export) — previously silent. EOL-normalized so it doesn't cry wolf on CRLF-vs-LF."""
+    import hashlib
+    from pathlib import Path as _P
+    vroot = _P(__file__).resolve().parents[2]
+    canon_root, mirror_root = vroot / ".claude" / "skills", vroot / ".agents" / "skills"
+
+    def names(root):
+        return {d.name for d in root.iterdir() if d.is_dir() and not d.name.startswith("_")} if root.is_dir() else set()
+
+    def sha(p):
+        try:
+            return hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")).hexdigest()
+        except OSError:
+            return None
+
+    canon, mirror = names(canon_root), names(mirror_root)
+    missing = canon - mirror
+    divergent = [n for n in (canon & mirror)
+                 if (a := sha(canon_root / n / "SKILL.md")) and (b := sha(mirror_root / n / "SKILL.md")) and a != b]
+    if missing or divergent:
+        findings.append({"level": "yellow", "code": "skill-mirror-drift",
+                         "msg": f".agents skill mirror drifted vs canonical .claude/skills: "
+                                f"{len(missing)} missing, {len(divergent)} byte-divergent — re-run the mirror sync."})
+
+
 def severity_of(findings: list) -> str:
     if any(f["level"] == "red" for f in findings):
         return "red"
@@ -583,6 +631,8 @@ def main() -> int:
         lambda: check_adjudicator_verdicts(findings),
         lambda: check_error_rate(findings),
         lambda: check_obsidian_sensor(findings),
+        lambda: check_skill_mirror(findings),
+        lambda: check_brain_gates(findings),
     )
     for check in checks:
         try:
@@ -662,6 +712,18 @@ def main() -> int:
             VERDICT_PATH.write_text(json.dumps(verdict, ensure_ascii=False, indent=2), encoding="utf-8")
         except Exception as e:
             log_event(ROUTINE, "error", f"verdict re-write failed: {e}")
+
+    # ---------- arm the distill model-step when due (close the learn-loop's open joint) ----------
+    # The pulse already fires every ~3h; piggyback the distill auto-trigger here so the judgment
+    # loop SELF-INVOKES (drops a _pending/distill-request signal) instead of waiting for a human
+    # to notice the "distill due" nag. Cheap, daily-capped, dedup'd, notification-class — its own
+    # try/except so it can never affect the pulse verdict. Implements the harness's own validated
+    # judgment (corrections 2026-05-27 auto-diagnose>manual-cards, 2026-05-29 reduce-operator-overhead).
+    try:
+        import distill_autotrigger
+        distill_autotrigger.run(verdict)
+    except Exception as e:
+        log_event(ROUTINE, "error", f"distill autotrigger failed: {e}")
 
     log_event(ROUTINE, "alert" if sev != "green" else "info",
               f"pulse={sev} (prev={prev_sev}) findings={len(findings)} pushed={pushed} autofix={len(autofix_results)}",

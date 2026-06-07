@@ -29,5 +29,5 @@ source: observed (session usage)
 **Tells when it's being violated:** polishing what's already good enough; refinement that adds no compounding edge.
 
 **Frameworks that embody it:** [[f-2080]]
-**Rules that serve it:** (J2 — prune cadence, learn-loop promotion, eval-before-commit)
-**Born-from incidents:** (J2)
+**Rules that serve it:** the judgment learn-loop (capture → harvest → distill → human-gated promotion) as the compounding mechanism; eval-before-commit (grade before promote); prune cadence (retire stale skills/snapshots so the surface compounds in signal, not bulk).
+**Born-from incidents:** 2026-05-26 invest-in-distilled-judgment-not-frames; 2026-05-27 auto-diagnose-over-manual-capture; 2026-05-29 dashboard-over-manual-input (reduce operator overhead). _(applied from distill proposal dp-20260606-001, 2026-06-06)_

@@ -153,7 +153,7 @@ Always trust the grader's `composite_check` block — if your reported composite
 - **Sourced data > narrative.** Every rationale cell needs a number or fact, not vibes.
 - **JP perspective.** The mandate is JP rollout. CN-side strengths only matter as enablers, not as the case.
 - **No invented financials.** If a number isn't public, write "private — estimate range based on category benchmarks" and provide the range with reasoning.
-- **Cross-project isolation.** This is {{ORG_B}} only. Do not reference {{PROJECT_A}} BD work, {{PROJECT_A}} 资源, or {{ORG_A}}.
+- **Cross-project isolation.** This is {{ORG_B}} only. Do not reference {{PROJECT_A}} BD work, {{PROJECT_A}} 资源, or {{ORG_E}}.
 - **Language:** EN or 中文 — board-facing JP is for `03 Proposals/`, not screening. Default 中文 unless the source intel is primarily EN.
 - **Tight.** Target ≤600 words. Density over completeness.
 - **No board promises.** The screening output is {{USER_NAME}}'s working analysis, not a board commitment. Phrase accordingly ("recommend DD", not "we should acquire").

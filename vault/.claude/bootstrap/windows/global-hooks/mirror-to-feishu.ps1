@@ -110,12 +110,22 @@ if ($m.Success) {
     # Fallback for afk-code feishu sessions: those don't inject a <channel> tag
     # (input arrives via PTY pipe, not the MCP plugin), but the wrapper's
     # --append-system-prompt contains the marker below. Pull chat_id from feishu.env.
+    # Only count the marker as a genuine session binding when it is NOT inside a
+    # tool_result. Fix (2026-06-04): a Discord harness-eval session that READS
+    # harness files containing 'AFK session via Feishu' previously false-tripped
+    # here, then pulled a chat_id from feishu.env and leaked its Discord output
+    # into the morty Feishu chat. The real binding lives in the session's system
+    # prompt (never a tool_result), so excluding tool_result lines is precise and
+    # purely subtractive (can only suppress a wrong send, never cause one).
     $isAfkFeishu = $false
     foreach ($line in $lines) {
-        if ($line -and $line.Contains('AFK session via Feishu')) { $isAfkFeishu = $true; break }
+        if (-not $line) { continue }
+        if ($line.Contains('AFK session via Feishu') -and -not $line.Contains('"type":"tool_result"')) {
+            $isAfkFeishu = $true; break
+        }
     }
     if (-not $isAfkFeishu) {
-        Log "no feishu channel tag in prompting message"
+        Log "no feishu channel tag in prompting message (or marker only in tool_result)"
         exit 0
     }
 
@@ -218,7 +228,7 @@ if ($rest) { $chunks += $rest }
 # at the console encoding (cp936 on zh-CN Windows), so CJK in $contentJson
 # went through one decode/encode round already; UTF8Encoding(false) writes
 # without BOM so `cat` produces clean UTF-8 bytes.
-$LARK_PROFILE = if ($env:LARK_PROFILE) { $env:LARK_PROFILE } else { 'morty' }
+$LARK_PROFILE = if ($env:LARK_PROFILE) { $env:LARK_PROFILE } else { 'business-morty' }
 $BASH_EXE = 'C:\Program Files\Git\bin\bash.exe'
 $sent = 0
 foreach ($c in $chunks) {

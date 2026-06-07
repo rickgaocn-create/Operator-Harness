@@ -116,6 +116,8 @@ def verdict(h):
     ready = any(a["distinct_sessions"] >= a["need"] for a in h["loop"].get("arrow", []))
     if ready:
         v = "LEARNING — a prediction is READY for a verdict"
+    elif fresh >= 4 and h["loop"].get("open", 0) == 0 and h["loop"].get("total", 0) > 0:
+        v = "LEARNING -- all " + str(h["loop"]["total"]) + " predictions adjudicated/closed; feeders fresh"
     elif fresh >= 4 and h["loop"].get("open", 0) > 0:
         v = "RUNNING — feeders fresh, loop open, arrow accruing" if arrow_moving else "RUNNING — feeders fresh; arrow not yet accruing (needs distinct-session confirms)"
     else:

@@ -1,6 +1,6 @@
 """morning-sweep — pull the previous day's messaging-platform dialogs into ONE raw bundle.
 
-Channels: WeChat (via WeFlow @ :5031) + Feishu (via lark-cli profile morty).
+Channels: WeChat (via WeFlow @ :5031) + Feishu (via lark-cli profile business-morty).
 Reuses the pull primitives from daily-wechat-ingest / daily-feishu-ingest (DRY).
 
 Contract:

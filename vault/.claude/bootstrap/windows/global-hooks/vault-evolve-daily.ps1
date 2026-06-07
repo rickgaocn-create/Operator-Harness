@@ -5,10 +5,7 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Continue"
 
-# Vault root DISCOVERED from script location (global-hooks -> windows -> bootstrap -> .claude -> {{USER_NAME}}),
-# not hardcoded, so the daily vault-evolve registers/runs on any client (multi-client portability).
-# Mirrors harness-evolve-drain.ps1 and setup_all_schedules.ps1.
-$vault = (Resolve-Path (Join-Path $PSScriptRoot "..\..\..\..")).Path
+$vault = "D:\Administrator\Documents\{{USER_NAME}}"
 $logDir = "$vault\04 Notes\vault-evolve"
 $schedulerLog = "$logDir\_scheduler.log"
 $lockFile = "$logDir\_running.lock"

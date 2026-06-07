@@ -37,9 +37,9 @@ A scrubber rewrote all text files, replacing secrets, PII, and machine-specific 
 | Placeholder | Meaning |
 |---|---|
 | `{{USER_NAME}}` | You |
-| `{{ORG_A}}` / `{{ORG_B}}` / `{{ORG_C}}` / `{{ORG_D}}` | Organizations |
-| `{{PROJECT_A}}` / `{{PROJECT_C}}` / `{{FUND}}` | Projects / funds |
-| `{{PERSON}}` / `{{PERSON_1}}` | Other people |
+| `{{ORG_A}}` … `{{ORG_G}}` | Organizations (employers, partners, vendors) |
+| `{{PROJECT_A}}` / `{{PROJECT_B}}` / `{{PROJECT_C}}` / `{{FUND}}` | Projects / funds |
+| `{{PERSON}}` / `{{PERSON_1}}` … `{{PERSON_8}}` | Other people |
 
 ## Verification
 

@@ -35,13 +35,13 @@ The cron job runs whether `ANTHROPIC_API_KEY` is set or not — its output is mo
 Same 13 chats baselined 2026-05-12. Defined in **`scripts/priority_chats.json`** and editable in-place:
 
 - 《{{PROJECT_A}}》× TapTap対接群, {{PROJECT_A}} × 4399 対接群, bili × {{PROJECT_A}} 联运対接
-- 美林 × {{PROJECT_A}} — 6月大型线下活动, {{PROJECT_A}} × 美林 — 目标广州新地标
-- 诗悦 × 前进街道办, 小鹏 × 诗悦, 广文旅 × {{PROJECT_A}}, 月月月月 (internal), 模之屋 × {{PROJECT_A}}
+- {{ORG_G}} × {{PROJECT_A}} — 6月大型线下活动, {{PROJECT_A}} × {{ORG_G}} — 目标广州新地标
+- {{ORG_E}} × 前进街道办, 小鹏 × {{ORG_E}}, 广文旅 × {{PROJECT_A}}, 月月月月 (internal), 模之屋 × {{PROJECT_A}}
 - DM: Cathy（{{ORG_A}}）— filtered for personal mix per `me.md` § Personal Context (text only, no media surfacing without explicit ask)
 - DM: {{ORG_B}} — 娇娇 (Japan ops)
 - DM: 珍珍 — TapTap
 
-Add/remove chats by editing `priority_chats.json`. The script also auto-picks up new chats with > 5 messages in the window from groups whose names contain `{{PROJECT_A}}`/`{{ORG_B}}`/`诗悦` (configurable threshold).
+Add/remove chats by editing `priority_chats.json`. The script also auto-picks up new chats with > 5 messages in the window from groups whose names contain `{{PROJECT_A}}`/`{{ORG_B}}`/`{{ORG_E}}` (configurable threshold).
 
 ## Output shape (in daily note)
 
@@ -79,6 +79,14 @@ Get-ScheduledTask -TaskName '{{USER_NAME}}-daily-wechat-ingest' | Format-List
 ```
 
 The scheduled task runs `python <ingest.py>` at 06:00 daily; logs to `.claude\.daily-ingest-queue\{date}\run.log`.
+
+## WeChat backend — WeFlow or the native bridge (Windows)
+
+Message data is pulled from a **WeFlow-shaped local HTTP API** at `WEFLOW_BASE` (default `http://127.0.0.1:5031`). Two backends serve it:
+
+- **WeFlow.exe** (default) — the 184MB Electron app. Quirks every consumer must handle: a cold cursor returns `count=0` on the *first* `/api/v1/messages` call (use `limit=200` + retry-on-empty), media can come back with a null `mediaUrl`, and it periodically **crashes WeChat**.
+- **Native bridge** (drop-in replacement, built 2026-06-05) — `Developer/operator-harness/windows/wechat/wechat_bridge.py`. Reads the SQLCipher-4 DBs directly (ctypes memory key-scan + pure-Python decrypt), serves the same 3 endpoints + Bearer auth, no Electron, never locks WeChat's live files (operates on copies). Registered as scheduled task **`{{USER_NAME}}-wechat-bridge`** (Disabled by default). Drop-in verified: this skill + `wechat_schedule_capture.py` run against it unchanged. Mechanism + caveats: that dir's `README.md`.
+  - **Cutover (retire WeFlow):** ensure 微信 (`Weixin.exe`) is running → stop `WeFlow.exe` → `Enable-ScheduledTask {{USER_NAME}}-wechat-bridge` (or run `run-bridge.ps1`). `WEFLOW_BASE`/`WEFLOW_TOKEN` stay unchanged. The bridge reads the key from `Weixin.exe`'s memory, so 微信 must be open.
 
 ## When this skill does NOT apply
 

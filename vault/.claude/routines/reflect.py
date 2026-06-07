@@ -121,8 +121,8 @@ def gather(window: int, today: date):
                       "summary": f"{e.get('signature','')} x{e.get('count','?')}/{e.get('sessions','?')}sess: {e.get('proposed_intervention','')}"[:140]})
     for g in _read_jsonl(GRADER):
         v = str(g.get("verdict", "")).upper()
-        if g.get("grader") == "_template" or v in ("", "PASS", "APPROVED", "OK"):
-            continue  # only enforce-layer FAILURES carry a learning signal
+        if g.get("grader") == "_template" or not v or v.startswith(("PASS", "APPROV", "OK")):
+            continue  # only enforce-layer FAILURES carry a learning signal (accept passed/approve/ok variants)
         hf = ", ".join(g.get("hard_fails", []) or [])
         items.append({"src": "grader", "days_ago": _days_ago(g.get("ts", ""), today) or 0, "salience": 0.85,
                       "text": str(g.get("artifact", "")) + " " + hf + " " + str(g.get("notes", "")),

@@ -74,7 +74,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - 抬头: 一行身份 + 引荐 source ("XX 介绍过来" / "刚才会议上加的")
 - 落款: 无 (消息流) 或 "—— {{USER_NAME}} · {{PROJECT_A}} BD" 一行 if 第一条触达
 - emoji: 接近无 (1 个 🙏 OK)
-- 句式: 完整句 + 主语 ("我是诗悦/{{PROJECT_A}}的 {{USER_NAME}}" 不是 "诗悦{{PROJECT_A}} {{USER_NAME}}")
+- 句式: 完整句 + 主语 ("我是{{ORG_E}}/{{PROJECT_A}}的 {{USER_NAME}}" 不是 "{{ORG_E}}{{PROJECT_A}} {{USER_NAME}}")
 - 时态: 具体 ("下周二上午 / 5/20 PM")
 - bilingual: 谨慎 — bilingual mix 默认 OK 但避免高频英文
 - action ask: 单 ask + 明确价值
@@ -82,14 +82,14 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 **Example**:
 ```
-张总好，我是诗悦/{{PROJECT_A}}的 {{USER_NAME}}。{{ORG_B}} 那边 何宗寰 老师转过 contact 给我。
+张总好，我是{{ORG_E}}/{{PROJECT_A}}的 {{USER_NAME}}。{{ORG_B}} 那边 何宗寰 老师转过 contact 给我。
 
 听说您下月会到广州，想约个 30-min 咖啡聊聊 — 我们这边在 M&A 角度
 有一个想法可能跟 {{ORG_D}} 的 sourcing 角度对得上。
 
 您方便时回我个时段就行，不急。
 
-—— {{USER_NAME}} · 诗悦网络 / {{ORG_B}} M&A advisor
+—— {{USER_NAME}} · {{ORG_E}} / {{ORG_B}} M&A advisor
 ```
 
 **禁忌**:
@@ -106,8 +106,8 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 **特征**:
 - 长度: 3-6 行 ideal (相对 A1 长，因为 information density + 礼貌 buffer)
 - 称呼: 职位 + 姓 ("张主任 / 李书记 / 周老师") + "您好" / "好"
-- 抬头: 短身份 reminder + 议题 anchor ("我是诗悦网络的 {{USER_NAME}}，上次 EPIC 峰会您说过的...")
-- 落款: "—— {{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD"
+- 抬头: 短身份 reminder + 议题 anchor ("我是{{ORG_E}}的 {{USER_NAME}}，上次 EPIC 峰会您说过的...")
+- 落款: "—— {{USER_NAME}} · {{ORG_E}} / {{PROJECT_A}} BD"
 - emoji: **极少 (0-1)** — 仅 🙏 用于诚意
 - 句式: 完整 + 主语 + 客气词；**"您"替代"你"** throughout
 - 礼貌词:
@@ -123,7 +123,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 **Example**:
 ```
-张主任好，我是诗悦网络的 {{USER_NAME}}。
+张主任好，我是{{ORG_E}}的 {{USER_NAME}}。
 
 关于上次您提到的 5/15 文旅局对接事宜，我们这边初步整理了一份背景材料 — 想请教您几个问题：
 
@@ -132,7 +132,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 如果您 schedule 允许，希望约一次 30-min 当面汇报 — 时点您来定，我们配合您的时间。
 
-—— {{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD
+—— {{USER_NAME}} · {{ORG_E}} / {{PROJECT_A}} BD
 ```
 
 **禁忌**:
@@ -147,7 +147,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 ### A4 · WeCom 1-on-1 · 内部 + 跨团队 (default work register)
 
-**典型场景**: 诗悦 / {{ORG_C}}发行内部跨组沟通 ({{USER_NAME}} → 小K / 煎饼 / 一一 / {{PERSON_1}} / 等) · 大客户 enterprise 对接人 · 长期供应商。
+**典型场景**: {{ORG_E}} / {{ORG_C}}发行内部跨组沟通 ({{USER_NAME}} → 小K / 煎饼 / 一一 / {{PERSON_1}} / 等) · 大客户 enterprise 对接人 · 长期供应商。
 
 **特征**:
 - 长度: 2-5 行 (介于 A1 和 A3 之间)
@@ -193,7 +193,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - 长度: 5-15 行 (允许结构化)
 - 称呼: 群 — "各位 / 大家好" · 邮件 — "X 总 / X 老师 / 各位"
 - 抬头: 邮件必有 (主题行 + 收件人 cc)；群通报顶部 1 行 概要
-- 落款: 邮件 — "{{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD"；群 — 无
+- 落款: 邮件 — "{{USER_NAME}} · {{ORG_E}} / {{PROJECT_A}} BD"；群 — 无
 - emoji: 极少 (0-1) — 群里 emoji 看场合
 - 句式: 半正式 — 主语全 / 时态明确 / 礼貌词 occasional
 - bilingual: 中文主，英文术语层
@@ -230,7 +230,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 **特征**:
 - 长度: 8-30 行 (邮件 default 长一些)
 - 抬头: "X 主任 / X 总 / 尊敬的 X 老师 您好"
-- 落款: 完整 — "祝好 / 此致 / 顺祝商祺" + "{{USER_NAME}} · 诗悦网络 / {{PROJECT_A}} BD · 联系方式"
+- 落款: 完整 — "祝好 / 此致 / 顺祝商祺" + "{{USER_NAME}} · {{ORG_E}} / {{PROJECT_A}} BD · 联系方式"
 - 主题行: 等于 概要 ("{{ORG_D}} 基金 IL Profile 转发 + 后续会面建议")
 - emoji: **零** (邮件 emoji 不专业)
 - 句式: 完整 + 主语 / 时态精确 / 复合句 OK
@@ -247,7 +247,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 
 张主任：
 
-您好。我是诗悦网络的 {{USER_NAME}}，上周通过 何宗寰 老师 转介绍后与您加上。
+您好。我是{{ORG_E}}的 {{USER_NAME}}，上周通过 何宗寰 老师 转介绍后与您加上。
 
 关于 5/15 您安排的对接，我们这边初步整理了 3 个主轴议题，
 想请教您几点，便于会面时聚焦：
@@ -268,7 +268,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 若您时间紧，提前微信 / 邮件简答几行也行，我做好功课再来当面汇报。
 
 附件:
-- 附件 1: 诗悦网络背景 1-pager (CN)
+- 附件 1: {{ORG_E}}背景 1-pager (CN)
 - 附件 2: {{ORG_D}} Fund I L.P. Overview (FYI 提交, 非本议题主轴)
 
 期待您的反馈。
@@ -276,7 +276,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 此致
 
 {{USER_NAME}}
-诗悦网络 / {{PROJECT_A}} BD
+{{ORG_E}} / {{PROJECT_A}} BD
 联系方式: {{REDACTED}} / {{REDACTED}}
 ```
 
@@ -369,7 +369,7 @@ audit-trace: "{{USER_NAME}} request 2026-05-14 — tone calibration for messagin
 - Medium: WeChat (default) / 邮件 / sometimes 电话约
 - 长度: 短 + 模糊 (3-5 行 ideal) — 越长越多 quote 风险
 - 称呼: "X 老师好" (default 尊称) / "X 编辑好" / first name + 老师
-- 抬头: 短身份 + 议题 anchor ("我是诗悦的 {{USER_NAME}}，上次 EPIC 峰会聊过")
+- 抬头: 短身份 + 议题 anchor ("我是{{ORG_E}}的 {{USER_NAME}}，上次 EPIC 峰会聊过")
 - 落款: 无（消息流）或 "{{USER_NAME}} · {{PROJECT_A}} BD" 一行
 - emoji: 极少 (0-1)
 - 句式: 完整 + 主语 + careful — 每句问"this on the record would I say"
@@ -413,7 +413,7 @@ X 老师好，看到你问。
 
 ### A10 · 投资人 / 董事会 (谦虚冷静 · 数据驱动)
 
-**典型场景**: {{ORG_D}} GP / 路奇 (诗悦董事长) / 何宗寰 (诗悦研发) / 黄文斌 (诗悦董秘) · {{ORG_B}} 后续 LP / GP · 跨年战略 review 场合。
+**典型场景**: {{ORG_D}} GP / 路奇 ({{ORG_E}}董事长) / 何宗寰 ({{ORG_E}}研发) / 黄文斌 ({{ORG_E}}董秘) · {{ORG_B}} 后续 LP / GP · 跨年战略 review 场合。
 
 **核心张力**: 不夸大 + 不慌乱 + 数据 + 风险透明。投资人最讨厌"过度乐观"（暴露经验不足）和"急躁紧张"（暴露管理失控）。
 
@@ -490,7 +490,7 @@ X 老师好，看到你问。
 
 ### A11 · 法务 / 合规 (严谨清晰 · 无歧义)
 
-**典型场景**: 诗悦法务 / 外部律所 / 合规审计 / 合同审稿 / 政府备案文件 / 跨境 legal review。
+**典型场景**: {{ORG_E}}法务 / 外部律所 / 合规审计 / 合同审稿 / 政府备案文件 / 跨境 legal review。
 
 **核心张力**: 措辞 precision 高于一切 — 每个词都可能影响法律解释。**清晰 ≠ 复杂**, 清晰 = 不歧义。
 
@@ -504,7 +504,7 @@ X 老师好，看到你问。
 - 句式: 完整 + 准确 + 单一解读
 - 词汇 precision:
   - 法律术语用准 (force majeure / 不可抗力 / warranty / 保证 / indemnity / 赔偿)
-  - 主体 specific — 用法人单位全称 ("广州栖梧信息科技有限公司") 而非简称 ("诗悦")
+  - 主体 specific — 用法人单位全称 ("广州栖梧信息科技有限公司") 而非简称 ("{{ORG_E}}")
   - 时点 specific — "2026 年 5 月 31 日 24:00 (北京时间)" 而非 "5月底"
   - 范围 specific — "限于 [国家 / 区域 / 渠道] 范围内" 不留通用兜底
 - 引用 conventions:
@@ -523,7 +523,7 @@ X 老师好，看到你问。
   - 不 commit answer 时直说 "需进一步 review" / "需补充 information"
   - 不模糊 "大概 / 应该"
 
-**Example** (诗悦法务 review 小鹏 MOU):
+**Example** ({{ORG_E}}法务 review 小鹏 MOU):
 ```
 主题: 小鹏 MOU 草案 review 反馈 — 4 个 point 需要进一步明确
 
@@ -549,14 +549,14 @@ X 律师 您好:
 
 4. **争议解决 (中风险)**
    § 10 现"友好协商"为单一机制. 建议补 fallback:
-   - 协商不成 → 广州仲裁委 arbitration (诗悦主场)
+   - 协商不成 → 广州仲裁委 arbitration ({{ORG_E}}主场)
 
 依据《合同法》第 X 条 + 《公司法》§ XX, 上述 4 点完善后可进入下一轮 redline.
 
 如需 redline 草案 我可以 5/16 EOD 前提供.
 
 祝好,
-{{USER_NAME}} · 诗悦网络 BD
+{{USER_NAME}} · {{ORG_E}} BD
 广州栖梧信息科技有限公司
 ```
 
@@ -662,7 +662,7 @@ X 律师 您好:
 ## Examples — register mismatch detection
 
 ❌ **Wrong**: 给政府文旅局副局发 "李哥，听说您...嗯..."
-✅ **Right**: A3 register — "李局好，我是诗悦的 {{USER_NAME}}..."
+✅ **Right**: A3 register — "李局好，我是{{ORG_E}}的 {{USER_NAME}}..."
 
 ❌ **Wrong**: 给{{PERSON_4}}发 "{{PERSON_4}}先生您好,关于 EPIC 议题特此请教..."
 ✅ **Right**: A1 register — "{{PERSON_4}}哥, 刚才聊到 Tiff 那个口子..."

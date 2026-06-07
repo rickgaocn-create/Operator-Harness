@@ -91,9 +91,20 @@ def scan(sessions: int, per_chat: int, days: int):
         name = c.get("displayName", "")
         if PROMO_RE.search(name):   # skip coupon / promo broadcast groups
             continue
-        try:
-            d = _get(f"/api/v1/messages?talker={talker}&limit={per_chat}")
-        except Exception:
+        # WeFlow cold-cursor: the first /messages call per talker returns count=0;
+        # it only populates on retry (confirmed 0/12 single-call vs 12/12 with retry,
+        # 2026-06-05). ingest.py has this workaround; this routine was missing it.
+        d = None
+        for _attempt in range(4):
+            try:
+                d = _get(f"/api/v1/messages?talker={talker}&limit={per_chat}")
+            except Exception:
+                d = None
+                break
+            if d.get("count") or d.get("messages"):
+                break
+            time.sleep(0.5 * (_attempt + 1))
+        if not d:
             continue
         for m in (d.get("messages") or []):
             scanned += 1
